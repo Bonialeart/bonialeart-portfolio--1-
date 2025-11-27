@@ -5,7 +5,7 @@ import { GalleryItem } from './types';
 // Since this is a generated environment, we use a placeholder that represents the "Bonialeart" style described (black and white).
 // The user should replace this URL with their actual image path.
 // Updated to a black and white sketch style image to simulate the logo.
-export const MAIN_CHARACTER_IMAGE = "https://www.dropbox.com/scl/fi/qiqiv707pneox7mov6k2l/Logourl.png?rlkey=6xf5lm2cdy24g03ku0xffbqkg&st=undtitur&raw=1"; 
+export const MAIN_CHARACTER_IMAGE = "https://www.dropbox.com/scl/fi/qiqiv707pneox7mov6k2l/Logourl.png?rlkey=6xf5lm2cdy24g03ku0xffbqkg&st=undtitur&raw=1";
 
 // New Professional Portrait for About Section
 // Dropbox links need 'raw=1' to be used as an image source directly
@@ -36,8 +36,8 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         media: [
             { type: 'image', url: "https://www.dropbox.com/scl/fi/d7qztimmnw6qc8c0l2qvf/Monja.jpg?rlkey=2l3n87ekbu4n3ph7e5h2cgphq&st=2lk7314k&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/y0qihe3kvjtp2yin37vih/Monjasketch.png?rlkey=oy7bwf2yb9mpdvmx770bjjtpu&st=h0cyc9zq&raw=1" },
-            { 
-                type: 'video', 
+            {
+                type: 'video',
                 url: "https://www.dropbox.com/scl/fi/nqupjuawfwp6702wv0ivx/video4967876765910304751.mp4?rlkey=v3o255vbzij1r18apdd4g3n0e&st=wck567c2&raw=1",
                 thumbnail: "https://www.dropbox.com/scl/fi/d7qztimmnw6qc8c0l2qvf/Monja.jpg?rlkey=2l3n87ekbu4n3ph7e5h2cgphq&st=2lk7314k&raw=1"
             }
@@ -52,8 +52,8 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         media: [
             { type: 'image', url: "https://cdnb.artstation.com/p/assets/images/images/068/156/459/large/alejandro-bonilla-wukong3.jpg?1697115228" },
             { type: 'image', url: "https://cdnb.artstation.com/p/assets/images/images/068/156/459/large/alejandro-bonilla-wukong3.jpg?1697115228" },
-            { 
-                type: 'video', 
+            {
+                type: 'video',
                 url: "https://cdn.artstation.com/p/video_sources/001/589/471/video-sin-titulo-hecho-con-clipchamp.mp4",
                 thumbnail: "https://cdnb.artstation.com/p/assets/images/images/068/156/459/large/alejandro-bonilla-wukong3.jpg?1697115228"
             }
@@ -68,7 +68,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         url: "https://cdna.artstation.com/p/assets/images/images/054/247/668/large/alejandro-bonilla-practica-final7.jpg?1664113123",
         media: [
             { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/054/247/668/large/alejandro-bonilla-practica-final7.jpg?1664113123" },
-            { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/054/247/700/large/alejandro-bonilla-captura-de-pantalla-2022-09-25-093917.jpg?1664113171" } 
+            { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/054/247/700/large/alejandro-bonilla-captura-de-pantalla-2022-09-25-093917.jpg?1664113171" }
         ]
     },
     {
@@ -80,8 +80,8 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         media: [
             { type: 'image', url: "https://www.dropbox.com/scl/fi/ei3n1qpns1agovxei0ocn/Maquina.png?rlkey=eyxl9ggd3mo4iukgry5ln0zft&st=ge5zmfk8&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/1i068iulj23wh2hrfatpi/Maquina-3.png?rlkey=bylob2c1ygi1w9br9ug6gtpwv&st=2sti98wi&raw=1" },
-            { 
-                type: 'video', 
+            {
+                type: 'video',
                 url: "https://www.dropbox.com/scl/fi/p9phbmc0pptwie7illm14/Maquina.mp4?rlkey=93n1fdxwsumyai7t6z1qln4pu&st=oje40q8o&raw=1",
                 thumbnail: "https://www.dropbox.com/scl/fi/ei3n1qpns1agovxei0ocn/Maquina.png?rlkey=eyxl9ggd3mo4iukgry5ln0zft&st=ge5zmfk8&raw=1"
             }
@@ -89,7 +89,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     },
     {
         id: 5,
-         title: "Vida Salvaje y Doméstica: Una Mirada Cercana",
+        title: "Vida Salvaje y Doméstica: Una Mirada Cercana",
         category: "Photography",
         description: "Esta colección fotográfica explora la belleza y singularidad del mundo animal, capturando momentos íntimos y expresiones auténticas. Desde la serenidad del reposo hasta la alerta curiosidad, cada imagen busca revelar la esencia de sus protagonistas en su entorno natural o cotidiano, jugando con la luz y la textura para transmitir la emoción del instante",
         url: "https://www.dropbox.com/scl/fi/f2yzgd0jm8rpba69a6nwt/IMG_1489.jpg?rlkey=1l3tt91ve10yjbqmx6uy0jq0c&st=gw8q8l1g&raw=1",
@@ -105,11 +105,11 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         title: "Practica",
         category: "Sketches",
         description: "Paisaje retro-futurista inspirado en la estética de los años 80.",
-        url: "https://cdna.artstation.com/p/assets/images/images/082/170/516/large/alejandro-bonilla-practica-pies.jpg?1732234894",
+        url: "https://www.dropbox.com/scl/fi/wmmrk2b9kfht33eyyyicr/sketch5.jpg?rlkey=bvt92p1o1hrzncpcbssa3fwo1&st=qrawr5ub&raw=1",
         media: [
-            { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/082/170/516/large/alejandro-bonilla-practica-pies.jpg?1732234894" },
-            { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/082/170/504/large/alejandro-bonilla-chica-pelo-morado.jpg?1732234816" },
-            { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/082/170/510/large/alejandro-bonilla-misatofinal.jpg?1732234827" },
+            { type: 'image', url: "https://www.dropbox.com/scl/fi/wmmrk2b9kfht33eyyyicr/sketch5.jpg?rlkey=bvt92p1o1hrzncpcbssa3fwo1&st=qrawr5ub&raw=1" },
+            { type: 'image', url: "https://www.dropbox.com/scl/fi/habbt5m2pvzz5v5l2rt11/sketch3.jpg?rlkey=yhcp3mes3d9bjmyalma930zn6&st=pnsy5hv0&raw=1" },
+            { type: 'image', url: "https://www.dropbox.com/scl/fi/6abgj8wspws4hxsd1p0sa/Sketch.jpg?rlkey=270n385azlyhq3pdfp1elmjcq&st=sw47tzgk&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/jkek4cbvkfy78soz99r8a/skecth4.png?rlkey=w39etx4h24i0xyk9296chg5id&st=3r9smzgz&raw=1" }
         ]
     },
