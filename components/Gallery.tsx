@@ -12,16 +12,16 @@ interface GalleryProps {
 }
 
 // --- Image Component with Loader ---
-const ImageWithLoader = React.memo(({ 
-    src, 
-    alt, 
-    className, 
+const ImageWithLoader = React.memo(({
+    src,
+    alt,
+    className,
     priority = false,
     layoutId
-}: { 
-    src: string, 
-    alt: string, 
-    className?: string, 
+}: {
+    src: string,
+    alt: string,
+    className?: string,
     priority?: boolean,
     layoutId?: string
 }) => {
@@ -93,9 +93,9 @@ const CustomVideoPlayer = ({ src, poster }: { src: string, poster?: string }) =>
 
     return (
         <div className="relative w-full h-full group/video bg-black flex items-center justify-center" onClick={togglePlay}>
-            <video 
+            <video
                 ref={videoRef}
-                src={src} 
+                src={src}
                 poster={poster}
                 className="w-full h-full object-contain"
                 onTimeUpdate={handleTimeUpdate}
@@ -104,9 +104,9 @@ const CustomVideoPlayer = ({ src, poster }: { src: string, poster?: string }) =>
                 onEnded={() => setIsPlaying(false)}
                 playsInline
             />
-            
+
             <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity duration-300 ${isPlaying ? 'opacity-0 group-hover/video:opacity-100' : 'opacity-100'}`}>
-                <button 
+                <button
                     onClick={togglePlay}
                     className="p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:scale-110 transition-transform hover:bg-white/20"
                 >
@@ -115,17 +115,17 @@ const CustomVideoPlayer = ({ src, poster }: { src: string, poster?: string }) =>
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 h-2 bg-white/10 transition-opacity duration-300 opacity-0 group-hover/video:opacity-100" onClick={(e) => e.stopPropagation()}>
-                 <div 
+                <div
                     className="absolute inset-0 cursor-pointer"
                     onClick={handleProgressClick}
-                 >
-                    <div 
-                        className="h-full bg-indigo-500 relative" 
+                >
+                    <div
+                        className="h-full bg-indigo-500 relative"
                         style={{ width: `${progress}%` }}
                     >
-                         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm scale-0 group-hover/video:scale-100 transition-transform" />
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm scale-0 group-hover/video:scale-100 transition-transform" />
                     </div>
-                 </div>
+                </div>
             </div>
         </div>
     );
@@ -137,14 +137,19 @@ const ZoomableImage = ({ src, alt }: { src?: string, alt: string }) => {
     const [showIcon, setShowIcon] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isTouch, setIsTouch] = useState(false);
+
+    useEffect(() => {
+        setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+    }, []);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
+        if (isTouch || !containerRef.current) return;
         const { left, top, width, height } = containerRef.current.getBoundingClientRect();
-        
+
         const x = ((e.clientX - left) / width) * 100;
         const y = ((e.clientY - top) / height) * 100;
-        
+
         setMousePos({ x, y });
     };
 
@@ -155,21 +160,21 @@ const ZoomableImage = ({ src, alt }: { src?: string, alt: string }) => {
     if (!src) return null;
 
     return (
-        <div 
+        <div
             ref={containerRef}
             className={`relative w-full h-full flex items-center justify-center overflow-hidden group/zoom ${isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
-            onMouseEnter={() => setShowIcon(true)}
+            onMouseEnter={() => !isTouch && setShowIcon(true)}
             onMouseLeave={() => {
                 setShowIcon(false);
-                setIsZoomed(false); 
+                setIsZoomed(false);
             }}
             onMouseMove={handleMouseMove}
-            onClick={toggleZoom}
+            onClick={!isTouch ? toggleZoom : undefined}
         >
             <div className={`absolute inset-0 z-20 pointer-events-none flex items-center justify-center transition-opacity duration-300 ${showIcon && !isZoomed ? 'opacity-100' : 'opacity-0'}`}>
-                 <div className="bg-black/40 p-4 rounded-full backdrop-blur-md border border-white/20 shadow-xl transform transition-transform group-hover/zoom:scale-110">
+                <div className="bg-black/40 p-4 rounded-full backdrop-blur-md border border-white/20 shadow-xl transform transition-transform group-hover/zoom:scale-110">
                     <ZoomIn className="text-white" size={32} />
-                 </div>
+                </div>
             </div>
 
             <img
@@ -198,15 +203,15 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
 
     useEffect(() => {
         if (selectedId && modalItem && !palettes[selectedId]) {
-             const fetchColor = async () => {
+            const fetchColor = async () => {
                 try {
                     const colors = await extractColorsFromUrl(modalItem.url);
                     setPalettes(prev => ({ ...prev, [selectedId]: colors }));
                 } catch (e) {
                     console.warn("Failed to extract colors", e);
                 }
-             };
-             fetchColor();
+            };
+            fetchColor();
         }
     }, [selectedId, modalItem, palettes]);
 
@@ -222,8 +227,8 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
 
     const mediaList: MediaItem[] = useMemo(() => {
         if (!modalItem) return [];
-        return modalItem.media && modalItem.media.length > 0 
-            ? modalItem.media 
+        return modalItem.media && modalItem.media.length > 0
+            ? modalItem.media
             : [{ type: 'image', url: modalItem.url }];
     }, [modalItem]);
 
@@ -247,13 +252,13 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
 
     const getGridClass = (index: number) => {
         const patternIndex = index % 6;
-        switch(patternIndex) {
-            case 0: return "md:col-span-1 md:row-span-2"; 
-            case 1: return "md:col-span-2 md:row-span-1"; 
-            case 2: return "md:col-span-1 md:row-span-1"; 
-            case 3: return "md:col-span-1 md:row-span-2"; 
-            case 4: return "md:col-span-1 md:row-span-1"; 
-            case 5: return "md:col-span-1 md:row-span-1"; 
+        switch (patternIndex) {
+            case 0: return "md:col-span-1 md:row-span-2";
+            case 1: return "md:col-span-2 md:row-span-1";
+            case 2: return "md:col-span-1 md:row-span-1";
+            case 3: return "md:col-span-1 md:row-span-2";
+            case 4: return "md:col-span-1 md:row-span-1";
+            case 5: return "md:col-span-1 md:row-span-1";
             default: return "md:col-span-1 md:row-span-1";
         }
     };
@@ -262,10 +267,10 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
 
     return (
         <div className="w-full relative min-h-[800px] flex flex-col items-center">
-            
+
             {/* --- MOSAIC GRID VIEW --- */}
             <div className="w-full max-w-[1400px] px-4 pb-24">
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
@@ -279,13 +284,13 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                             className={`${getGridClass(index)} relative group rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 cursor-pointer hover:border-indigo-500/30 transition-all duration-500`}
                             whileHover={{ y: -5 }}
                         >
-                            <ImageWithLoader 
-                                src={item.url} 
-                                alt={item.title} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                                priority={index < 6} 
+                            <ImageWithLoader
+                                src={item.url}
+                                alt={item.title}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                priority={index < 6}
                             />
-                            
+
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
 
                             <div className="absolute bottom-0 left-0 p-6 z-20 w-full">
@@ -319,7 +324,7 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                             onClick={() => setSelectedId(null)}
                             className="absolute inset-0 bg-slate-950/95 backdrop-blur-xl cursor-pointer pointer-events-auto"
                         />
-                        
+
                         {/* Layout: 
                             Mobile: Stacked (Image 50%, Info 50%)
                             Tablet (md): Stacked (Image 60%, Info 40%) -> Changed from previous row layout
@@ -328,9 +333,9 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                         <motion.div
                             layoutId={`card-container-${modalItem.id}`}
                             className="relative w-full h-[100dvh] md:h-[90vh] lg:max-w-6xl lg:h-[85vh] overflow-hidden bg-slate-900 shadow-2xl flex flex-col lg:flex-row pointer-events-auto border-0 md:border border-white/5 z-50 md:rounded-lg"
-                            onClick={(e) => e.stopPropagation()} 
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            <button 
+                            <button
                                 onClick={() => setSelectedId(null)}
                                 className="absolute top-4 right-4 md:top-6 md:right-6 z-50 p-2 text-white/50 hover:text-white bg-black/50 rounded-full backdrop-blur-md hover:bg-black/70 transition-colors"
                             >
@@ -338,19 +343,32 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                             </button>
 
                             {/* Media Viewport */}
-                            <div className="w-full lg:w-3/4 h-[50%] md:h-[60%] lg:h-full relative bg-[#050505] flex flex-col group/carousel shrink-0">
+                            <motion.div
+                                className="w-full lg:w-3/4 h-[50%] md:h-[60%] lg:h-full relative bg-[#050505] flex flex-col group/carousel shrink-0"
+                                drag="x"
+                                dragConstraints={{ left: 0, right: 0 }}
+                                dragElastic={0.2}
+                                onDragEnd={(e, { offset, velocity }) => {
+                                    const swipe = offset.x;
+                                    if (swipe < -50) {
+                                        handleNextMedia(e as any);
+                                    } else if (swipe > 50) {
+                                        handlePrevMedia(e as any);
+                                    }
+                                }}
+                            >
                                 <div className="relative flex-grow h-full flex items-center justify-center p-0 md:p-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[length:20px_20px] overflow-hidden">
-                                    
+
                                     {/* Navigation Arrows */}
                                     {mediaList.length > 1 && (
                                         <>
-                                            <button 
+                                            <button
                                                 onClick={handlePrevMedia}
                                                 className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/20 text-white/70 hover:bg-black/50 hover:text-white transition-all backdrop-blur-sm opacity-100 lg:opacity-0 lg:group-hover/carousel:opacity-100"
                                             >
                                                 <ChevronLeft size={32} />
                                             </button>
-                                            <button 
+                                            <button
                                                 onClick={handleNextMedia}
                                                 className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/20 text-white/70 hover:bg-black/50 hover:text-white transition-all backdrop-blur-sm opacity-100 lg:opacity-0 lg:group-hover/carousel:opacity-100"
                                             >
@@ -360,18 +378,18 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                     )}
 
                                     {activeMedia?.type === 'video' ? (
-                                        <CustomVideoPlayer 
-                                            src={activeMedia.url} 
+                                        <CustomVideoPlayer
+                                            src={activeMedia.url}
                                             poster={activeMedia.thumbnail}
                                         />
                                     ) : (
-                                        <ZoomableImage 
-                                            src={activeMedia?.url} 
-                                            alt={modalItem.title} 
+                                        <ZoomableImage
+                                            src={activeMedia?.url}
+                                            alt={modalItem.title}
                                         />
                                     )}
                                 </div>
-                                
+
                                 {/* Thumbnails Strip */}
                                 {mediaList.length > 1 && (
                                     <div className="h-16 md:h-20 bg-slate-950 border-t border-white/10 flex gap-2 p-2 overflow-x-auto justify-center flex-shrink-0 z-20 relative">
@@ -381,25 +399,25 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                                 onClick={() => setCurrentMediaIndex(idx)}
                                                 className={`relative aspect-square h-full rounded-md overflow-hidden border-2 transition-all ${currentMediaIndex === idx ? 'border-indigo-500 opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`}
                                             >
-                                                 <img src={m.thumbnail || m.url} className="w-full h-full object-cover" loading="lazy" alt="thumbnail" />
+                                                <img src={m.thumbnail || m.url} className="w-full h-full object-cover" loading="lazy" alt="thumbnail" />
                                             </button>
                                         ))}
                                     </div>
                                 )}
-                            </div>
+                            </motion.div>
 
                             {/* Info Panel */}
                             <div className="w-full lg:w-1/4 h-[50%] md:h-[40%] lg:h-full bg-slate-950 border-t lg:border-t-0 lg:border-l border-white/5 p-6 md:p-8 overflow-y-auto custom-scrollbar flex-grow">
                                 <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-500/30 pb-1 mb-4 inline-block">{modalItem.category}</span>
                                 <h2 className="text-2xl md:text-3xl font-light text-white mb-4 md:mb-6 mt-2">{modalItem.title}</h2>
                                 <p className="text-slate-400 text-sm leading-relaxed mb-8 font-mono">{modalItem.description}</p>
-                                
+
                                 <div className="border-t border-white/10 pt-6">
                                     <h4 className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-4 flex items-center gap-2">
                                         Color Palette
                                         <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">HEX</span>
                                     </h4>
-                                    
+
                                     <div className="flex flex-wrap gap-3">
                                         {palettes[modalItem.id] ? (
                                             palettes[modalItem.id].map((color, index) => (
@@ -410,9 +428,9 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                                         style={{ backgroundColor: color }}
                                                         title="Click to Copy"
                                                     >
-                                                       {copiedColor === color && <Check size={16} className="text-white drop-shadow-md" />}
+                                                        {copiedColor === color && <Check size={16} className="text-white drop-shadow-md" />}
                                                     </button>
-                                                    
+
                                                     <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
                                                         {copiedColor === color ? 'Copied!' : color}
                                                         <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900"></div>
@@ -421,7 +439,7 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                             ))
                                         ) : (
                                             <div className="flex gap-2">
-                                                {[1,2,3,4,5].map(i => (
+                                                {[1, 2, 3, 4, 5].map(i => (
                                                     <div key={i} className="w-10 h-10 rounded-full bg-slate-800 animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
                                                 ))}
                                             </div>

@@ -6,17 +6,21 @@ const CustomCursor = () => {
   const [isPointer, setIsPointer] = useState(false);
 
   useEffect(() => {
+    // Check if device is touch-enabled (coarse pointer)
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
+
     const mouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-      
+
       // Since we forced cursor: none in CSS, we can't use getComputedStyle.
       // We must check the tag name or parent tags.
       const target = e.target as HTMLElement;
       const clickableTags = ['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'LABEL', 'SELECT'];
-      
+
       // Check if target or any parent is clickable
-      const isClickable = 
-        clickableTags.includes(target.tagName) || 
+      const isClickable =
+        clickableTags.includes(target.tagName) ||
         target.closest('a') !== null ||
         target.closest('button') !== null ||
         target.onclick !== null; // rough check for JS click handlers
@@ -30,6 +34,17 @@ const CustomCursor = () => {
       window.removeEventListener("mousemove", mouseMove);
     };
   }, []);
+
+  // If it's a touch device (checked on mount), we might want to return null. 
+  // However, since we are using a hook, we can just check state. 
+  // Let's add a state for isTouch.
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
+
+  if (isTouchDevice) return null;
 
   return (
     <>
@@ -49,21 +64,21 @@ const CustomCursor = () => {
         }}
       >
         {/* SVG Pen Icon */}
-        <svg 
-            width="32" 
-            height="32" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="white" 
-            strokeWidth="1.5" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-            style={{ filter: 'drop-shadow(0px 0px 2px black)' }}
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ filter: 'drop-shadow(0px 0px 2px black)' }}
         >
-            <path d="M12 19l7-7 3 3-7 7-3-3z" fill="white" />
-            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-            <path d="M2 2l7.586 7.586" />
-            <circle cx="11" cy="11" r="2" fill="black" />
+          <path d="M12 19l7-7 3 3-7 7-3-3z" fill="white" />
+          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+          <path d="M2 2l7.586 7.586" />
+          <circle cx="11" cy="11" r="2" fill="black" />
         </svg>
       </motion.div>
     </>
