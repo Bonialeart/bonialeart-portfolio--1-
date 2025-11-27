@@ -7,14 +7,35 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Detect scroll for background changes
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Detect scroll for background changes and hide/show logic
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+
+      // Determine if scrolled down
+      if (currentScrollY > 50) {
+        setScrolled(true);
+        // Hide if scrolling down and not at the top
+        if (currentScrollY > lastScrollY) {
+          setIsVisible(false);
+        } else {
+          // Show if scrolling up
+          setIsVisible(true);
+        }
+      } else {
+        setScrolled(false);
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -36,8 +57,8 @@ const Navigation = () => {
   return (
     <>
       {/* Changed md:flex to lg:flex to keep hamburger on tablets */}
-      <nav className={`fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-50 transition-all duration-300 ${scrolled || isOpen ? 'bg-slate-950/90 backdrop-blur-md border-b border-white/5' : ''} pointer-events-auto text-white`}>
-        <div 
+      <nav className={`fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-50 transition-all duration-300 ${scrolled || isOpen ? 'bg-slate-950/90 backdrop-blur-md border-b border-white/5' : ''} ${!isVisible && !isOpen ? '-translate-y-full' : 'translate-y-0'} pointer-events-auto text-white`}>
+        <div
           className="text-xl md:text-2xl font-bold tracking-widest uppercase cursor-pointer z-50 relative"
           onClick={() => scrollToSection('home')}
         >
@@ -47,10 +68,10 @@ const Navigation = () => {
         {/* Desktop Menu - Visible only on Large screens (Laptops/Desktops) */}
         <div className="hidden lg:flex gap-8 text-sm tracking-wide mix-blend-difference">
           {navLinks.map((link) => (
-            <a 
+            <a
               key={link.id}
-              href={`#${link.id}`} 
-              onClick={(e) => { e.preventDefault(); scrollToSection(link.id); }} 
+              href={`#${link.id}`}
+              onClick={(e) => { e.preventDefault(); scrollToSection(link.id); }}
               className="hover:text-indigo-400 transition-colors cursor-pointer uppercase font-medium text-slate-200"
             >
               {link.label}
@@ -59,7 +80,7 @@ const Navigation = () => {
         </div>
 
         {/* Mobile/Tablet Hamburger - Visible on md and below */}
-        <button 
+        <button
           className="lg:hidden z-50 p-2 text-white focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
@@ -78,11 +99,11 @@ const Navigation = () => {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 bg-slate-950 z-40 flex flex-col items-center justify-center pointer-events-auto px-6"
           >
-             {/* Decorative Background */}
-             <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-                <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-600 rounded-full blur-[100px]"></div>
-                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-pink-600 rounded-full blur-[100px]"></div>
-             </div>
+            {/* Decorative Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+              <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-600 rounded-full blur-[100px]"></div>
+              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-pink-600 rounded-full blur-[100px]"></div>
+            </div>
 
             <div className="flex flex-col gap-8 text-center z-10 w-full max-w-md">
               {navLinks.map((link, i) => (
