@@ -128,8 +128,31 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     }
 ];
 
-// Text used on the Polaroid in the About section
 export const POLAROID_TEXT = {
     left: "23 AÑOS",
     right: "Vnzl"
 };
+
+export const SERVICES = [
+    {
+        id: 1,
+        title: "Ilustración Digital",
+        description: "Creación de personajes, arte conceptual y portadas de libros con un estilo único y detallado.",
+        icon: "palette",
+        price: "Desde $50"
+    },
+    {
+        id: 2,
+        title: "Modelado 3D",
+        description: "Modelado de assets, personajes y entornos 3D optimizados para videojuegos o renderizado.",
+        icon: "box",
+        price: "Desde $80"
+    },
+    {
+        id: 3,
+        title: "Fotografía",
+        description: "Sesiones fotográficas de retrato, producto y eventos. Capturando la esencia de cada momento.",
+        icon: "camera",
+        price: "Consultar"
+    }
+];

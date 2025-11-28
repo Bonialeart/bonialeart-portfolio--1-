@@ -14,6 +14,8 @@ import CustomCursor from './components/CustomCursor';
 import TikTokSection from './components/TikTokSection';
 import PolaroidMarquee from './components/PolaroidMarquee';
 import LoadingScreen from './components/LoadingScreen';
+import Services from './components/Services';
+import MediaKitButton from './components/MediaKitButton';
 import { ArrowDown, Instagram, Globe } from 'lucide-react';
 
 // Helper to get icon component
@@ -120,6 +122,7 @@ function App() {
       <CustomCursor />
       <ThreeBackground />
       <Navigation />
+      <MediaKitButton />
 
       {/* Hero Section */}
       <motion.section
@@ -374,6 +377,10 @@ function App() {
         </div>
       </motion.section>
 
+
+
+
+
       {/* TikTok Section */}
       <motion.section
         className="py-20 md:py-24 bg-gradient-to-b from-slate-900/20 to-slate-950/80 relative z-20 border-t border-slate-900/50"
@@ -383,6 +390,34 @@ function App() {
         variants={sectionVariants}
       >
         <TikTokSection />
+      </motion.section>
+
+      {/* Services Section */}
+      <motion.section
+        id="services"
+        className="py-20 md:py-24 relative z-20 border-t border-slate-900/50 bg-slate-950"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[length:30px_30px] opacity-[0.03] pointer-events-none"></div>
+
+        <div className="max-w-5xl mx-auto text-center mb-16 md:mb-24 px-4">
+          <div className="inline-block relative">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
+              SERVICIOS
+            </h2>
+            <div className="w-full max-w-[200px] md:max-w-[300px] mx-auto">
+              <ScribbleUnderline color="text-indigo-500" />
+            </div>
+          </div>
+          <p className="text-slate-400 mt-6 max-w-2xl mx-auto font-light text-lg">
+            ¿Tienes una idea en mente? Puedo ayudarte a hacerla realidad.
+          </p>
+        </div>
+
+        <Services />
       </motion.section>
 
       {/* Contact Section */}

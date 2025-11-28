@@ -51,6 +51,7 @@ const Navigation = () => {
     { id: 'qualities', label: 'Cualidades' },
     { id: 'skills', label: 'Skills' },
     { id: 'gallery', label: 'Galería' },
+    { id: 'services', label: 'Servicios' },
     { id: 'contact', label: 'Contacto' },
   ];
 
@@ -62,20 +63,35 @@ const Navigation = () => {
           className="text-xl md:text-2xl font-bold tracking-widest uppercase cursor-pointer z-50 relative"
           onClick={() => scrollToSection('home')}
         >
-          Bonialeart
+          <img
+            src="https://www.dropbox.com/scl/fi/9q9hko6g1xf1h7llrog4l/logo.png?rlkey=nzog3afkbp36668f9nv6hbihv&st=t74qbrli&raw=1"
+            alt="Bonialeart Logo"
+            className="h-14 md:h-20 w-auto object-contain hover:scale-105 transition-transform duration-300"
+          />
         </div>
 
         {/* Desktop Menu - Visible only on Large screens (Laptops/Desktops) */}
-        <div className="hidden lg:flex gap-8 text-sm tracking-wide mix-blend-difference">
-          {navLinks.map((link) => (
-            <a
+        <div className="hidden lg:flex gap-4 text-sm tracking-wide items-center">
+          {navLinks.map((link, index) => (
+            <motion.a
               key={link.id}
               href={`#${link.id}`}
               onClick={(e) => { e.preventDefault(); scrollToSection(link.id); }}
-              className="hover:text-indigo-400 transition-colors cursor-pointer uppercase font-medium text-slate-200"
+              className="relative group px-4 py-2 cursor-pointer"
+              whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
+              initial={{ rotate: 0 }}
             >
-              {link.label}
-            </a>
+              {/* Paper Background */}
+              <div className={`absolute inset-0 bg-[#f1f5f9] shadow-md transform ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} group-hover:rotate-0 transition-transform duration-300 rounded-sm`}></div>
+
+              {/* Tape Effect */}
+              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-white/40 backdrop-blur-[1px] rotate-[-2deg] shadow-sm z-10 border-l border-r border-white/20"></div>
+
+              {/* Text */}
+              <span className="relative z-10 font-['Permanent_Marker'] text-slate-900 group-hover:text-indigo-600 transition-colors text-sm md:text-base">
+                {link.label}
+              </span>
+            </motion.a>
           ))}
         </div>
 
