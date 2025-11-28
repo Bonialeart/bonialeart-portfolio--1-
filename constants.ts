@@ -15,7 +15,7 @@ export const PROFILE_IMAGE = "https://www.dropbox.com/scl/fi/mpmg7z24dvr7j026z2w
 export const CV_URL = "https://www.dropbox.com/scl/fi/2ohizarln2fcyyewui401/CV.pdf?rlkey=0jpsyddimwfrf8ovq1nf6r9nh&st=1hy3vidj&dl=1";
 
 export const INITIAL_CONTENT = {
-    tagline: "Arte Digital. Fotografia.",
+    tagline: "Arte Digital, Diseño, 3D, Fotografia.",
     bio: "Creando mundos visuales únicos que inspiran y cautivan. Arte digital, concept art y fotografía para cine, videojuegos y proyectos creativos",
     aboutMe: "Mi nombre es Alejandro Bonilla, un dedicado artista digital freelance, ilustrador y amante de la fotografia con más de 4 años de experiencia profesional. Mi pasión radica en crear narrativas visuales atractivas y mundos únicos. Me especializo en transformar ideas en visuales cautivadores. Ya sea que necesites ilustraciones impactantes, arte conceptual detallado o pinturas digitales dinámicas, aporto una mezcla de habilidad técnica y visión creativa a cada proyecto.",
     qualities: [
