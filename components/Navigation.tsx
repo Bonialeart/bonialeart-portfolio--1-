@@ -48,10 +48,8 @@ const Navigation = () => {
   const navLinks = [
     { id: 'home', label: 'Inicio' },
     { id: 'about', label: 'Sobre Mí' },
-    { id: 'qualities', label: 'Cualidades' },
     { id: 'skills', label: 'Skills' },
     { id: 'gallery', label: 'Galería' },
-    { id: 'services', label: 'Servicios' },
     { id: 'contact', label: 'Contacto' },
   ];
 
