@@ -288,7 +288,7 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                 src={item.url}
                                 alt={item.title}
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                priority={index < 6}
+                                priority={false}
                             />
 
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
