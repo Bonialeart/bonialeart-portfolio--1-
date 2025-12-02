@@ -56,7 +56,7 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const progressRef = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    
+
     // Performance: Pause video when it scrolls out of view
     const isInView = useInView(containerRef, { amount: 0.6 });
 
@@ -69,7 +69,7 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
 
     const togglePlay = () => {
         if (!videoRef.current) return;
-        
+
         if (isPlaying) {
             videoRef.current.pause();
         } else {
@@ -108,8 +108,8 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
         >
             {/* Removed expensive shadows and backdrop-filters for performance */}
             <div className="relative w-[280px] h-[500px] bg-slate-950 rounded-[2rem] border border-slate-800 overflow-hidden">
-                
-                <video 
+
+                <video
                     ref={videoRef}
                     src={getPlayableVideoUrl(video.url)}
                     className="w-full h-full object-cover"
@@ -123,27 +123,27 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
                 />
 
                 {/* Overlay Gradient - Simple CSS gradient, cheap to render */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none transition-opacity duration-300" 
-                     style={{ opacity: isPlaying ? 0.4 : 1 }}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none transition-opacity duration-300"
+                    style={{ opacity: isPlaying ? 0.4 : 1 }}
                 />
 
                 {/* Play Button Overlay (Center) */}
-                <div 
+                <div
                     className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 z-20 ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}
                     onClick={togglePlay}
                 >
                     {/* Replaced backdrop-blur with solid semi-transparent bg for speed */}
                     <div className="w-16 h-16 rounded-full bg-black/50 flex items-center justify-center border border-white/20 hover:scale-110 transition-transform cursor-pointer">
                         {isPlaying ? (
-                             <Pause size={32} fill="white" className="text-white" />
+                            <Pause size={32} fill="white" className="text-white" />
                         ) : (
-                             <Play size={32} fill="white" className="text-white ml-1" />
+                            <Play size={32} fill="white" className="text-white ml-1" />
                         )}
                     </div>
                 </div>
 
                 {/* Open in TikTok Button - Made more prominent */}
-                <a 
+                <a
                     href={video.tiktokUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -155,8 +155,8 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
                     <ExternalLink size={12} />
                 </a>
 
-                 {/* Video Playback Bottom Progress Bar with improved visibility */}
-                 <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-900/50 z-30 backdrop-blur-sm">
+                {/* Video Playback Bottom Progress Bar with improved visibility */}
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-900/50 z-30 backdrop-blur-sm">
                     <div ref={progressRef} className="h-full bg-indigo-500 w-0 transition-all duration-100 ease-linear" />
                 </div>
 
@@ -179,7 +179,7 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
                         </div>
                         <span className="text-[10px] text-white font-bold">{video.likes}</span>
                     </div>
-                    
+
                     <div className="flex flex-col items-center gap-1">
                         <div className="p-2 bg-slate-900/80 rounded-full text-white">
                             <MessageCircle size={18} />
@@ -197,24 +197,24 @@ const TikTokCard = ({ video }: { video: typeof TIKTOK_VIDEOS[0] }) => {
 };
 
 const TikTokSection = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-        const { current } = scrollRef;
-        const scrollAmount = 300;
-        if (direction === 'left') {
-            current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        } else {
-            current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollRef.current) {
+            const { current } = scrollRef;
+            const scrollAmount = 300;
+            if (direction === 'left') {
+                current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
         }
-    }
-  };
+    };
 
-  return (
-    <div className="w-full max-w-7xl mx-auto px-4 relative group/section">
-        {/* Inject styles to hide scrollbar but keep functionality */}
-        <style>{`
+    return (
+        <div className="w-full max-w-7xl mx-auto px-4 relative group/section">
+            {/* Inject styles to hide scrollbar but keep functionality */}
+            <style>{`
             .hide-scrollbar::-webkit-scrollbar {
                 display: none;
             }
@@ -224,88 +224,88 @@ const TikTokSection = () => {
             }
         `}</style>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-block relative group"
-            >
-                <h2 className="text-4xl md:text-6xl font-['Permanent_Marker'] text-white mb-2">
-                    TIKTOK FEED
-                </h2>
-                <a 
-                    href={TIKTOK_PROFILE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-slate-400 font-mono text-sm tracking-widest hover:text-pink-500 transition-colors flex items-center justify-center gap-2"
+            {/* Header */}
+            <div className="text-center mb-12">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="inline-block relative group"
                 >
-                    @bonialeart
-                    <ExternalLink size={12} />
-                </a>
-            </motion.div>
-        </div>
+                    <h2 className="text-4xl md:text-6xl font-['Permanent_Marker'] text-white mb-2">
+                        TIKTOK FEED
+                    </h2>
+                    <a
+                        href={TIKTOK_PROFILE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-400 font-mono text-sm tracking-widest hover:text-pink-500 transition-colors flex items-center justify-center gap-2"
+                    >
+                        @bonialeart
+                        <ExternalLink size={12} />
+                    </a>
+                </motion.div>
+            </div>
 
-        {/* Navigation Arrows - Visible on desktop to encourage interaction without scrollbar */}
-        <div className="absolute top-[60%] -translate-y-1/2 left-2 md:-left-12 z-40 hidden md:block">
-            <button 
-                onClick={() => scroll('left')}
-                className="p-3 md:p-4 rounded-full bg-slate-900 border border-slate-700 text-white hover:bg-indigo-600 hover:border-indigo-600 transition-all shadow-xl active:scale-95"
-                aria-label="Scroll left"
-            >
-                <ChevronLeft size={24} />
-            </button>
-        </div>
-        <div className="absolute top-[60%] -translate-y-1/2 right-2 md:-right-12 z-40 hidden md:block">
-             <button 
-                onClick={() => scroll('right')}
-                className="p-3 md:p-4 rounded-full bg-slate-900 border border-slate-700 text-white hover:bg-indigo-600 hover:border-indigo-600 transition-all shadow-xl active:scale-95"
-                aria-label="Scroll right"
-            >
-                <ChevronRight size={24} />
-            </button>
-        </div>
-
-        {/* Horizontal Scroll Container */}
-        <div 
-            ref={scrollRef}
-            className="flex overflow-x-auto pb-10 gap-6 md:gap-10 px-4 snap-x snap-mandatory scroll-smooth hide-scrollbar"
-            style={{ 
-                maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
-                willChange: 'scroll-position' // Optimization hint for browser
-            }}
-        >
-            {TIKTOK_VIDEOS.map((video) => (
-                <TikTokCard key={video.id} video={video} />
-            ))}
-            
-            {/* "See More" Card */}
-             <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="flex-shrink-0 snap-center flex items-center"
-            >
-                <a 
-                    href={TIKTOK_PROFILE_URL} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="w-[280px] h-[400px] rounded-[2rem] border-2 border-dashed border-slate-800 flex flex-col items-center justify-center gap-4 group hover:border-pink-500 hover:bg-pink-500/5 transition-all"
+            {/* Navigation Arrows - Visible on desktop to encourage interaction without scrollbar */}
+            <div className="absolute top-[60%] -translate-y-1/2 left-2 md:-left-12 z-40 hidden md:block">
+                <button
+                    onClick={() => scroll('left')}
+                    className="p-3 md:p-4 rounded-full bg-slate-900 border border-slate-700 text-white hover:bg-indigo-600 hover:border-indigo-600 transition-all shadow-xl active:scale-95"
+                    aria-label="Scroll left"
                 >
-                    <div className="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <ExternalLink size={32} className="text-white" />
-                    </div>
-                    <span className="font-['Permanent_Marker'] text-xl text-slate-500 group-hover:text-white">
-                        View All
-                    </span>
-                    <span className="text-xs text-slate-600 font-mono">@bonialeart</span>
-                </a>
-            </motion.div>
+                    <ChevronLeft size={24} />
+                </button>
+            </div>
+            <div className="absolute top-[60%] -translate-y-1/2 right-2 md:-right-12 z-40 hidden md:block">
+                <button
+                    onClick={() => scroll('right')}
+                    className="p-3 md:p-4 rounded-full bg-slate-900 border border-slate-700 text-white hover:bg-indigo-600 hover:border-indigo-600 transition-all shadow-xl active:scale-95"
+                    aria-label="Scroll right"
+                >
+                    <ChevronRight size={24} />
+                </button>
+            </div>
+
+            {/* Horizontal Scroll Container */}
+            <div
+                ref={scrollRef}
+                className="flex overflow-x-auto pb-10 gap-6 md:gap-10 px-4 snap-x snap-mandatory scroll-smooth hide-scrollbar"
+                style={{
+                    maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+                    willChange: 'scroll-position' // Optimization hint for browser
+                }}
+            >
+                {TIKTOK_VIDEOS.map((video) => (
+                    <TikTokCard key={video.id} video={video} />
+                ))}
+
+                {/* "See More" Card */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    className="flex-shrink-0 snap-center flex items-center"
+                >
+                    <a
+                        href={TIKTOK_PROFILE_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-[280px] h-[400px] rounded-[2rem] border-2 border-dashed border-slate-800 flex flex-col items-center justify-center gap-4 group hover:border-pink-500 hover:bg-pink-500/5 transition-all"
+                    >
+                        <div className="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <ExternalLink size={32} className="text-white" />
+                        </div>
+                        <span className="font-['Permanent_Marker'] text-xl text-slate-500 group-hover:text-white">
+                            View All
+                        </span>
+                        <span className="text-xs text-slate-600 font-mono">@bonialeart</span>
+                    </a>
+                </motion.div>
+            </div>
         </div>
-    </div>
-  );
+    );
 };
 
 export default TikTokSection;
