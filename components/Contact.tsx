@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Send, AlertCircle, CheckCircle2 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import { StickerSmile } from './Doodles';
 
 const Contact = () => {
     const formRef = useRef<HTMLFormElement>(null);
@@ -48,12 +49,8 @@ const Contact = () => {
     return (
         <div className="w-full max-w-xl mx-auto bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-6 md:p-12 shadow-2xl shadow-indigo-500/5 relative">
             {/* Decorative Scribble - Hidden on MD (Tablet) to avoid overlap, Visible on LG */}
-            <div className="absolute -top-8 -right-8 w-16 h-16 text-pink-500 opacity-80 transform rotate-12 pointer-events-none hidden lg:block">
-                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3">
-                    <path d="M20,50 Q50,20 80,50 T50,80 T20,50" />
-                    <path d="M50,20 L50,80" />
-                    <path d="M20,50 L80,50" />
-                </svg>
+            <div className="absolute -top-12 -right-12 z-20 hidden lg:block pointer-events-none">
+                <StickerSmile className="w-24 h-24 text-pink-500 opacity-90 rotate-12" />
             </div>
 
             <h3 className="text-3xl md:text-5xl font-['Permanent_Marker'] mb-4 text-center text-white">
@@ -102,10 +99,10 @@ const Contact = () => {
                     type="submit"
                     disabled={formState === 'sending' || formState === 'sent'}
                     className={`w-full font-bold py-3 md:py-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg ${formState === 'error'
-                            ? 'bg-red-500/10 text-red-500 border border-red-500/50'
-                            : formState === 'sent'
-                                ? 'bg-green-500/10 text-green-500 border border-green-500/50'
-                                : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-indigo-500/20'
+                        ? 'bg-red-500/10 text-red-500 border border-red-500/50'
+                        : formState === 'sent'
+                            ? 'bg-green-500/10 text-green-500 border border-green-500/50'
+                            : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-indigo-500/20'
                         } disabled:opacity-70 disabled:cursor-not-allowed`}
                 >
                     {formState === 'idle' && (

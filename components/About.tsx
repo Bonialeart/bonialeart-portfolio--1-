@@ -8,34 +8,7 @@ interface AboutProps {
     text: string;
 }
 
-// Custom SVG Components for the "Doodle/Sticker" look
-const StickerSmile = () => (
-    <svg viewBox="0 0 100 100" className="w-16 h-16 md:w-24 md:h-24 text-pink-600 drop-shadow-lg transform -rotate-12">
-        <path d="M25,35 L35,45 M35,35 L25,45" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-        <path d="M65,35 L75,45 M75,35 L65,45" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-        <path d="M25,65 Q50,85 75,65" stroke="currentColor" strokeWidth="5" fill="none" strokeLinecap="round" />
-    </svg>
-);
-
-const StickerFlame = () => (
-    <svg viewBox="0 0 100 100" className="w-24 h-24 md:w-32 md:h-32 text-pink-600 drop-shadow-lg">
-        <path
-            d="M50,5 C50,5 20,40 20,65 C20,85 35,95 50,95 C65,95 80,85 80,65 C80,40 50,5 50,5 Z M50,25 C50,25 65,55 65,70 C65,80 58,85 50,85 C42,85 35,80 35,70 C35,55 50,25 50,25 Z"
-            stroke="currentColor"
-            strokeWidth="3"
-            fill="none"
-            strokeLinejoin="round"
-        />
-        <path d="M50,45 L50,75" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-    </svg>
-);
-
-const ScribbleArrow = () => (
-    <svg viewBox="0 0 100 50" className="w-24 h-12 md:w-32 md:h-16 text-white opacity-80">
-        <path d="M10,25 Q50,5 90,25" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="5,5" />
-        <path d="M80,20 L90,25 L85,35" stroke="currentColor" strokeWidth="2" fill="none" />
-    </svg>
-);
+import { StickerSmile, StickerFlame, ScribbleArrow } from './Doodles';
 
 const About: React.FC<AboutProps> = ({ text }) => {
     return (

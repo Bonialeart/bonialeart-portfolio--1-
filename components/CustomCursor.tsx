@@ -28,10 +28,10 @@ const CustomCursor = () => {
       setIsPointer(!!isClickable);
     };
 
-    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("mousemove", mouseMove, { capture: true });
 
     return () => {
-      window.removeEventListener("mousemove", mouseMove);
+      window.removeEventListener("mousemove", mouseMove, { capture: true });
     };
   }, []);
 
@@ -50,7 +50,7 @@ const CustomCursor = () => {
     <>
       {/* Main Pen Tip */}
       <motion.div
-        className="fixed top-0 left-0 z-[100] pointer-events-none mix-blend-difference"
+        className="fixed top-0 left-0 z-[9999] pointer-events-none"
         animate={{
           x: mousePosition.x - 2, // Align tip
           y: mousePosition.y - 2,

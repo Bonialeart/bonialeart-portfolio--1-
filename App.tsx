@@ -6,12 +6,15 @@ import HomeSelection from './components/HomeSelection';
 import MainPortfolio from './components/MainPortfolio';
 import ArtisticGallery from './components/ArtisticGallery';
 
+import CustomCursor from './components/CustomCursor';
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [view, setView] = useState<'selection' | 'portfolio' | 'artistic'>('selection');
 
   return (
     <>
+      <CustomCursor />
       <AnimatePresence mode="wait">
         {isLoading && (
           <LoadingScreen key="loader" onFinished={() => setIsLoading(false)} />

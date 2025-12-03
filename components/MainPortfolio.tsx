@@ -17,18 +17,7 @@ import Services from './Services';
 import MediaKitButton from './MediaKitButton';
 import { ArrowDown, Instagram, Globe, ArrowLeft } from 'lucide-react';
 
-// SVG Underline Component for handmade feel
-const ScribbleUnderline = ({ color = "text-indigo-500" }: { color?: string }) => (
-    <svg viewBox="0 0 200 20" className={`w-full h-6 ${color} opacity-80 mt-[-10px]`}>
-        <path d="M5,15 Q50,5 100,12 T195,8" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-    </svg>
-);
-
-const ScribbleCircle = () => (
-    <svg viewBox="0 0 100 100" className="absolute -top-6 -left-6 w-20 h-20 text-orange-500 opacity-60 -z-10 transform -rotate-12">
-        <path d="M50,10 A40,40 0 1,1 40,90 A40,40 0 0,1 50,10" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
-    </svg>
-);
+import { ScribbleUnderline, ScribbleCircle, StickerStar, StickerCrown, StickerWow, ScribbleSpiral, StickerSmile } from './Doodles';
 
 interface MainPortfolioProps {
     onBack: () => void;
@@ -172,7 +161,8 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                             className="absolute bottom-[-5%] left-[60%] md:bottom-[10%] md:left-[70%] lg:left-[70%] z-20 cursor-none origin-center"
                         >
                             {/* Scale increased on MD to 125 (1.25) for larger tape */}
-                            <div className="scale-[0.58] md:scale-100 lg:scale-105 -rotate-12 origin-center transition-transform duration-300">
+                            <div className="scale-[0.58] md:scale-100 lg:scale-105 -rotate-12 origin-center transition-transform duration-300 relative">
+                                <StickerStar className="absolute -top-12 -right-12 rotate-12 z-20" />
                                 <motion.div
                                     whileHover={{
                                         y: -12,
@@ -356,6 +346,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 to-transparent -z-10"></div>
                 <div className="max-w-5xl mx-auto text-center mb-16 md:mb-24">
                     <div className="inline-block relative">
+                        <StickerCrown className="absolute -top-10 -right-10 rotate-12 z-20" />
                         <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
                             SKILLS & SOFTWARE
                         </h2>
@@ -380,6 +371,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-12 md:mb-16 text-right">
                         <div className="inline-block relative">
+                            <StickerWow className="absolute -top-12 -left-20 -rotate-12 z-20" />
                             <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] pr-2 md:pr-6">
                                 OBRA RECIENTE
                             </h2>
@@ -451,7 +443,8 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             </motion.section>
 
             {/* Footer */}
-            <footer className="py-12 border-t border-slate-900 bg-slate-950 text-center relative z-20 px-4">
+            <footer className="py-12 border-t border-slate-900 bg-slate-950 text-center relative z-20 px-4 overflow-hidden">
+                <ScribbleSpiral className="absolute bottom-4 right-4 md:right-10 opacity-10 rotate-45 pointer-events-none" />
                 <div className="flex flex-col items-center justify-center gap-8">
 
                     <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">

@@ -1,12 +1,10 @@
 
-import React, { useRef, useLayoutEffect, useState, useEffect } from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import gsap from 'gsap';
 import { Draggable } from "gsap/Draggable";
 import { GALLERY_ITEMS } from '../constants';
-import { ArrowLeft, X, PlayCircle, Check, Palette } from 'lucide-react';
-import CustomCursor from './CustomCursor';
+import { ArrowLeft, X, PlayCircle, Check } from 'lucide-react';
 import { extractColorsFromUrl } from '../utils/colorUtils';
-import { motion, AnimatePresence } from 'framer-motion';
 
 // Register GSAP Plugins
 gsap.registerPlugin(Draggable);
@@ -205,7 +203,6 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
 
     return (
         <div ref={containerRef} className="relative w-full h-screen bg-slate-950 overflow-hidden flex flex-col items-center justify-center text-slate-100 perspective-1000">
-            <CustomCursor />
 
             {/* Back Button */}
             <button
