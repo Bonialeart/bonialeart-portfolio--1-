@@ -11,7 +11,7 @@ import Skills from './Skills';
 import Contact from './Contact';
 import About from './About';
 import CustomCursor from './CustomCursor';
-import TikTokSection from './TikTokSection';
+import Testimonials from './Testimonials';
 import PolaroidMarquee from './PolaroidMarquee';
 import Services from './Services';
 import MediaKitButton from './MediaKitButton';
@@ -26,6 +26,7 @@ interface MainPortfolioProps {
 const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
     const [content, setContent] = useState<GeneratedContent>(INITIAL_CONTENT as any);
     const [selectedGalleryId, setSelectedGalleryId] = useState<number | null>(null);
+    const [activeCategory, setActiveCategory] = useState<string>('All');
     const qualitiesContainerRef = useRef<HTMLDivElement>(null);
     const marqueeRef = useRef<HTMLElement>(null);
 
@@ -109,6 +110,43 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             }
         }, 50);
     };
+
+    // Filter out Photography items for the main portfolio gallery
+    const basePortfolioItems = GALLERY_ITEMS.filter(item => item.category !== 'Photography');
+
+    // Category Filtering Logic
+    const doesItemBelongToCategory = (item: typeof GALLERY_ITEMS[0], category: string): boolean => {
+        switch (category) {
+            case 'All':
+                return true;
+            case 'Digital Illustrations':
+                return item.category === 'Digital Painting';
+            case 'Environment Art':
+                return item.category === '3d' || item.category === 'Sketches' || item.description.toLowerCase().includes('entorno') || item.description.toLowerCase().includes('landscape');
+            case 'Concept Art':
+                return item.category === 'Sketches' || item.category === 'Digital Painting';
+            case 'Character Design':
+                return (item.category === 'Digital Painting' || item.category === '3d') && !item.description.toLowerCase().includes('landscape') && !item.description.toLowerCase().includes('entorno');
+            case '3D':
+                return item.category === '3d';
+            case 'Design':
+                return item.category === 'Design';
+            default:
+                return false;
+        }
+    };
+
+    const portfolioItems = basePortfolioItems.filter(item => doesItemBelongToCategory(item, activeCategory));
+
+    const categories = [
+        'All',
+        'Digital Illustrations',
+        'Environment Art',
+        'Concept Art',
+        'Character Design',
+        '3D',
+        'Design'
+    ];
 
     return (
         <motion.div
@@ -381,8 +419,24 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                         </div>
                     </div>
 
+                    {/* Category Filters */}
+                    <div className="flex flex-wrap justify-center gap-2 mb-12">
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveCategory(cat)}
+                                className={`px-4 py-2 rounded-full text-sm font-['Space_Grotesk'] transition-all border ${activeCategory === cat
+                                    ? 'bg-indigo-500 border-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]'
+                                    : 'bg-slate-900/50 border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
+                                    }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+
                     <Gallery
-                        items={GALLERY_ITEMS}
+                        items={portfolioItems}
                         selectedId={selectedGalleryId}
                         setSelectedId={setSelectedGalleryId}
                     />
@@ -390,15 +444,15 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 </div>
             </motion.section>
 
-            {/* TikTok Section */}
+            {/* Testimonials Section (Replaces TikTok) */}
             <motion.section
-                className="py-20 md:py-24 bg-gradient-to-b from-slate-900/20 to-slate-950/80 relative z-20 border-t border-slate-900/50"
+                className="relative z-20 border-t border-slate-900/50"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: false, amount: 0.3 }}
                 variants={sectionVariants}
             >
-                <TikTokSection />
+                <Testimonials />
             </motion.section>
 
             {/* Services Section */}

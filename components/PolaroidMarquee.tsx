@@ -11,9 +11,9 @@ const PolaroidCard = ({ item, onClick, index }: { item: GalleryItem; onClick: ()
   // varied rotation slightly for a natural look
   const rotations = ['rotate-1', '-rotate-2', 'rotate-3', '-rotate-1', 'rotate-2'];
   const rotateClass = rotations[index % rotations.length];
-  
+
   return (
-    <div 
+    <div
       onClick={onClick}
       className={`relative group flex-shrink-0 cursor-pointer p-3 bg-[#fdfbf7] shadow-lg transform ${rotateClass} hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 w-64 h-80 flex flex-col items-center justify-start`}
       style={{ boxShadow: '5px 5px 15px rgba(0,0,0,0.5)' }}
@@ -23,10 +23,10 @@ const PolaroidCard = ({ item, onClick, index }: { item: GalleryItem; onClick: ()
 
       {/* Image Container */}
       <div className="w-full aspect-square bg-slate-200 overflow-hidden mb-4 grayscale group-hover:grayscale-0 transition-all duration-500">
-        <img 
-          src={item.url} 
-          alt={item.title} 
-          className="w-full h-full object-cover" 
+        <img
+          src={item.url}
+          alt={item.title}
+          className="w-full h-full object-cover"
           loading="lazy"
         />
         {/* Noise overlay */}
@@ -52,27 +52,27 @@ const PolaroidMarquee: React.FC<PolaroidMarqueeProps> = ({ onSelect }) => {
 
   return (
     <div className="w-full py-16 bg-slate-950/50 overflow-hidden relative border-y border-white/5 z-20 group/marquee">
-      
+
       <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
       <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
 
       <div className="flex w-max">
-        <div 
-            className="flex gap-12 px-6 animate-marquee group-hover/marquee:[animation-play-state:paused]"
-            style={{ width: 'max-content' }}
+        <div
+          className="flex gap-12 px-6 animate-marquee group-hover/marquee:[animation-play-state:paused]"
+          style={{ width: 'max-content' }}
         >
           {duplicatedItems.map((item, index) => (
-            <PolaroidCard 
-              key={`${item.id}-${index}`} 
-              item={item} 
+            <PolaroidCard
+              key={`${item.id}-${index}`}
+              item={item}
               index={index}
-              onClick={() => onSelect(item.id)} 
+              onClick={() => onSelect(item.id)}
             />
           ))}
         </div>
       </div>
 
-       <style>{`
+      <style>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-33.33%); } 

@@ -47,15 +47,16 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         id: 2,
         title: "Wukong",
         category: "Digital Painting",
+        objectPosition: "left center",
         description: "Esta impactante ilustración digital retrata a Sun Wukong, el Rey Mono, en una pose de batalla feroz y dinámica, en medio de una tormenta. Con pelaje blanco y una barba imponente que enmarca un rostro lleno de determinación, sus ojos brillan con una luz amarilla intensa. Viste un atuendo oscuro, posiblemente de color púrpura o granate, y luce brazaletes dorados en sus muñecas, un gran collar de cuentas oscuras alrededor de su cuello y la icónica diadema dorada (el filete dorado) flotando justo encima de su cabeza.",
-        url: "https://cdnb.artstation.com/p/assets/images/images/068/156/463/large/alejandro-bonilla-wukong3-color-correct.jpg?1697115257",
+        url: "https://www.dropbox.com/scl/fi/ar6n72ydqsk7qbjpfhnfj/alejandro-bonilla-wukong3-color-correct.jpg?rlkey=isspq41p8ub3adv96ra958ugs&st=ufbz9ydm&raw=1",
         media: [
-            { type: 'image', url: "https://cdnb.artstation.com/p/assets/images/images/068/156/459/large/alejandro-bonilla-wukong3.jpg?1697115228" },
-            { type: 'image', url: "https://cdnb.artstation.com/p/assets/images/images/068/156/459/large/alejandro-bonilla-wukong3.jpg?1697115228" },
+            { type: 'image', url: "https://www.dropbox.com/scl/fi/ar6n72ydqsk7qbjpfhnfj/alejandro-bonilla-wukong3-color-correct.jpg?rlkey=isspq41p8ub3adv96ra958ugs&st=ufbz9ydm&raw=1" },
+            { type: 'image', url: "https://www.dropbox.com/scl/fi/2z64byr1i3hbk09zjeqvp/alejandro-bonilla-wukong3.jpg?rlkey=9uhkbyebh8ee7dsbohtt9sosy&st=tm48rggj&raw=1" },
             {
                 type: 'video',
                 url: "https://cdn.artstation.com/p/video_sources/001/589/471/video-sin-titulo-hecho-con-clipchamp.mp4",
-                thumbnail: "https://cdnb.artstation.com/p/assets/images/images/068/156/459/large/alejandro-bonilla-wukong3.jpg?1697115228"
+                thumbnail: "https://cdnb.artstation.com/p/assets/images/images/068/156/463/large/alejandro-bonilla-wukong3-color-correct.jpg?1697115257"
             }
         ]
     },
@@ -98,7 +99,14 @@ export const GALLERY_ITEMS: GalleryItem[] = [
             { type: 'image', url: "https://www.dropbox.com/scl/fi/tku62frxlap1400s90o6g/animal4.JPG?rlkey=q3c5csxnus2k0s811npiip3kd&st=afzz1fw4&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/s47271i6eco3p0bce3hie/pajarito1.jpg?rlkey=cv3nwueee9z1lzje7nixp8ayg&st=aeu67rlo&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/83kxg7q1ub84un05zf6nj/animal5.jpg?rlkey=fi71xxmzjiuhahlzae6tgunfi&st=ydyxdn64&raw=1" }
-        ]
+        ],
+        cameraInfo: {
+            model: "Canon EOS R5",
+            lens: "RF 85mm f/1.2L USM",
+            aperture: "f/1.8",
+            shutterSpeed: "1/200s",
+            iso: "100"
+        }
     },
     {
         id: 6,
@@ -124,6 +132,74 @@ export const GALLERY_ITEMS: GalleryItem[] = [
             { type: 'image', url: "https://www.dropbox.com/scl/fi/s47271i6eco3p0bce3hie/pajarito1.jpg?rlkey=cv3nwueee9z1lzje7nixp8ayg&st=fc6p22un&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/54kcrd4fpw1cx6rul0wen/pajarito5.jpg?rlkey=au88w4uk9o41wz7thoqrporz5&st=ctes28is&raw=1" },
             { type: 'image', url: "https://www.dropbox.com/scl/fi/x1ly2qwgq6ts6c1kzw9uh/pajarito4.jpg?rlkey=6nkiqo8rd0oi0xo8cs5ywhgf0&st=lbruqfrf&raw=1" }
+        ]
+    },
+    {
+        id: 8,
+        title: "Brand Identity System",
+        category: "Design",
+        description: "A comprehensive brand identity system designed for a modern tech startup. This project encompasses the logo design, color palette selection, typography hierarchy, and application across various digital and physical touchpoints. The goal was to create a visual language that communicates innovation, reliability, and approachability.",
+        url: "https://images.unsplash.com/photo-1626785774573-4b7993125486?q=80&w=2070&auto=format&fit=crop", // Placeholder
+        media: [],
+        technicalInfo: {
+            software: "Adobe Illustrator, Photoshop, Figma",
+            year: "2024",
+            dimensions: "Various",
+            technique: "Vector Design & UI/UX"
+        },
+        bentoData: [
+            {
+                color: '#0f172a',
+                title: 'Primary Palette',
+                description: 'Slate 900 - The foundation of the brand, representing stability and depth.',
+                label: 'Color'
+            },
+            {
+                color: '#6366f1',
+                title: 'Accent Color',
+                description: 'Indigo 500 - Used for calls to action and highlighting key information.',
+                label: 'Color'
+            },
+            {
+                color: '#1e293b',
+                title: 'Typography',
+                description: 'Space Grotesk - Modern, geometric sans-serif.',
+                label: 'Font',
+                type: 'font',
+                fontFamily: 'Space Grotesk'
+            },
+            {
+                color: '#000000',
+                title: 'Logo Mark',
+                description: 'Minimalist geometric abstraction.',
+                label: 'Brand Asset',
+                type: 'image',
+                img: 'https://images.unsplash.com/photo-1626785774573-4b7993125486?q=80&w=2070&auto=format&fit=crop'
+            },
+            {
+                color: '#334155',
+                title: 'Iconography',
+                description: 'Consistent stroke weight and rounded corners.',
+                label: 'System'
+            },
+            {
+                color: '#475569',
+                title: 'Grid System',
+                description: '12-column fluid grid for responsive layouts.',
+                label: 'Layout'
+            },
+            {
+                color: '#0f172a',
+                title: 'View Mockups',
+                description: 'See the brand applied in real-world scenarios.',
+                label: 'Mockups',
+                type: 'default' // This will be the trigger
+            }
+        ],
+        mockups: [
+            { url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2055&auto=format&fit=crop", title: "Website Landing Page", description: "High-fidelity desktop mockup." },
+            { url: "https://images.unsplash.com/photo-1555421689-491a97ff2040?q=80&w=2070&auto=format&fit=crop", title: "Mobile Application", description: "iOS app interface design." },
+            { url: "https://images.unsplash.com/photo-1603380353725-f8a4d39cc80e?q=80&w=2070&auto=format&fit=crop", title: "Business Cards", description: "Print collateral branding." }
         ]
     }
 ];

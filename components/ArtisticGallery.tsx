@@ -1,13 +1,13 @@
-
-import React, { useRef, useLayoutEffect, useState } from 'react';
+import React, { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import gsap from 'gsap';
-import { Draggable } from "gsap/Draggable";
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import BounceCards from './BounceCards';
+import MagicBento, { BentoCardProps } from './MagicBento';
 import { GALLERY_ITEMS } from '../constants';
-import { ArrowLeft, X, PlayCircle, Check } from 'lucide-react';
+import { ArrowLeft, X, PlayCircle, Check, ChevronLeft, ChevronRight, Info, Camera, Aperture, Timer, Maximize2, Layers, Image as ImageIcon } from 'lucide-react';
 import { extractColorsFromUrl } from '../utils/colorUtils';
 
-// Register GSAP Plugins
-gsap.registerPlugin(Draggable);
+gsap.registerPlugin(ScrollTrigger);
 
 // --- SVG Assets for Handmade Feel ---
 const PaperClip = ({ className }: { className?: string }) => (
@@ -15,6 +15,10 @@ const PaperClip = ({ className }: { className?: string }) => (
         <path d="M16 42V10a6 6 0 0 0-12 0v28a2 2 0 0 0 4 0V12" />
         <path d="M8 12v26a2 2 0 0 0 4 0V10" strokeOpacity="0.5" />
     </svg>
+);
+
+const Tape = ({ className, color = "bg-[#e2d5b5]/80" }: { className?: string, color?: string }) => (
+    <div className={`absolute h-8 ${color} backdrop-blur-sm shadow-sm z-20 pointer-events-none ${className}`}></div>
 );
 
 const Scribble = ({ className }: { className?: string }) => (
@@ -41,78 +45,53 @@ interface ArtisticGalleryProps {
 const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDivElement>(null);
+    const mockupsRef = useRef<HTMLDivElement>(null); // Ref for Mockups section
     const [selectedItem, setSelectedItem] = useState<typeof GALLERY_ITEMS[0] | null>(null);
     const [activeImage, setActiveImage] = useState<string | null>(null);
     const [palette, setPalette] = useState<string[]>([]);
     const [copiedColor, setCopiedColor] = useState<string | null>(null);
 
-    // Initial Animation & Draggable Setup
-    useLayoutEffect(() => {
-        const ctx = gsap.context(() => {
-            const cards = gsap.utils.toArray('.gallery-card') as HTMLElement[];
+    // Filtering
+    const [activeCategory, setActiveCategory] = useState<string>('All');
 
-            gsap.set(cards, {
-                x: 0,
-                y: window.innerHeight + 200,
-                rotate: 0,
-                scale: 0.8,
-                opacity: 0
-            });
+    // User-defined categories
+    const categories = [
+        'All',
+        'Digital Illustrations',
+        'Environment Art',
+        'Concept Art',
+        'Character Design',
+        'Animation',
+        'Design'
+    ];
 
-            cards.forEach((card, i) => {
-                const angle = gsap.utils.random(-15, 15);
-                const x = gsap.utils.random(-200, 200);
-                const y = gsap.utils.random(-100, 100);
+    const doesItemBelongToCategory = (item: typeof GALLERY_ITEMS[0], category: string): boolean => {
+        switch (category) {
+            case 'All':
+                return true;
+            case 'Digital Illustrations':
+                return item.category === 'Digital Painting';
+            case 'Environment Art':
+                // Check for 3D or Sketches, or description keywords
+                return item.category === '3d' || item.category === 'Sketches' || item.description.toLowerCase().includes('entorno') || item.description.toLowerCase().includes('landscape');
+            case 'Concept Art':
+                return item.category === 'Sketches' || item.category === 'Digital Painting';
+            case 'Character Design':
+                // Check for Digital Painting or 3D, usually characters
+                return (item.category === 'Digital Painting' || item.category === '3d') && !item.description.toLowerCase().includes('landscape') && !item.description.toLowerCase().includes('entorno');
+            case 'Animation':
+                // Check if it has video media or description mentions animation
+                return item.media?.some(m => m.type === 'video') || item.description.toLowerCase().includes('animación') || item.description.toLowerCase().includes('animation');
+            case 'Design':
+                return item.category === 'Design';
+            default:
+                return false;
+        }
+    };
 
-                gsap.to(card, {
-                    x: x,
-                    y: y,
-                    rotate: angle,
-                    opacity: 1,
-                    scale: 1,
-                    duration: 1.5,
-                    ease: "power4.out",
-                    delay: i * 0.1,
-                    onComplete: () => {
-                        gsap.to(card, {
-                            y: `+=${gsap.utils.random(-10, 10)}`,
-                            duration: gsap.utils.random(2, 4),
-                            repeat: -1,
-                            yoyo: true,
-                            ease: "sine.inOut"
-                        });
-                    }
-                });
-            });
+    const filteredItems = GALLERY_ITEMS.filter(item => doesItemBelongToCategory(item, activeCategory));
 
-            Draggable.create(cards, {
-                type: "x,y",
-                edgeResistance: 0.65,
-                bounds: containerRef.current,
-                inertia: true,
-                zIndexBoost: true,
-                onPress: function () {
-                    gsap.killTweensOf(this.target, "y");
-                    gsap.to(this.target, { scale: 1.1, rotate: 0, duration: 0.2, overwrite: true, boxShadow: "0 30px 60px -12px rgba(0, 0, 0, 0.6)" });
-                },
-                onRelease: function () {
-                    gsap.to(this.target, { scale: 1, duration: 0.2, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)" });
-                },
-                onClick: function () {
-                    const id = this.target.getAttribute('data-id');
-                    const item = GALLERY_ITEMS.find(i => i.id === Number(id));
-                    if (item) {
-                        handleCardClick(item);
-                    }
-                }
-            });
-
-        }, containerRef);
-
-        return () => ctx.revert();
-    }, []);
-
-    // Modal Entrance Animation
+    // Modal Entrance Animation & Scroll Triggers
     useLayoutEffect(() => {
         if (selectedItem && modalRef.current) {
             const ctx = gsap.context(() => {
@@ -139,7 +118,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                     "-=0.1"
                 );
 
-                // 3. Staggered Content Entry
+                // 3. Staggered Content Entry (Hero)
                 tl.from('.hero-element', {
                     y: 50,
                     opacity: 0,
@@ -148,14 +127,63 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                     ease: "power3.out"
                 }, "-=0.8");
 
+                // 4. Scroll Animations for Content Sections
+                const sections = gsap.utils.toArray('.content-section');
+                sections.forEach((section: any) => {
+                    gsap.fromTo(section,
+                        {
+                            y: 50,
+                            opacity: 0
+                        },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.8,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: section,
+                                scroller: modalRef.current, // Important: define the scroller
+                                start: "top 85%", // Start animation when top of section hits 85% of viewport
+                                toggleActions: "play none none reverse" // Play on enter, reverse on leave back up
+                            }
+                        }
+                    );
+                });
+
             }, modalRef); // Scope to modalRef
 
             return () => ctx.revert();
         }
     }, [selectedItem]);
 
+    // Keyboard Navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!selectedItem) return;
+
+            if (e.key === 'Escape') {
+                handleCloseAnimation();
+            } else if (e.key === 'ArrowLeft') {
+                navigateItem(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigateItem(1);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedItem, filteredItems]);
+
+    const navigateItem = (direction: number) => {
+        if (!selectedItem) return;
+        const currentIndex = filteredItems.findIndex(item => item.id === selectedItem.id);
+        if (currentIndex === -1) return;
+
+        const newIndex = (currentIndex + direction + filteredItems.length) % filteredItems.length;
+        handleCardClick(filteredItems[newIndex]);
+    };
+
     const handleCardClick = async (item: typeof GALLERY_ITEMS[0]) => {
-        if (selectedItem) return;
         setSelectedItem(item);
         setActiveImage(item.url);
 
@@ -201,6 +229,10 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
         setTimeout(() => setCopiedColor(null), 2000);
     };
 
+    const scrollToMockups = () => {
+        mockupsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <div ref={containerRef} className="relative w-full h-screen bg-slate-950 overflow-hidden flex flex-col items-center justify-center text-slate-100 perspective-1000">
 
@@ -212,6 +244,22 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                 <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
             </button>
 
+            {/* Category Filters */}
+            <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-40 flex gap-2 p-1 bg-slate-900/50 backdrop-blur-md rounded-full border border-white/5 transition-opacity duration-300 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                {categories.map(cat => (
+                    <button
+                        key={cat}
+                        onClick={() => setActiveCategory(cat)}
+                        className={`px-4 py-1.5 rounded-full text-sm font-['Space_Grotesk'] transition-all ${activeCategory === cat
+                            ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
+                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                            }`}
+                    >
+                        {cat}
+                    </button>
+                ))}
+            </div>
+
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-20"></div>
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] -z-10"></div>
@@ -222,60 +270,73 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
             </h2>
 
             {/* Cards Container */}
-            <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${selectedItem ? 'opacity-0' : 'opacity-100'}`}>
-                <div className="w-full h-full flex items-center justify-center">
-                    {GALLERY_ITEMS.map((item) => {
-                        const isWide = item.id === 2;
-                        return (
-                            <div
-                                key={item.id}
-                                data-id={item.id}
-                                className={`gallery-card absolute bg-white p-3 pb-12 shadow-2xl cursor-grab active:cursor-grabbing pointer-events-auto transform-gpu will-change-transform hover:z-10 ${isWide ? 'w-80 md:w-[28rem] aspect-video' : 'w-64 md:w-80 aspect-[3/4]'}`}
-                            >
-                                <div className="w-full h-full bg-gray-100 overflow-hidden border border-gray-200 relative pointer-events-none">
-                                    <img src={item.url} alt={item.title} loading="lazy" className="w-full h-full object-cover pointer-events-none" />
-                                    <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors"></div>
-                                </div>
-                                <div className="absolute bottom-3 left-0 right-0 text-center pointer-events-none">
-                                    <p className="font-['Permanent_Marker'] text-slate-900 text-lg truncate px-4">{item.title}</p>
-                                    <p className="font-['Space_Grotesk'] text-slate-500 text-[10px] uppercase tracking-widest">{item.category}</p>
-                                </div>
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-[#e2d5b5]/90 backdrop-blur-sm rotate-1 shadow-sm opacity-90 pointer-events-none"></div>
-                            </div>
-                        );
-                    })}
-                </div>
+            <div className={`absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <BounceCards
+                    images={filteredItems.map(item => item.url)}
+                    containerWidth={800}
+                    containerHeight={600}
+                    animationDelay={0.5}
+                    animationStagger={0.08}
+                    transformStyles={[
+                        "rotate(-20deg) translate(-480px)",
+                        "rotate(-15deg) translate(-360px)",
+                        "rotate(-10deg) translate(-240px)",
+                        "rotate(-5deg) translate(-120px)",
+                        "rotate(0deg)",
+                        "rotate(5deg) translate(120px)",
+                        "rotate(10deg) translate(240px)",
+                        "rotate(15deg) translate(360px)",
+                        "rotate(20deg) translate(480px)"
+                    ]}
+                    onClick={(index) => handleCardClick(filteredItems[index])}
+                    imageStyles={filteredItems.map(item => item.objectPosition ? { objectPosition: item.objectPosition } : {})}
+                />
             </div>
 
             {/* Instruction */}
             <div className={`fixed bottom-12 text-slate-500 font-['Space_Grotesk'] text-sm tracking-widest animate-pulse pointer-events-none transition-opacity duration-300 ${selectedItem ? 'opacity-0' : 'opacity-100'}`}>
-                DRAG TO ARRANGE • CLICK TO VIEW
+                HOVER TO REVEAL • CLICK TO VIEW
             </div>
 
             {/* Full Screen Detail View */}
             {selectedItem && (
-                <div className="fixed inset-0 z-[60] pointer-events-auto">
+                <div className="fixed inset-0 z-[200] pointer-events-auto">
                     {/* Animation Overlay (Shutter) */}
                     <div
                         id="modal-shutter"
-                        className="absolute inset-0 bg-black z-50 pointer-events-none"
+                        className="absolute inset-0 bg-black z-[190] pointer-events-none"
                     ></div>
 
                     <div
                         ref={modalRef}
-                        className="absolute inset-0 bg-[#050505] overflow-y-auto custom-scrollbar opacity-0 z-[60]"
+                        className="absolute inset-0 bg-[#050505] overflow-y-auto custom-scrollbar opacity-0 z-[200]"
                         id="modal-content"
                     >
+                        {/* Close Button */}
                         <button
                             onClick={handleCloseAnimation}
-                            className="fixed top-6 right-6 z-[70] p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-md group"
+                            className="fixed top-6 right-6 z-[210] p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-md group"
                         >
                             <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
                         </button>
 
+                        {/* Navigation Buttons (Visible on Desktop) */}
+                        <button
+                            onClick={() => navigateItem(-1)}
+                            className="fixed top-1/2 left-6 z-[210] -translate-y-1/2 p-3 bg-white/5 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-all hidden md:block"
+                        >
+                            <ChevronLeft size={32} />
+                        </button>
+                        <button
+                            onClick={() => navigateItem(1)}
+                            className="fixed top-1/2 right-6 z-[210] -translate-y-1/2 p-3 bg-white/5 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-all hidden md:block"
+                        >
+                            <ChevronRight size={32} />
+                        </button>
+
                         <div className="min-h-screen flex flex-col">
 
-                            {/* Hero Section */}
+                            {/* Standard Hero Section (Restored for ALL categories) */}
                             <div className="w-full h-screen flex flex-col md:flex-row relative">
                                 {/* Left: Main Image */}
                                 <div className="w-full md:w-[65%] h-[50vh] md:h-full relative bg-[#0a0a0a] flex items-center justify-center p-8 md:p-16 hero-element">
@@ -286,7 +347,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                         <div className="absolute top-4 right-4 md:right-8 w-4 h-4 md:w-6 md:h-6 bg-[#0a0a0a] rounded-full shadow-inner z-30"></div>
 
                                         {/* Tape */}
-                                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-48 h-12 bg-[#e2d5b5]/90 backdrop-blur-sm -rotate-2 shadow-lg z-20"></div>
+                                        <Tape className="w-48 -top-6 left-1/2 -translate-x-1/2 -rotate-2 h-12" />
 
                                         {/* Paper Clip */}
                                         <PaperClip className="absolute -top-8 right-12 w-8 h-16 text-slate-300 rotate-12 z-40 drop-shadow-md" />
@@ -359,132 +420,394 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                             {/* Content Sections */}
                             <div className="w-full max-w-7xl mx-auto px-6 md:px-12 py-24 space-y-32">
 
-                                {/* Description */}
-                                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
-                                    <div className="md:col-span-4">
-                                        <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-indigo-500">01.</span> THE STORY
-                                        </h3>
-                                        <div className="w-full h-[1px] bg-white/10"></div>
-                                    </div>
-                                    <div className="md:col-span-8">
-                                        <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed">
-                                            {selectedItem.description}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Palette */}
-                                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
-                                    <div className="md:col-span-4">
-                                        <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-indigo-500">02.</span> PALETTE
-                                        </h3>
-                                        <div className="w-full h-[1px] bg-white/10"></div>
-                                    </div>
-                                    <div className="md:col-span-8">
-                                        <div className="flex flex-wrap gap-6">
-                                            {palette.length > 0 ? (
-                                                palette.map((color, index) => (
-                                                    <div key={index} className="group relative">
-                                                        <button
-                                                            onClick={() => handleCopyColor(color)}
-                                                            className="w-24 h-32 rounded-lg shadow-xl hover:scale-105 transition-transform duration-300 flex flex-col items-center justify-end pb-4 border border-white/5 relative overflow-hidden"
-                                                            style={{ backgroundColor: color }}
-                                                        >
-                                                            <span className="bg-black/20 backdrop-blur-sm text-white text-xs font-mono px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                {color}
-                                                            </span>
-                                                            {copiedColor === color && (
-                                                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-                                                                    <Check className="text-white" />
-                                                                </div>
-                                                            )}
-                                                        </button>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <div className="flex gap-4">
-                                                    {[1, 2, 3, 4, 5].map(i => (
-                                                        <div key={i} className="w-24 h-32 rounded-lg bg-slate-800 animate-pulse" />
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Magazine Style Assets */}
-                                {selectedItem.media && selectedItem.media.length > 0 && (
-                                    <div className="space-y-24">
+                                {/* PHOTOGRAPHY LAYOUT */}
+                                {selectedItem.category === 'Photography' && (
+                                    <>
+                                        {/* 01. SOBRE LA TOMA */}
                                         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                             <div className="md:col-span-4">
                                                 <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                    <span className="text-indigo-500">03.</span> ASSETS
+                                                    <span className="text-indigo-500">01.</span> SOBRE LA TOMA
                                                 </h3>
                                                 <div className="w-full h-[1px] bg-white/10"></div>
                                             </div>
+                                            <div className="md:col-span-8 space-y-8">
+                                                <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed">
+                                                    {selectedItem.description}
+                                                </p>
+
+                                                {/* Camera Info Box - Paper Style */}
+                                                {selectedItem.cameraInfo && (
+                                                    <div className="relative bg-[#fdfbf7] p-8 pt-10 rounded-sm shadow-xl rotate-1 transition-transform hover:rotate-0 group">
+                                                        <Tape className="w-32 -top-4 left-1/2 -translate-x-1/2 -rotate-1 opacity-90" />
+
+                                                        <h3 className="text-xl font-['Permanent_Marker'] text-slate-800 mb-6 flex items-center gap-2 border-b-2 border-slate-200 pb-2">
+                                                            <Camera className="text-slate-800" strokeWidth={2.5} size={20} />
+                                                            LOG DE CÁMARA
+                                                        </h3>
+
+                                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-6 gap-x-4">
+                                                            <div className="space-y-1">
+                                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Modelo</span>
+                                                                <p className="text-slate-800 font-['Space_Grotesk'] font-bold">{selectedItem.cameraInfo.model}</p>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lente</span>
+                                                                <p className="text-slate-800 font-['Space_Grotesk'] font-bold">{selectedItem.cameraInfo.lens}</p>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Apertura</span>
+                                                                <p className="text-slate-800 font-['Space_Grotesk'] font-bold flex items-center gap-2">
+                                                                    <Aperture size={14} className="text-indigo-500" /> {selectedItem.cameraInfo.aperture}
+                                                                </p>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Obturador</span>
+                                                                <p className="text-slate-800 font-['Space_Grotesk'] font-bold flex items-center gap-2">
+                                                                    <Timer size={14} className="text-indigo-500" /> {selectedItem.cameraInfo.shutterSpeed}
+                                                                </p>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ISO</span>
+                                                                <p className="text-slate-800 font-['Space_Grotesk'] font-bold flex items-center gap-2">
+                                                                    <Maximize2 size={14} className="text-indigo-500" /> {selectedItem.cameraInfo.iso}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Decorative stamp or signature area */}
+                                                        <div className="absolute bottom-4 right-6 opacity-10 rotate-12 pointer-events-none">
+                                                            <div className="border-2 border-slate-900 rounded-full w-16 h-16 flex items-center justify-center">
+                                                                <span className="font-['Permanent_Marker'] text-xs text-slate-900">APPROVED</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
 
-                                        {selectedItem.media.map((mediaItem, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 md:gap-24 items-center content-section`}
-                                            >
-                                                {/* Image Side */}
-                                                <div className="w-full md:w-2/3 relative group cursor-pointer" onClick={() => {
-                                                    setActiveImage(mediaItem.url);
-                                                    // Scroll to top of the modal container
-                                                    if (modalRef.current) {
-                                                        modalRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-                                                    }
-                                                }}>
-                                                    <div className={`relative bg-white p-3 md:p-4 shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] ${idx % 2 === 0 ? 'rotate-1' : '-rotate-1'}`}>
-                                                        {/* Decorative Elements */}
-                                                        <PaperClip className={`absolute -top-6 ${idx % 2 === 0 ? 'right-12' : 'left-12'} w-8 h-16 text-slate-400 z-20`} />
-                                                        <div className={`absolute -bottom-4 ${idx % 2 === 0 ? 'left-1/2' : 'right-1/2'} w-32 h-8 bg-[#e2d5b5]/80 backdrop-blur-sm rotate-2 shadow-sm z-20`}></div>
-                                                        <ScratchOverlay />
+                                        {/* 02. ÁLBUM DE FOTOS */}
+                                        <div className="space-y-8 content-section">
+                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+                                                <div className="md:col-span-4">
+                                                    <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                        <span className="text-indigo-500">02.</span> ÁLBUM DE FOTOS
+                                                    </h3>
+                                                    <div className="w-full h-[1px] bg-white/10"></div>
+                                                </div>
+                                            </div>
 
-                                                        <div className="aspect-video w-full bg-gray-100 overflow-hidden relative border border-slate-200">
-                                                            {mediaItem.type === 'video' ? (
-                                                                <div className="w-full h-full relative flex items-center justify-center bg-black">
-                                                                    <video
-                                                                        src={mediaItem.url}
-                                                                        className="w-full h-full object-cover opacity-90"
-                                                                        muted
-                                                                        loop
-                                                                        playsInline
-                                                                    />
-                                                                    <PlayCircle className="absolute text-white/70 w-16 h-16" />
-                                                                </div>
-                                                            ) : (
-                                                                <img src={mediaItem.url} alt="" loading="lazy" className="w-full h-full object-cover mix-blend-multiply" />
-                                                            )}
+                                            <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 pt-8">
+                                                {/* Main Image */}
+                                                <div className="break-inside-avoid relative group">
+                                                    <div className="bg-white p-4 pb-16 shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-300 transform-gpu relative">
+                                                        <Tape className="w-32 -top-4 left-1/2 -translate-x-1/2 -rotate-2 opacity-90" />
+                                                        <div className="w-full bg-gray-100 overflow-hidden relative">
+                                                            <img src={selectedItem.url} alt={selectedItem.title} className="w-full h-auto object-contain" />
+                                                            <ScratchOverlay />
+                                                        </div>
+                                                        <div className="mt-4 font-['Handlee'] text-slate-800 text-xl text-center">
+                                                            {selectedItem.title}
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Text Side */}
-                                                <div className="w-full md:w-1/3 space-y-6">
-                                                    <div className="flex items-center gap-4">
-                                                        <span className="text-6xl font-['Permanent_Marker'] text-slate-700 opacity-20">0{idx + 1}</span>
-                                                        <div className="h-[1px] flex-grow bg-white/10"></div>
+                                                {/* Media Images */}
+                                                {selectedItem.media?.map((mediaItem, idx) => (
+                                                    <div key={idx} className="break-inside-avoid relative group">
+                                                        <div className={`bg-white p-4 pb-16 shadow-2xl transition-transform duration-300 transform-gpu hover:z-10 hover:scale-105 ${idx % 2 === 0 ? '-rotate-2' : 'rotate-2'} hover:rotate-0 relative`}>
+                                                            <Tape className={`w-28 -top-3 left-1/2 -translate-x-1/2 opacity-90 ${idx % 2 === 0 ? 'rotate-1' : '-rotate-3'}`} />
+                                                            <div className="w-full bg-gray-100 overflow-hidden relative">
+                                                                {mediaItem.type === 'video' ? (
+                                                                    <video src={mediaItem.url} className="w-full h-auto object-contain" muted loop autoPlay playsInline />
+                                                                ) : (
+                                                                    <img src={mediaItem.url} alt="" className="w-full h-auto object-contain" />
+                                                                )}
+                                                                <ScratchOverlay />
+                                                            </div>
+                                                            <div className="mt-4 font-['Handlee'] text-slate-800 text-xl text-center">
+                                                                Captura #{idx + 1}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <h4 className="text-2xl font-['Space_Grotesk'] text-white font-bold">
-                                                        {mediaItem.type === 'video' ? 'Motion Process' : 'Visual Concept'}
-                                                    </h4>
-                                                    <p className="text-slate-400 font-light leading-relaxed font-['Handlee'] text-lg italic">
-                                                        "Exploring the depths of the design through {mediaItem.type === 'video' ? 'motion and dynamics' : 'visual composition and color'}. Every detail counts in the final render."
-                                                    </p>
-                                                    <div className="flex gap-2">
-                                                        <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
-                                                        <div className="w-2 h-2 rounded-full bg-slate-700"></div>
-                                                        <div className="w-2 h-2 rounded-full bg-slate-700"></div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* DESIGN CATEGORY LAYOUT */}
+                                {selectedItem.category === 'Design' && selectedItem.bentoData && (
+                                    <>
+                                        {/* 01. DESIGN SYSTEM (Bento) */}
+                                        <div className="content-section">
+                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start mb-12">
+                                                <div className="md:col-span-4">
+                                                    <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                        <span className="text-indigo-500">01.</span> DESIGN SYSTEM
+                                                    </h3>
+                                                    <div className="w-full h-[1px] bg-white/10"></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="w-full">
+                                                <MagicBento
+                                                    cards={selectedItem.bentoData.map(card => ({
+                                                        ...card,
+                                                        onClick: card.title === 'View Mockups' ? scrollToMockups : undefined
+                                                    }))}
+                                                    textAutoHide={true}
+                                                    enableStars={true}
+                                                    enableSpotlight={true}
+                                                    enableBorderGlow={true}
+                                                    enableTilt={true}
+                                                    enableMagnetism={true}
+                                                    clickEffect={true}
+                                                    spotlightRadius={300}
+                                                    particleCount={12}
+                                                    glowColor="132, 0, 255"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* 02. THE STORY */}
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                            <div className="md:col-span-4">
+                                                <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                    <span className="text-indigo-500">02.</span> THE STORY
+                                                </h3>
+                                                <div className="w-full h-[1px] bg-white/10"></div>
+                                            </div>
+                                            <div className="md:col-span-8">
+                                                <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed">
+                                                    {selectedItem.description}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* 03. SPECS */}
+                                        {selectedItem.technicalInfo && (
+                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                                <div className="md:col-span-4">
+                                                    <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                        <span className="text-indigo-500">03.</span> SPECS
+                                                    </h3>
+                                                    <div className="w-full h-[1px] bg-white/10"></div>
+                                                </div>
+                                                <div className="md:col-span-8">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                                        {Object.entries(selectedItem.technicalInfo).map(([key, value]) => (
+                                                            <div key={key} className="bg-white/5 p-6 rounded-lg border border-white/5 hover:border-indigo-500/30 transition-colors">
+                                                                <h4 className="text-indigo-400 uppercase tracking-widest text-xs mb-2 font-bold">{key}</h4>
+                                                                <p className="text-slate-200 font-['Space_Grotesk'] text-lg">{value}</p>
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
+                                        )}
+
+                                        {/* 04. MOCKUPS */}
+                                        {selectedItem.mockups && (
+                                            <div ref={mockupsRef} className="space-y-24 pt-12">
+                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                                    <div className="md:col-span-4">
+                                                        <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                            <span className="text-indigo-500">04.</span> MOCKUPS
+                                                        </h3>
+                                                        <div className="w-full h-[1px] bg-white/10"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 gap-16">
+                                                    {selectedItem.mockups.map((mockup, idx) => (
+                                                        <div key={idx} className="group relative">
+                                                            <div className="relative overflow-hidden rounded-xl shadow-2xl border border-white/10 bg-slate-900">
+                                                                <img
+                                                                    src={mockup.url}
+                                                                    alt={mockup.title}
+                                                                    className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
+                                                                />
+                                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                                                                    <h4 className="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{mockup.title}</h4>
+                                                                    <p className="text-slate-300 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">{mockup.description}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
+                                {/* STANDARD LAYOUT (For anything NOT Design AND NOT Photography) */}
+                                {selectedItem.category !== 'Design' && selectedItem.category !== 'Photography' && (
+                                    <>
+                                        {/* 01. THE STORY */}
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                            <div className="md:col-span-4">
+                                                <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                    <span className="text-indigo-500">01.</span> THE STORY
+                                                </h3>
+                                                <div className="w-full h-[1px] bg-white/10"></div>
+                                            </div>
+                                            <div className="md:col-span-8">
+                                                <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed">
+                                                    {selectedItem.description}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* 02. SPECS (if exists) */}
+                                        {selectedItem.technicalInfo && (
+                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                                <div className="md:col-span-4">
+                                                    <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                        <span className="text-indigo-500">02.</span> SPECS
+                                                    </h3>
+                                                    <div className="w-full h-[1px] bg-white/10"></div>
+                                                </div>
+                                                <div className="md:col-span-8">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                                        {Object.entries(selectedItem.technicalInfo).map(([key, value]) => (
+                                                            <div key={key} className="bg-white/5 p-6 rounded-lg border border-white/5 hover:border-indigo-500/30 transition-colors">
+                                                                <h4 className="text-indigo-400 uppercase tracking-widest text-xs mb-2 font-bold">{key}</h4>
+                                                                <p className="text-slate-200 font-['Space_Grotesk'] text-lg">{value}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* 03/02. PALETTE */}
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                            <div className="md:col-span-4">
+                                                <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                    <span className="text-indigo-500">{selectedItem.technicalInfo ? '03.' : '02.'}</span> PALETTE
+                                                </h3>
+                                                <div className="w-full h-[1px] bg-white/10"></div>
+                                            </div>
+                                            <div className="md:col-span-8">
+                                                <div className="flex flex-wrap gap-6">
+                                                    {palette.length > 0 ? (
+                                                        palette.map((color, index) => (
+                                                            <div key={index} className="group relative">
+                                                                <button
+                                                                    onClick={() => handleCopyColor(color)}
+                                                                    className="w-24 h-36 bg-white rounded-lg shadow-xl hover:-translate-y-2 transition-transform duration-300 flex flex-col relative overflow-hidden"
+                                                                >
+                                                                    {/* Color Area */}
+                                                                    <div
+                                                                        className="w-full h-24 relative"
+                                                                        style={{ backgroundColor: color }}
+                                                                    >
+                                                                        <ScratchOverlay />
+                                                                    </div>
+
+                                                                    {/* Info Area */}
+                                                                    <div className="flex-grow flex flex-col justify-center items-center bg-[#fdfbf7] border-t border-slate-100">
+                                                                        <span className="text-slate-800 text-[10px] font-mono font-bold uppercase tracking-wider">
+                                                                            {color}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    {/* Hole Punch */}
+                                                                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#050505] rounded-full shadow-inner border border-white/10"></div>
+
+                                                                    {/* Copied Feedback */}
+                                                                    {copiedColor === color && (
+                                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-10">
+                                                                            <Check className="text-white drop-shadow-md" />
+                                                                        </div>
+                                                                    )}
+                                                                </button>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div className="flex gap-4">
+                                                            {[1, 2, 3, 4, 5].map(i => (
+                                                                <div key={i} className="w-24 h-36 rounded-lg bg-slate-800 animate-pulse" />
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* 04/03. ASSETS */}
+                                        {selectedItem.media && selectedItem.media.length > 0 && (
+                                            <div className="space-y-24">
+                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
+                                                    <div className="md:col-span-4">
+                                                        <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                            <span className="text-indigo-500">{selectedItem.technicalInfo ? '04.' : '03.'}</span> ASSETS
+                                                        </h3>
+                                                        <div className="w-full h-[1px] bg-white/10"></div>
+                                                    </div>
+                                                </div>
+
+                                                {selectedItem.media.map((mediaItem, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 md:gap-24 items-center content-section`}
+                                                    >
+                                                        {/* Image Side */}
+                                                        <div className="w-full md:w-2/3 relative group cursor-pointer" onClick={() => {
+                                                            setActiveImage(mediaItem.url);
+                                                            if (modalRef.current) {
+                                                                modalRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                                                            }
+                                                        }}>
+                                                            <div className={`relative bg-white p-3 md:p-4 shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] ${idx % 2 === 0 ? 'rotate-1' : '-rotate-1'}`}>
+                                                                {/* Decorative Elements */}
+                                                                <PaperClip className={`absolute -top-6 ${idx % 2 === 0 ? 'right-12' : 'left-12'} w-8 h-16 text-slate-400 z-20`} />
+                                                                <Tape className={`w-32 -bottom-4 ${idx % 2 === 0 ? 'left-1/2' : 'right-1/2'} rotate-2`} />
+                                                                <ScratchOverlay />
+
+                                                                <div className="w-full bg-gray-100 overflow-hidden relative border border-slate-200">
+                                                                    {mediaItem.type === 'video' ? (
+                                                                        <div className="w-full aspect-video relative flex items-center justify-center bg-black">
+                                                                            <video
+                                                                                src={mediaItem.url}
+                                                                                className="w-full h-full object-cover opacity-90"
+                                                                                muted
+                                                                                loop
+                                                                                playsInline
+                                                                            />
+                                                                            <PlayCircle className="absolute text-white/70 w-16 h-16" />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <img src={mediaItem.url} alt="" loading="lazy" className="w-full h-auto object-contain mix-blend-multiply" />
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Text Side */}
+                                                        <div className="w-full md:w-1/3 space-y-6">
+                                                            <div className="flex items-center gap-4">
+                                                                <span className="text-6xl font-['Permanent_Marker'] text-slate-700 opacity-20">0{idx + 1}</span>
+                                                                <div className="h-[1px] flex-grow bg-white/10"></div>
+                                                            </div>
+                                                            <h4 className="text-2xl font-['Space_Grotesk'] text-white font-bold">
+                                                                {mediaItem.type === 'video' ? 'Motion Process' : 'Visual Concept'}
+                                                            </h4>
+                                                            <p className="text-slate-400 font-light leading-relaxed font-['Handlee'] text-lg italic">
+                                                                "Exploring the depths of the design through {mediaItem.type === 'video' ? 'motion and dynamics' : 'visual composition and color'}. Every detail counts in the final render."
+                                                            </p>
+                                                            <div className="flex gap-2">
+                                                                <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
+                                                                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
+                                                                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
                                 )}
 
                                 {/* Footer */}
