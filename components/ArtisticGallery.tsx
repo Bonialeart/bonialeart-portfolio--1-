@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import BounceCards from './BounceCards';
 import MagicBento, { BentoCardProps } from './MagicBento';
+import PillNav from './PillNav';
 import { GALLERY_ITEMS } from '../constants';
 import { ArrowLeft, X, PlayCircle, Check, ChevronLeft, ChevronRight, Info, Camera, Aperture, Timer, Maximize2, Layers, Image as ImageIcon } from 'lucide-react';
 import { extractColorsFromUrl } from '../utils/colorUtils';
@@ -246,19 +247,16 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
 
             {/* Category Filters */}
             <div className={`fixed top-6 left-0 right-0 z-40 flex justify-center transition-opacity duration-300 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                <div className="flex gap-2 p-1 bg-slate-900/80 backdrop-blur-md rounded-full border border-white/10 overflow-x-auto max-w-[95vw] mx-auto no-scrollbar px-2">
-                    {categories.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setActiveCategory(cat)}
-                            className={`px-4 py-1.5 rounded-full text-sm font-['Space_Grotesk'] whitespace-nowrap transition-all ${activeCategory === cat
-                                ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
-                                : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+                <div className="max-w-[95vw] overflow-x-auto no-scrollbar px-4 py-2">
+                    <PillNav
+                        items={categories.map(cat => ({ label: cat, value: cat }))}
+                        activeValue={activeCategory}
+                        onSelect={setActiveCategory}
+                        baseColor="#6366f1" // Indigo-500
+                        pillColor="#0f172a" // Slate-900
+                        pillTextColor="#94a3b8" // Slate-400
+                        hoveredPillTextColor="#ffffff"
+                    />
                 </div>
             </div>
 
