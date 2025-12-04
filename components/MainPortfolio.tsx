@@ -163,7 +163,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             {/* Back Button */}
             <button
                 onClick={onBack}
-                className="fixed top-6 left-6 z-50 p-3 bg-slate-900/80 backdrop-blur-md rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700"
+                className="hidden lg:block fixed top-6 left-6 z-50 p-3 bg-slate-900/80 backdrop-blur-md rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700"
             >
                 <ArrowLeft size={20} />
             </button>
