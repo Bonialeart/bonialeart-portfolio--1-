@@ -236,10 +236,10 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
     return (
         <div ref={containerRef} className="relative w-full h-screen bg-slate-950 overflow-hidden flex flex-col items-center justify-center text-slate-100 perspective-1000">
 
-            {/* Back Button */}
+            {/* Back Button - Hidden on Mobile, Visible on Desktop */}
             <button
                 onClick={onBack}
-                className={`fixed top-6 left-6 z-50 p-3 bg-slate-900/80 backdrop-blur-md rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 group ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                className={`hidden lg:block fixed top-6 left-6 z-50 p-3 bg-slate-900/80 backdrop-blur-md rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 group ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
                 <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
             </button>
