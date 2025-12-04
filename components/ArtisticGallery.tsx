@@ -245,32 +245,34 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
             </button>
 
             {/* Category Filters */}
-            <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-40 flex gap-2 p-1 bg-slate-900/50 backdrop-blur-md rounded-full border border-white/5 transition-opacity duration-300 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                {categories.map(cat => (
-                    <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        className={`px-4 py-1.5 rounded-full text-sm font-['Space_Grotesk'] transition-all ${activeCategory === cat
-                            ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
-                            : 'text-slate-400 hover:text-white hover:bg-white/5'
-                            }`}
-                    >
-                        {cat}
-                    </button>
-                ))}
+            <div className={`fixed top-6 left-0 right-0 z-40 flex justify-center transition-opacity duration-300 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <div className="flex gap-2 p-1 bg-slate-900/80 backdrop-blur-md rounded-full border border-white/10 overflow-x-auto max-w-[95vw] mx-auto no-scrollbar px-2">
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => setActiveCategory(cat)}
+                            className={`px-4 py-1.5 rounded-full text-sm font-['Space_Grotesk'] whitespace-nowrap transition-all ${activeCategory === cat
+                                ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
+                                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Background Texture */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-20"></div>
-            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] -z-10"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-20 fixed"></div>
+            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] -z-10 fixed"></div>
 
-            {/* Title Background */}
-            <h2 className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-800/50 font-['Permanent_Marker'] text-[15vw] opacity-10 select-none pointer-events-none whitespace-nowrap z-0 transition-opacity duration-500 ${selectedItem ? 'opacity-0' : 'opacity-10'}`}>
+            {/* Title Background (Desktop Only) */}
+            <h2 className={`hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-800/50 font-['Permanent_Marker'] text-[15vw] opacity-10 select-none pointer-events-none whitespace-nowrap z-0 transition-opacity duration-500 ${selectedItem ? 'opacity-0' : 'opacity-10'}`}>
                 ALBUM
             </h2>
 
-            {/* Cards Container */}
-            <div className={`absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            {/* DESKTOP: Bounce Cards Container */}
+            <div className={`hidden lg:flex absolute inset-0 items-center justify-center z-10 transition-opacity duration-500 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <BounceCards
                     images={filteredItems.map(item => item.url)}
                     containerWidth={800}
@@ -291,6 +293,43 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                     onClick={(index) => handleCardClick(filteredItems[index])}
                     imageStyles={filteredItems.map(item => item.objectPosition ? { objectPosition: item.objectPosition } : {})}
                 />
+            </div>
+
+            {/* MOBILE/TABLET: Scrollable Polaroid List */}
+            <div className={`lg:hidden absolute inset-0 z-10 overflow-y-auto pt-24 pb-20 px-4 transition-opacity duration-500 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 max-w-2xl mx-auto pb-12">
+                    {filteredItems.map((item, index) => (
+                        <div
+                            key={item.id}
+                            onClick={() => handleCardClick(item)}
+                            className={`relative bg-[#fdfbf7] p-3 pb-12 shadow-2xl transform transition-transform active:scale-95 duration-200 cursor-pointer group ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'}`}
+                        >
+                            {/* Tape */}
+                            <Tape className={`w-24 -top-3 left-1/2 -translate-x-1/2 opacity-90 ${index % 2 === 0 ? '-rotate-2' : 'rotate-1'}`} />
+
+                            {/* Image Container */}
+                            <div className="w-full aspect-[4/5] bg-gray-100 overflow-hidden relative border border-slate-200/50">
+                                <img
+                                    src={item.url}
+                                    alt={item.title}
+                                    className="w-full h-full object-cover filter sepia-[0.1] group-hover:sepia-0 transition-all duration-500"
+                                    loading="lazy"
+                                />
+                                <ScratchOverlay />
+                            </div>
+
+                            {/* Caption */}
+                            <div className="absolute bottom-3 left-0 right-0 text-center">
+                                <p className="font-['Permanent_Marker'] text-slate-800 text-xl truncate px-4">
+                                    {item.title}
+                                </p>
+                                <p className="font-['Space_Grotesk'] text-slate-500 text-[10px] uppercase tracking-widest">
+                                    {item.category}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* Instruction */}
