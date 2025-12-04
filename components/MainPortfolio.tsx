@@ -160,12 +160,14 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             <Navigation />
             <MediaKitButton />
 
-            {/* Back Button */}
+            {/* Back Button - Responsive Positioning */}
             <button
                 onClick={onBack}
-                className="hidden lg:block fixed top-6 left-6 z-50 p-3 bg-slate-900/80 backdrop-blur-md rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700"
+                className="fixed z-50 rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 bg-slate-900/80 backdrop-blur-md
+                top-6 left-6 p-3 hidden lg:block
+                bottom-6 left-6 p-2 lg:hidden shadow-lg"
             >
-                <ArrowLeft size={20} />
+                <ArrowLeft size={20} className="lg:w-5 lg:h-5 w-4 h-4" />
             </button>
 
             {/* Hero Section */}
