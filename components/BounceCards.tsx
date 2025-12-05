@@ -171,7 +171,9 @@ const BounceCards: React.FC<BounceCardsProps> = ({
                     key={i}
                     className="card absolute w-[320px] bg-[#f8f8f8] p-4 pb-14 shadow-xl cursor-pointer hover:shadow-2xl transition-shadow transform-gpu"
                     style={{
-                        zIndex: i
+                        zIndex: images.length - i, // First item on top
+                        // Initial stable position to prevent jumping
+                        transform: transformStyles[i % transformStyles.length] || `rotate(${(i - images.length / 2) * 5}deg)`
                     }}
                     onClick={() => onClick && onClick(i)}
                     onMouseEnter={(e) => handleCardEnter(e, i)}

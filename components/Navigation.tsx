@@ -48,8 +48,9 @@ const Navigation = () => {
   const navLinks = [
     { id: 'home', label: 'Inicio' },
     { id: 'about', label: 'Sobre Mí' },
-    { id: 'skills', label: 'Skills' },
+    { id: 'skills', label: 'Habilidades' },
     { id: 'gallery', label: 'Galería' },
+    { id: 'services', label: 'Servicios' },
     { id: 'contact', label: 'Contacto' },
   ];
 
@@ -80,13 +81,13 @@ const Navigation = () => {
               initial={{ rotate: 0 }}
             >
               {/* Paper Background */}
-              <div className={`absolute inset-0 bg-[#f1f5f9] shadow-md transform ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} group-hover:rotate-0 transition-transform duration-300 rounded-sm`}></div>
+              <div className={`absolute inset-0 ${link.id === 'contact' ? 'bg-[#ffbd2e]' : 'bg-[#f1f5f9]'} shadow-md transform ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} group-hover:rotate-0 transition-transform duration-300 rounded-sm`}></div>
 
               {/* Tape Effect */}
               <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-white/40 backdrop-blur-[1px] rotate-[-2deg] shadow-sm z-10 border-l border-r border-white/20"></div>
 
               {/* Text */}
-              <span className="relative z-10 font-['Permanent_Marker'] text-slate-900 group-hover:text-indigo-600 transition-colors text-sm md:text-base">
+              <span className={`relative z-10 font-['Permanent_Marker'] ${link.id === 'contact' ? 'text-slate-900 group-hover:text-white' : 'text-slate-900 group-hover:text-indigo-600'} transition-colors text-sm md:text-base`}>
                 {link.label}
               </span>
             </motion.a>
@@ -102,6 +103,7 @@ const Navigation = () => {
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </nav>
+
 
       {/* Mobile/Tablet Overlay Menu */}
       <AnimatePresence>

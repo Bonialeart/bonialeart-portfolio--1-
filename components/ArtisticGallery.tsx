@@ -4,8 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import BounceCards from './BounceCards';
 import MagicBento, { BentoCardProps } from './MagicBento';
 import PillNav from './PillNav';
-import { GALLERY_ITEMS } from '../constants';
-import { ArrowLeft, X, PlayCircle, Check, ChevronLeft, ChevronRight, Info, Camera, Aperture, Timer, Maximize2, Layers, Image as ImageIcon } from 'lucide-react';
+import { GALLERY_ITEMS, CATEGORY_TRANSLATIONS } from '../constants';
+import { ArrowLeft, X, PlayCircle, Check, ChevronLeft, ChevronRight, Info, Camera, Aperture, Timer, Maximize2, Layers, Image as ImageIcon, Home } from 'lucide-react';
 import { extractColorsFromUrl } from '../utils/colorUtils';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -53,44 +53,47 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
     const [copiedColor, setCopiedColor] = useState<string | null>(null);
 
     // Filtering
-    const [activeCategory, setActiveCategory] = useState<string>('All');
+    const [activeCategory, setActiveCategory] = useState<string>('Todos');
 
     // User-defined categories
     const categories = [
-        'All',
-        'Digital Illustrations',
-        'Environment Art',
-        'Concept Art',
-        'Character Design',
-        'Animation',
-        'Design'
+        'Todos',
+        'Ilustraciones Digitales',
+        'Arte de Entornos',
+        'Arte Conceptual',
+        'Diseño de Personajes',
+        'Animación',
+        'Diseño'
     ];
 
     const doesItemBelongToCategory = (item: typeof GALLERY_ITEMS[0], category: string): boolean => {
         switch (category) {
-            case 'All':
+            case 'Todos':
                 return true;
-            case 'Digital Illustrations':
+            case 'Ilustraciones Digitales':
                 return item.category === 'Digital Painting';
-            case 'Environment Art':
+            case 'Arte de Entornos':
                 // Check for 3D or Sketches, or description keywords
                 return item.category === '3d' || item.category === 'Sketches' || item.description.toLowerCase().includes('entorno') || item.description.toLowerCase().includes('landscape');
-            case 'Concept Art':
+            case 'Arte Conceptual':
                 return item.category === 'Sketches' || item.category === 'Digital Painting';
-            case 'Character Design':
+            case 'Diseño de Personajes':
                 // Check for Digital Painting or 3D, usually characters
                 return (item.category === 'Digital Painting' || item.category === '3d') && !item.description.toLowerCase().includes('landscape') && !item.description.toLowerCase().includes('entorno');
-            case 'Animation':
+            case 'Animación':
                 // Check if it has video media or description mentions animation
                 return item.media?.some(m => m.type === 'video') || item.description.toLowerCase().includes('animación') || item.description.toLowerCase().includes('animation');
-            case 'Design':
+            case 'Diseño':
                 return item.category === 'Design';
             default:
                 return false;
         }
     };
 
-    const filteredItems = GALLERY_ITEMS.filter(item => doesItemBelongToCategory(item, activeCategory));
+    // Reverse the items for the Artistic Gallery so that newer projects (e.g. Logo) appear first/left
+    // and older projects (e.g. Crimson Requiem) appear last/right, as requested.
+    // We clone the array with [...GALLERY_ITEMS] before reversing to avoid mutating the original import.
+    const filteredItems = [...GALLERY_ITEMS].reverse().filter(item => doesItemBelongToCategory(item, activeCategory));
 
     // Modal Entrance Animation & Scroll Triggers
     useLayoutEffect(() => {
@@ -241,11 +244,11 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
             <button
                 onClick={onBack}
                 className={`fixed z-50 rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 bg-slate-900/80 backdrop-blur-md group
-                top-6 left-6 p-3 hidden lg:block
-                bottom-6 left-6 p-2 lg:hidden shadow-lg
+                bottom-6 left-6 p-3 shadow-lg
                 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                title="Volver al Inicio"
             >
-                <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform lg:w-5 lg:h-5 w-4 h-4" />
+                <Home size={20} className="group-hover:scale-110 transition-transform w-5 h-5" />
             </button>
 
             {/* Category Filters */}
@@ -269,28 +272,33 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
 
             {/* Title Background (Desktop Only) */}
             <h2 className={`hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-800/50 font-['Permanent_Marker'] text-[15vw] opacity-10 select-none pointer-events-none whitespace-nowrap z-0 transition-opacity duration-500 ${selectedItem ? 'opacity-0' : 'opacity-10'}`}>
-                ALBUM
+                ÁLBUM
             </h2>
 
-            {/* DESKTOP: Bounce Cards Container */}
+            {/* DESKTOP: OPTIMIZED CLEAN GALLERY */}
             <div className={`hidden lg:flex absolute inset-0 items-center justify-center z-10 transition-opacity duration-500 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <BounceCards
                     images={filteredItems.map(item => item.url)}
-                    containerWidth={800}
+                    containerWidth="90%" // Use essentially full width
                     containerHeight={600}
-                    animationDelay={0.5}
-                    animationStagger={0.08}
-                    transformStyles={[
-                        "rotate(-20deg) translate(-480px)",
-                        "rotate(-15deg) translate(-360px)",
-                        "rotate(-10deg) translate(-240px)",
-                        "rotate(-5deg) translate(-120px)",
-                        "rotate(0deg)",
-                        "rotate(5deg) translate(120px)",
-                        "rotate(10deg) translate(240px)",
-                        "rotate(15deg) translate(360px)",
-                        "rotate(20deg) translate(480px)"
-                    ]}
+                    animationDelay={0.3}
+                    animationStagger={0.05}
+                    transformStyles={filteredItems.map((_, i) => {
+                        // LINEAR COMPACT SPREAD
+                        const count = filteredItems.length;
+                        // Reduce spread width to ensure more items fit
+                        // 120px per card allocation, max 1000px total width
+
+                        const totalSpread = Math.min(count * 120, 1000);
+                        const spacing = count > 1 ? totalSpread / (count - 1) : 0;
+                        const startX = -totalSpread / 2;
+
+                        const x = startX + (i * spacing);
+                        // Very minimal rotation for "organic" feel but readable
+                        const rotate = (i % 2 === 0 ? 1 : -1) * 2;
+
+                        return `translate(${x}px, 0px) rotate(${rotate}deg)`;
+                    })}
                     onClick={(index) => handleCardClick(filteredItems[index])}
                     imageStyles={filteredItems.map(item => item.objectPosition ? { objectPosition: item.objectPosition } : {})}
                 />
@@ -325,7 +333,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                     {item.title}
                                 </p>
                                 <p className="font-['Space_Grotesk'] text-slate-500 text-[10px] uppercase tracking-widest">
-                                    {item.category}
+                                    {CATEGORY_TRANSLATIONS[item.category] || item.category}
                                 </p>
                             </div>
                         </div>
@@ -335,7 +343,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
 
             {/* Instruction */}
             <div className={`fixed bottom-12 text-slate-500 font-['Space_Grotesk'] text-sm tracking-widest animate-pulse pointer-events-none transition-opacity duration-300 ${selectedItem ? 'opacity-0' : 'opacity-100'}`}>
-                HOVER TO REVEAL • CLICK TO VIEW
+                INTERACTÚA PARA REVELAR • CLIC PARA VER
             </div>
 
             {/* Full Screen Detail View */}
@@ -441,7 +449,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
 
                                     <div className="relative z-10">
                                         <div className="inline-block px-4 py-1.5 border border-indigo-500/50 rounded-full bg-indigo-500/10 text-indigo-400 text-sm font-['Space_Grotesk'] tracking-widest uppercase mb-6">
-                                            {selectedItem.category}
+                                            {CATEGORY_TRANSLATIONS[selectedItem.category] || selectedItem.category}
                                         </div>
 
                                         <h2 className="text-5xl md:text-7xl font-['Permanent_Marker'] text-white leading-[0.9] mb-8">
@@ -451,7 +459,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                         <Scribble className="w-32 h-6 text-indigo-500 mb-8 opacity-80" />
 
                                         <p className="text-slate-400 font-light text-lg leading-relaxed animate-pulse">
-                                            Scroll to explore
+                                            Desliza para explorar
                                         </p>
                                     </div>
                                 </div>
@@ -518,7 +526,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                                         {/* Decorative stamp or signature area */}
                                                         <div className="absolute bottom-4 right-6 opacity-10 rotate-12 pointer-events-none">
                                                             <div className="border-2 border-slate-900 rounded-full w-16 h-16 flex items-center justify-center">
-                                                                <span className="font-['Permanent_Marker'] text-xs text-slate-900">APPROVED</span>
+                                                                <span className="font-['Permanent_Marker'] text-xs text-slate-900">APROBADO</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -579,12 +587,12 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                 {/* DESIGN CATEGORY LAYOUT */}
                                 {selectedItem.category === 'Design' && selectedItem.bentoData && (
                                     <>
-                                        {/* 01. DESIGN SYSTEM (Bento) */}
+                                        {/* 01. SISTEMA DE DISEÑO (Bento) */}
                                         <div className="content-section">
                                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start mb-12">
                                                 <div className="md:col-span-4">
                                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                        <span className="text-indigo-500">01.</span> DESIGN SYSTEM
+                                                        <span className="text-indigo-500">01.</span> SISTEMA DE DISEÑO
                                                     </h3>
                                                     <div className="w-full h-[1px] bg-white/10"></div>
                                                 </div>
@@ -594,7 +602,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                                 <MagicBento
                                                     cards={selectedItem.bentoData.map(card => ({
                                                         ...card,
-                                                        onClick: card.title === 'View Mockups' ? scrollToMockups : undefined
+                                                        onClick: card.title === 'Ver Mockups' ? scrollToMockups : undefined
                                                     }))}
                                                     textAutoHide={true}
                                                     enableStars={true}
@@ -610,11 +618,11 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                             </div>
                                         </div>
 
-                                        {/* 02. THE STORY */}
+                                        {/* 02. LA HISTORIA */}
                                         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                             <div className="md:col-span-4">
                                                 <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                    <span className="text-indigo-500">02.</span> THE STORY
+                                                    <span className="text-indigo-500">02.</span> LA HISTORIA
                                                 </h3>
                                                 <div className="w-full h-[1px] bg-white/10"></div>
                                             </div>
@@ -625,12 +633,12 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                             </div>
                                         </div>
 
-                                        {/* 03. SPECS */}
+                                        {/* 03. ESPECIFICACIONES */}
                                         {selectedItem.technicalInfo && (
                                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                                 <div className="md:col-span-4">
                                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                        <span className="text-indigo-500">03.</span> SPECS
+                                                        <span className="text-indigo-500">03.</span> ESPECIFICACIONES
                                                     </h3>
                                                     <div className="w-full h-[1px] bg-white/10"></div>
                                                 </div>
@@ -638,7 +646,9 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                                         {Object.entries(selectedItem.technicalInfo).map(([key, value]) => (
                                                             <div key={key} className="bg-white/5 p-6 rounded-lg border border-white/5 hover:border-indigo-500/30 transition-colors">
-                                                                <h4 className="text-indigo-400 uppercase tracking-widest text-xs mb-2 font-bold">{key}</h4>
+                                                                <h4 className="text-indigo-400 uppercase tracking-widest text-xs mb-2 font-bold">
+                                                                    {key === 'software' ? 'Software' : key === 'year' ? 'Año' : key === 'dimensions' ? 'Dimensiones' : key === 'technique' ? 'Técnica' : key}
+                                                                </h4>
                                                                 <p className="text-slate-200 font-['Space_Grotesk'] text-lg">{value}</p>
                                                             </div>
                                                         ))}
@@ -684,11 +694,11 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                 {/* STANDARD LAYOUT (For anything NOT Design AND NOT Photography) */}
                                 {selectedItem.category !== 'Design' && selectedItem.category !== 'Photography' && (
                                     <>
-                                        {/* 01. THE STORY */}
+                                        {/* 01. LA HISTORIA */}
                                         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                             <div className="md:col-span-4">
                                                 <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                    <span className="text-indigo-500">01.</span> THE STORY
+                                                    <span className="text-indigo-500">01.</span> LA HISTORIA
                                                 </h3>
                                                 <div className="w-full h-[1px] bg-white/10"></div>
                                             </div>
@@ -699,12 +709,12 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                             </div>
                                         </div>
 
-                                        {/* 02. SPECS (if exists) */}
+                                        {/* 02. ESPECIFICACIONES (if exists) */}
                                         {selectedItem.technicalInfo && (
                                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                                 <div className="md:col-span-4">
                                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                        <span className="text-indigo-500">02.</span> SPECS
+                                                        <span className="text-indigo-500">02.</span> ESPECIFICACIONES
                                                     </h3>
                                                     <div className="w-full h-[1px] bg-white/10"></div>
                                                 </div>
@@ -721,11 +731,11 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                             </div>
                                         )}
 
-                                        {/* 03/02. PALETTE */}
+                                        {/* 03/02. PALETA */}
                                         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                             <div className="md:col-span-4">
                                                 <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                    <span className="text-indigo-500">{selectedItem.technicalInfo ? '03.' : '02.'}</span> PALETTE
+                                                    <span className="text-indigo-500">{selectedItem.technicalInfo ? '03.' : '02.'}</span> PALETA
                                                 </h3>
                                                 <div className="w-full h-[1px] bg-white/10"></div>
                                             </div>
@@ -776,13 +786,13 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                             </div>
                                         </div>
 
-                                        {/* 04/03. ASSETS */}
+                                        {/* 04/03. ACTIVOS */}
                                         {selectedItem.media && selectedItem.media.length > 0 && (
                                             <div className="space-y-24">
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                                     <div className="md:col-span-4">
                                                         <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                            <span className="text-indigo-500">{selectedItem.technicalInfo ? '04.' : '03.'}</span> ASSETS
+                                                            <span className="text-indigo-500">{selectedItem.technicalInfo ? '04.' : '03.'}</span> ACTIVOS
                                                         </h3>
                                                         <div className="w-full h-[1px] bg-white/10"></div>
                                                     </div>
@@ -800,48 +810,49 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                                                 modalRef.current.scrollTo({ top: 0, behavior: 'smooth' });
                                                             }
                                                         }}>
-                                                            <div className={`relative bg-white p-3 md:p-4 shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] ${idx % 2 === 0 ? 'rotate-1' : '-rotate-1'}`}>
-                                                                {/* Decorative Elements */}
-                                                                <PaperClip className={`absolute -top-6 ${idx % 2 === 0 ? 'right-12' : 'left-12'} w-8 h-16 text-slate-400 z-20`} />
-                                                                <Tape className={`w-32 -bottom-4 ${idx % 2 === 0 ? 'left-1/2' : 'right-1/2'} rotate-2`} />
-                                                                <ScratchOverlay />
-
-                                                                <div className="w-full bg-gray-100 overflow-hidden relative border border-slate-200">
+                                                            <div className={`relative bg-white p-3 shadow-2xl transition-all duration-300 transform-gpu group-hover:scale-[1.02] ${idx % 2 === 0 ? 'rotate-1 group-hover:rotate-0' : '-rotate-1 group-hover:rotate-0'}`}>
+                                                                <Tape className={`w-32 -top-4 left-1/2 -translate-x-1/2 opacity-90 ${idx % 2 === 0 ? '-rotate-2' : 'rotate-2'}`} />
+                                                                <div className="aspect-video w-full bg-gray-100 overflow-hidden relative border border-slate-200">
                                                                     {mediaItem.type === 'video' ? (
-                                                                        <div className="w-full aspect-video relative flex items-center justify-center bg-black">
+                                                                        <>
                                                                             <video
                                                                                 src={mediaItem.url}
-                                                                                className="w-full h-full object-cover opacity-90"
+                                                                                className="w-full h-full object-cover filter contrast-125 hover:contrast-100 transition-all duration-500"
                                                                                 muted
                                                                                 loop
+                                                                                autoPlay
                                                                                 playsInline
                                                                             />
-                                                                            <PlayCircle className="absolute text-white/70 w-16 h-16" />
-                                                                        </div>
+                                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-all">
+                                                                                <PlayCircle className="text-white opacity-80 group-hover:opacity-0 transition-opacity drop-shadow-lg" size={48} />
+                                                                            </div>
+                                                                        </>
                                                                     ) : (
-                                                                        <img src={mediaItem.url} alt="" loading="lazy" className="w-full h-auto object-contain mix-blend-multiply" />
+                                                                        <img
+                                                                            src={mediaItem.url}
+                                                                            alt=""
+                                                                            className="w-full h-full object-cover filter contrast-125 hover:contrast-100 transition-all duration-500"
+                                                                            loading="lazy"
+                                                                        />
                                                                     )}
+                                                                    <ScratchOverlay />
+                                                                </div>
+                                                                <div className="absolute -bottom-10 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                                    <span className="font-['Permanent_Marker'] text-slate-500">Ver en detalle</span>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         {/* Text Side */}
-                                                        <div className="w-full md:w-1/3 space-y-6">
-                                                            <div className="flex items-center gap-4">
-                                                                <span className="text-6xl font-['Permanent_Marker'] text-slate-700 opacity-20">0{idx + 1}</span>
-                                                                <div className="h-[1px] flex-grow bg-white/10"></div>
+                                                        <div className="w-full md:w-1/3 space-y-4">
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="text-5xl font-['Permanent_Marker'] text-indigo-500/50">{String(idx + 1).padStart(2, '0')}</span>
+                                                                <div className="h-[2px] w-12 bg-indigo-500/30"></div>
                                                             </div>
-                                                            <h4 className="text-2xl font-['Space_Grotesk'] text-white font-bold">
-                                                                {mediaItem.type === 'video' ? 'Motion Process' : 'Visual Concept'}
-                                                            </h4>
-                                                            <p className="text-slate-400 font-light leading-relaxed font-['Handlee'] text-lg italic">
-                                                                "Exploring the depths of the design through {mediaItem.type === 'video' ? 'motion and dynamics' : 'visual composition and color'}. Every detail counts in the final render."
+                                                            <h4 className="text-2xl font-bold text-white">Vista Detallada</h4>
+                                                            <p className="text-slate-400 font-light leading-relaxed">
+                                                                Exploración visual de los detalles y composición de la obra.
                                                             </p>
-                                                            <div className="flex gap-2">
-                                                                <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
-                                                                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
-                                                                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -849,12 +860,6 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                         )}
                                     </>
                                 )}
-
-                                {/* Footer */}
-                                <div className="py-12 border-t border-white/5 text-center text-slate-500 font-['Space_Grotesk'] text-sm tracking-widest">
-                                    BONIALEART PORTFOLIO • 2024
-                                </div>
-
                             </div>
                         </div>
                     </div>

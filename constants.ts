@@ -31,7 +31,6 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         title: "Crimsom Requiem",
         category: "Digital Painting",
         description: "Conocida solo como la Sacerdotisa de la Serpiente, su rostro marcado por un estigma divino y demoníaco, lidera una procesión silenciosa a través de las ruinas de una antigua fe. Se rumorea que posee el poder de controlar las corrientes de la vida y la muerte, mientras una serpiente albina, símbolo de tentación y sabiduría, se enrosca a su alrededor. 'Crimson Requiem' es una ventana a un momento crucial, donde el destino de un mundo pende de la balanza de sus decisiones, un acto final en una sinfonía de sangre y redención.",
-        // Fixed: Changed ArtStation page URL to direct Dropbox image URL
         url: "https://www.dropbox.com/scl/fi/d7qztimmnw6qc8c0l2qvf/Monja.jpg?rlkey=2l3n87ekbu4n3ph7e5h2cgphq&st=2lk7314k&raw=1",
         media: [
             { type: 'image', url: "https://www.dropbox.com/scl/fi/d7qztimmnw6qc8c0l2qvf/Monja.jpg?rlkey=2l3n87ekbu4n3ph7e5h2cgphq&st=2lk7314k&raw=1" },
@@ -64,8 +63,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
         id: 3,
         title: "Aurora",
         category: "3d",
-        description: "A fusion of technology and artistry, radiating from the digital frontier. This 3D design embodies a silent guardian, emitting an ethereal glow that beckons exploration. A new form that redefines the beauty of the digital form.",
-        // FIXED: Used the direct CDNA image link instead of the HTML page link
+        description: "Una fusión de tecnología y arte, irradiando desde la frontera digital. Este diseño 3D encarna a un guardián silencioso, emitiendo un brillo etéreo que invita a la exploración. Una nueva forma que redefine la belleza de la forma digital.",
         url: "https://cdna.artstation.com/p/assets/images/images/054/247/668/large/alejandro-bonilla-practica-final7.jpg?1664113123",
         media: [
             { type: 'image', url: "https://cdna.artstation.com/p/assets/images/images/054/247/668/large/alejandro-bonilla-practica-final7.jpg?1664113123" },
@@ -136,73 +134,81 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     },
     {
         id: 8,
-        title: "Brand Identity System",
+        title: "Sistema de Identidad de Marca",
         category: "Design",
-        description: "A comprehensive brand identity system designed for a modern tech startup. This project encompasses the logo design, color palette selection, typography hierarchy, and application across various digital and physical touchpoints. The goal was to create a visual language that communicates innovation, reliability, and approachability.",
-        url: "https://images.unsplash.com/photo-1626785774573-4b7993125486?q=80&w=2070&auto=format&fit=crop", // Placeholder
+        description: "Un sistema integral de identidad de marca diseñado para una startup tecnológica moderna. Este proyecto abarca el diseño del logotipo, la selección de la paleta de colores, la jerarquía tipográfica y la aplicación en varios puntos de contacto físicos y digitales. El objetivo fue crear un lenguaje visual que comunique innovación, confiabilidad y cercanía.",
+        url: "https://www.dropbox.com/scl/fi/qiqiv707pneox7mov6k2l/Logourl.png?rlkey=6xf5lm2cdy24g03ku0xffbqkg&st=undtitur&raw=1",
         media: [],
         technicalInfo: {
             software: "Adobe Illustrator, Photoshop, Figma",
             year: "2024",
-            dimensions: "Various",
-            technique: "Vector Design & UI/UX"
+            dimensions: "Varias",
+            technique: "Diseño Vectorial y UI/UX"
         },
         bentoData: [
             {
                 color: '#0f172a',
-                title: 'Primary Palette',
-                description: 'Slate 900 - The foundation of the brand, representing stability and depth.',
+                title: 'Paleta Primaria',
+                description: 'Slate 900 - La base de la marca, representando estabilidad y profundidad.',
                 label: 'Color'
             },
             {
                 color: '#6366f1',
-                title: 'Accent Color',
-                description: 'Indigo 500 - Used for calls to action and highlighting key information.',
+                title: 'Color de Acento',
+                description: 'Indigo 500 - Usado para llamadas a la acción y resaltar información clave.',
                 label: 'Color'
             },
             {
                 color: '#1e293b',
-                title: 'Typography',
-                description: 'Space Grotesk - Modern, geometric sans-serif.',
-                label: 'Font',
+                title: 'Tipografía',
+                description: 'Space Grotesk - Sans-serif moderna y geométrica.',
+                label: 'Fuente',
                 type: 'font',
                 fontFamily: 'Space Grotesk'
             },
             {
                 color: '#000000',
-                title: 'Logo Mark',
-                description: 'Minimalist geometric abstraction.',
-                label: 'Brand Asset',
+                title: 'Marca de Logotipo',
+                description: 'Abstracción geométrica minimalista.',
+                label: 'Activo de Marca',
                 type: 'image',
-                img: 'https://images.unsplash.com/photo-1626785774573-4b7993125486?q=80&w=2070&auto=format&fit=crop'
+                img: 'https://www.dropbox.com/scl/fi/qiqiv707pneox7mov6k2l/Logourl.png?rlkey=6xf5lm2cdy24g03ku0xffbqkg&st=undtitur&raw=1'
             },
             {
                 color: '#334155',
-                title: 'Iconography',
-                description: 'Consistent stroke weight and rounded corners.',
-                label: 'System'
+                title: 'Iconografía',
+                description: 'Peso de trazo consistente y esquinas redondeadas.',
+                label: 'Sistema'
             },
             {
                 color: '#475569',
-                title: 'Grid System',
-                description: '12-column fluid grid for responsive layouts.',
-                label: 'Layout'
+                title: 'Sistema de Retícula',
+                description: 'Retícula fluida de 12 columnas para diseños responsivos.',
+                label: 'Diseño'
             },
             {
                 color: '#0f172a',
-                title: 'View Mockups',
-                description: 'See the brand applied in real-world scenarios.',
+                title: 'Ver Mockups',
+                description: 'Mira la marca aplicada en escenarios reales.',
                 label: 'Mockups',
                 type: 'default' // This will be the trigger
             }
         ],
         mockups: [
-            { url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2055&auto=format&fit=crop", title: "Website Landing Page", description: "High-fidelity desktop mockup." },
-            { url: "https://images.unsplash.com/photo-1555421689-491a97ff2040?q=80&w=2070&auto=format&fit=crop", title: "Mobile Application", description: "iOS app interface design." },
-            { url: "https://images.unsplash.com/photo-1603380353725-f8a4d39cc80e?q=80&w=2070&auto=format&fit=crop", title: "Business Cards", description: "Print collateral branding." }
+            { url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2055&auto=format&fit=crop", title: "Página de Aterrizaje", description: "Mockup de escritorio de alta fidelidad." },
+            { url: "https://images.unsplash.com/photo-1555421689-491a97ff2040?q=80&w=2070&auto=format&fit=crop", title: "Aplicación Móvil", description: "Diseño de interfaz de app iOS." },
+            { url: "https://images.unsplash.com/photo-1603380353725-f8a4d39cc80e?q=80&w=2070&auto=format&fit=crop", title: "Tarjetas de Presentación", description: "Branding en material impreso." }
         ]
     }
 ];
+
+export const CATEGORY_TRANSLATIONS: Record<string, string> = {
+    'Digital Painting': 'Ilustración Digital',
+    '3d': '3D',
+    'Sketches': 'Bocetos',
+    'Design': 'Diseño',
+    'Photography': 'Fotografía'
+};
 
 export const POLAROID_TEXT = {
     left: "23 AÑOS",

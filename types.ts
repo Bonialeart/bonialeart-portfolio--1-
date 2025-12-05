@@ -54,6 +54,7 @@ export interface GalleryItem {
     bentoData?: BentoCardData[];
     mockups?: { url: string; title?: string; description?: string }[];
     cameraInfo?: CameraInfo;
+    objectPosition?: string;
 }
 
 export interface CameraInfo {

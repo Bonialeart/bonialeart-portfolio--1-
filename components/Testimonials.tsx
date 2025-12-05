@@ -26,36 +26,36 @@ const TESTIMONIALS = [
     {
         id: 1,
         name: "Sofia Rodriguez",
-        role: "Art Director",
+        role: "Directora de Arte",
         company: "Studio Ghibli",
-        text: "Alejandro's ability to capture emotion in his digital paintings is unparalleled. His work on 'Crimson Requiem' brought our vision to life.",
+        text: "La capacidad de Alejandro para capturar la emoción en sus pinturas digitales es inigualable. Su trabajo en 'Crimson Requiem' dio vida a nuestra visión.",
         avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop",
         rotation: "rotate-1"
     },
     {
         id: 2,
         name: "Marcus Chen",
-        role: "Lead Developer",
+        role: "Desarrollador Principal",
         company: "TechFlow",
-        text: "The 3D assets provided for our game environment were optimized perfectly without sacrificing visual fidelity. A true professional.",
+        text: "Los activos 3D proporcionados para nuestro entorno de juego fueron optimizados perfectamente sin sacrificar la fidelidad visual. Un verdadero profesional.",
         avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop",
         rotation: "-rotate-2"
     },
     {
         id: 3,
         name: "Elena Vasquez",
-        role: "Marketing Head",
+        role: "Jefa de Marketing",
         company: "Solaris",
-        text: "We hired Bonialeart for a complete brand identity overhaul. The result was a sleek, modern system that perfectly communicates our values.",
+        text: "Contratamos a Bonialeart para una revisión completa de identidad de marca. El resultado fue un sistema elegante y moderno que comunica perfectamente nuestros valores.",
         avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop",
         rotation: "rotate-2"
     },
     {
         id: 4,
         name: "David Miller",
-        role: "Indie Game Dev",
+        role: "Desarrollador Indie",
         company: "Indie",
-        text: "The character designs for my RPG were spot on. Alejandro has a unique style that really stands out. Communication was smooth.",
+        text: "Los diseños de personajes para mi RPG fueron perfectos. Alejandro tiene un estilo único que realmente destaca. La comunicación fue fluida.",
         avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop",
         rotation: "-rotate-1"
     }
@@ -85,7 +85,7 @@ const Testimonials = () => {
                     className="inline-block relative"
                 >
                     <h2 className="text-4xl md:text-6xl font-['Permanent_Marker'] text-slate-100 mb-4 transform -rotate-2">
-                        TESTIMONIALS
+                        TESTIMONIOS
                     </h2>
                     {/* Scribble Underline */}
                     <svg viewBox="0 0 200 20" className="w-full h-4 text-indigo-500 opacity-80 mx-auto">
@@ -93,7 +93,7 @@ const Testimonials = () => {
                     </svg>
                 </motion.div>
                 <p className="text-slate-400 mt-6 max-w-2xl mx-auto font-['Handlee'] text-xl">
-                    Notes from happy clients & collaborators.
+                    Notas de clientes felices y colaboradores.
                 </p>
             </div>
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Image as ImageIcon, ZoomIn, ChevronLeft, ChevronRight, Play, Pause, Copy } from 'lucide-react';
 import { GalleryItem, MediaItem } from '../types';
+import { CATEGORY_TRANSLATIONS } from '../constants';
 import { extractColorsFromUrl } from '../utils/colorUtils';
 
 interface GalleryProps {
@@ -304,7 +305,7 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                         {item.title}
                                     </span>
                                     <span className="text-xs text-indigo-400 font-mono mt-1 block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
-                                        {item.category}
+                                        {CATEGORY_TRANSLATIONS[item.category] || item.category}
                                     </span>
                                 </div>
                             </div>
@@ -408,13 +409,13 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
 
                             {/* Info Panel */}
                             <div className="w-full lg:w-1/4 h-[50%] md:h-[40%] lg:h-full bg-slate-950 border-t lg:border-t-0 lg:border-l border-white/5 p-6 md:p-8 overflow-y-auto custom-scrollbar flex-grow">
-                                <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-500/30 pb-1 mb-4 inline-block">{modalItem.category}</span>
+                                <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-500/30 pb-1 mb-4 inline-block">{CATEGORY_TRANSLATIONS[modalItem.category] || modalItem.category}</span>
                                 <h2 className="text-2xl md:text-3xl font-light text-white mb-4 md:mb-6 mt-2">{modalItem.title}</h2>
                                 <p className="text-slate-400 text-sm leading-relaxed mb-8 font-mono">{modalItem.description}</p>
 
                                 <div className="border-t border-white/10 pt-6">
                                     <h4 className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-4 flex items-center gap-2">
-                                        Color Palette
+                                        Paleta de Color
                                         <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">HEX</span>
                                     </h4>
 
@@ -426,13 +427,13 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                                         onClick={() => handleCopyColor(color)}
                                                         className="w-10 h-10 rounded-full border-2 border-white/10 shadow-lg hover:scale-110 transition-all duration-300 flex items-center justify-center group hover:border-white/40"
                                                         style={{ backgroundColor: color }}
-                                                        title="Click to Copy"
+                                                        title="Clic para copiar"
                                                     >
                                                         {copiedColor === color && <Check size={16} className="text-white drop-shadow-md" />}
                                                     </button>
 
                                                     <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
-                                                        {copiedColor === color ? 'Copied!' : color}
+                                                        {copiedColor === color ? '¡Copiado!' : color}
                                                         <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900"></div>
                                                     </div>
                                                 </div>

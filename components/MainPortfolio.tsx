@@ -15,7 +15,7 @@ import Testimonials from './Testimonials';
 import PolaroidMarquee from './PolaroidMarquee';
 import Services from './Services';
 import MediaKitButton from './MediaKitButton';
-import { ArrowDown, Instagram, Globe, ArrowLeft } from 'lucide-react';
+import { ArrowDown, Instagram, Globe, ArrowLeft, Home } from 'lucide-react';
 
 import { ScribbleUnderline, ScribbleCircle, StickerStar, StickerCrown, StickerWow, ScribbleSpiral, StickerSmile } from './Doodles';
 
@@ -26,7 +26,7 @@ interface MainPortfolioProps {
 const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
     const [content, setContent] = useState<GeneratedContent>(INITIAL_CONTENT as any);
     const [selectedGalleryId, setSelectedGalleryId] = useState<number | null>(null);
-    const [activeCategory, setActiveCategory] = useState<string>('All');
+    const [activeCategory, setActiveCategory] = useState<string>('Todos');
     const qualitiesContainerRef = useRef<HTMLDivElement>(null);
     const marqueeRef = useRef<HTMLElement>(null);
 
@@ -117,19 +117,19 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
     // Category Filtering Logic
     const doesItemBelongToCategory = (item: typeof GALLERY_ITEMS[0], category: string): boolean => {
         switch (category) {
-            case 'All':
+            case 'Todos':
                 return true;
-            case 'Digital Illustrations':
+            case 'Ilustraciones Digitales':
                 return item.category === 'Digital Painting';
-            case 'Environment Art':
+            case 'Arte de Entornos':
                 return item.category === '3d' || item.category === 'Sketches' || item.description.toLowerCase().includes('entorno') || item.description.toLowerCase().includes('landscape');
-            case 'Concept Art':
+            case 'Arte Conceptual':
                 return item.category === 'Sketches' || item.category === 'Digital Painting';
-            case 'Character Design':
+            case 'Diseño de Personajes':
                 return (item.category === 'Digital Painting' || item.category === '3d') && !item.description.toLowerCase().includes('landscape') && !item.description.toLowerCase().includes('entorno');
             case '3D':
                 return item.category === '3d';
-            case 'Design':
+            case 'Diseño':
                 return item.category === 'Design';
             default:
                 return false;
@@ -139,13 +139,13 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
     const portfolioItems = basePortfolioItems.filter(item => doesItemBelongToCategory(item, activeCategory));
 
     const categories = [
-        'All',
-        'Digital Illustrations',
-        'Environment Art',
-        'Concept Art',
-        'Character Design',
+        'Todos',
+        'Ilustraciones Digitales',
+        'Arte de Entornos',
+        'Arte Conceptual',
+        'Diseño de Personajes',
         '3D',
-        'Design'
+        'Diseño'
     ];
 
     return (
@@ -164,10 +164,10 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             <button
                 onClick={onBack}
                 className="fixed z-50 rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 bg-slate-900/80 backdrop-blur-md
-                top-6 left-6 p-3 hidden lg:block
-                bottom-6 left-6 p-2 lg:hidden shadow-lg"
+                bottom-6 left-6 p-3 shadow-lg group"
+                title="Volver al Inicio"
             >
-                <ArrowLeft size={20} className="lg:w-5 lg:h-5 w-4 h-4" />
+                <Home size={20} className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </button>
 
             {/* Hero Section */}
@@ -192,7 +192,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                             variants={fadeUp}
                             className="text-[18vw] md:text-[21vw] lg:text-[12rem] xl:text-[15rem] leading-[0.9] md:leading-[0.8] font-bold font-['Space_Grotesk'] tracking-tighter text-indigo-600 select-none mix-blend-screen opacity-90"
                         >
-                            Portfolio
+                            Portafolio
                         </motion.h1>
 
                         <motion.div
@@ -241,7 +241,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
                     className="absolute bottom-6 md:bottom-12 z-50 cursor-pointer p-2 hover:bg-white/5 rounded-full transition-colors"
                     onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
-                    aria-label="Go to Gallery"
+                    aria-label="Ir a Galería"
                 >
                     <ArrowDown className="w-6 h-6 md:w-8 md:h-8 text-indigo-400 hover:text-white transition-colors" />
                 </motion.button>
@@ -309,7 +309,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                             >
                                 <div className="flex items-center gap-4 mb-2">
                                     <ScribbleCircle />
-                                    <span className="font-['Permanent_Marker'] text-indigo-400 tracking-widest text-lg md:text-xl">Step 01</span>
+                                    <span className="font-['Permanent_Marker'] text-indigo-400 tracking-widest text-lg md:text-xl">Paso 01</span>
                                 </div>
                                 <h3 className="text-4xl md:text-4xl lg:text-6xl font-bold text-white mb-4 font-['Space_Grotesk'] uppercase leading-none tracking-tighter">
                                     {qualities[0].title}
@@ -331,7 +331,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                                 className="absolute top-[40%] md:top-[40%] lg:top-[45%] right-6 md:right-10 lg:right-32 max-w-[80%] md:max-w-[300px] lg:max-w-xs text-right"
                             >
                                 <div className="flex items-center gap-4 mb-2 justify-end relative">
-                                    <span className="font-['Permanent_Marker'] text-orange-500 tracking-widest text-lg md:text-xl">Step 02</span>
+                                    <span className="font-['Permanent_Marker'] text-orange-500 tracking-widest text-lg md:text-xl">Paso 02</span>
                                     <div className="absolute -top-2 -right-2 w-12 h-12 border-2 border-orange-500/50 rounded-full animate-ping" />
                                 </div>
                                 <h3 className="text-4xl md:text-4xl lg:text-6xl font-bold text-white mb-4 font-['Space_Grotesk'] uppercase leading-none tracking-tighter">
@@ -354,7 +354,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                                 className="absolute bottom-[20%] md:bottom-[20%] left-6 md:left-16 lg:left-40 max-w-[80%] md:max-w-[300px] lg:max-w-xs"
                             >
                                 <div className="flex items-center gap-4 mb-2">
-                                    <span className="font-['Permanent_Marker'] text-pink-500 tracking-widest text-lg md:text-xl">Step 03</span>
+                                    <span className="font-['Permanent_Marker'] text-pink-500 tracking-widest text-lg md:text-xl">Paso 03</span>
                                 </div>
                                 <h3 className="text-4xl md:text-4xl lg:text-6xl font-bold text-white mb-4 font-['Space_Grotesk'] uppercase leading-none tracking-tighter">
                                     {qualities[2].title}
@@ -388,7 +388,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     <div className="inline-block relative">
                         <StickerCrown className="absolute -top-10 -right-10 rotate-12 z-20" />
                         <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
-                            SKILLS & SOFTWARE
+                            HABILIDADES Y SOFTWARE
                         </h2>
                         <div className="w-full max-w-[200px] md:max-w-[300px] mx-auto">
                             <ScribbleUnderline color="text-pink-500" />
@@ -446,17 +446,6 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 </div>
             </motion.section>
 
-            {/* Testimonials Section (Replaces TikTok) */}
-            <motion.section
-                className="relative z-20 border-t border-slate-900/50"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
-                variants={sectionVariants}
-            >
-                <Testimonials />
-            </motion.section>
-
             {/* Services Section */}
             <motion.section
                 id="services"
@@ -483,6 +472,17 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 </div>
 
                 <Services />
+            </motion.section>
+
+            {/* Testimonials Section (Moved below Services) */}
+            <motion.section
+                className="relative z-20 border-t border-slate-900/50"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.3 }}
+                variants={sectionVariants}
+            >
+                <Testimonials />
             </motion.section>
 
             {/* Contact Section */}
@@ -530,7 +530,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     </div>
 
                     <p className="text-slate-500 uppercase tracking-widest text-xs md:text-sm">
-                        © {new Date().getFullYear()} Bonialeart. All rights reserved.
+                        © {new Date().getFullYear()} Bonialeart. Todos los derechos reservados.
                     </p>
                 </div>
             </footer>
