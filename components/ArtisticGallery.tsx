@@ -604,16 +604,6 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                                         ...card,
                                                         onClick: card.title === 'Ver Mockups' ? scrollToMockups : undefined
                                                     }))}
-                                                    textAutoHide={true}
-                                                    enableStars={true}
-                                                    enableSpotlight={true}
-                                                    enableBorderGlow={true}
-                                                    enableTilt={true}
-                                                    enableMagnetism={true}
-                                                    clickEffect={true}
-                                                    spotlightRadius={300}
-                                                    particleCount={12}
-                                                    glowColor="132, 0, 255"
                                                 />
                                             </div>
                                         </div>
@@ -657,13 +647,80 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
                                             </div>
                                         )}
 
-                                        {/* 04. MOCKUPS */}
+                                        {/* 04. EXPLORACIÓN CREATIVA */}
+                                        {selectedItem.process && (
+                                            <div className="space-y-24 content-section mb-24">
+                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+                                                    <div className="md:col-span-4">
+                                                        <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
+                                                            <span className="text-indigo-500">04.</span> EXPLORACIÓN
+                                                        </h3>
+                                                        <div className="w-full h-[1px] bg-white/10"></div>
+                                                    </div>
+                                                    <div className="md:col-span-8">
+                                                        <p className="text-xl text-slate-300 font-light leading-relaxed mb-12">
+                                                            El camino hacia la identidad final involucró la exploración de diversas metáforas visuales, desde lo figurativo hasta lo arquitectónico.
+                                                        </p>
+
+                                                        <div className="space-y-20">
+                                                            {selectedItem.process.map((proc, idx) => (
+                                                                <div key={idx} className={`flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 items-center`}>
+
+                                                                    {/* Image Side */}
+                                                                    <div className="w-full lg:w-1/2 relative group z-10 hover:z-50 transition-all duration-300">
+                                                                        <div className={`relative bg-[#fdfbf7] p-3 pb-8 shadow-xl transform transition-transform duration-500 hover:scale-[1.5] cursor-zoom-in ${idx % 2 === 0 ? 'rotate-2 hover:rotate-0' : '-rotate-2 hover:rotate-0'}`}>
+                                                                            <Tape className={`w-32 -top-3 left-1/2 -translate-x-1/2 opacity-90 ${idx % 2 === 0 ? '-rotate-2' : 'rotate-1'}`} />
+                                                                            <div className="w-full aspect-[4/3] bg-slate-100 overflow-hidden relative border border-slate-200">
+                                                                                <img
+                                                                                    src={proc.url}
+                                                                                    alt={proc.title}
+                                                                                    className="w-full h-full object-contain p-4 opacity-90 mix-blend-multiply"
+                                                                                />
+                                                                                <ScratchOverlay />
+                                                                            </div>
+                                                                            <div className="absolute bottom-2 right-4 text-slate-400 font-['Permanent_Marker'] text-xs opacity-50">
+                                                                                v.{idx + 1}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* Text Side */}
+                                                                    <div className="w-full lg:w-1/2 text-center lg:text-left">
+                                                                        <div className={`inline-block px-3 py-1 mb-4 border rounded-full text-[10px] font-bold tracking-widest uppercase ${idx % 2 === 0 ? 'border-indigo-500/30 text-indigo-400 bg-indigo-500/10' : 'border-indigo-500/30 text-indigo-400 bg-indigo-500/10'}`}>
+                                                                            Prototipo {String(idx + 1).padStart(2, '0')}
+                                                                        </div>
+                                                                        <h4 className="text-2xl md:text-3xl font-['Permanent_Marker'] text-white mb-4">
+                                                                            {proc.title}
+                                                                        </h4>
+                                                                        <p className="text-slate-300 font-['Space_Grotesk'] text-lg leading-relaxed opacity-90">
+                                                                            {proc.description}
+                                                                        </p>
+
+                                                                        {/* Arrow Connection (Decorative) */}
+                                                                        {idx < (selectedItem.process?.length || 0) - 1 && (
+                                                                            <div className="hidden lg:block absolute left-1/2 -bottom-10 transform -translate-x-1/2 text-slate-700">
+                                                                                <svg width="24" height="48" viewBox="0 0 24 48" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4">
+                                                                                    <path d="M12 0V48" />
+                                                                                </svg>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* 05. MOCKUPS */}
                                         {selectedItem.mockups && (
                                             <div ref={mockupsRef} className="space-y-24 pt-12">
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                                     <div className="md:col-span-4">
                                                         <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                            <span className="text-indigo-500">04.</span> MOCKUPS
+                                                            <span className="text-indigo-500">05.</span> MOCKUPS
                                                         </h3>
                                                         <div className="w-full h-[1px] bg-white/10"></div>
                                                     </div>

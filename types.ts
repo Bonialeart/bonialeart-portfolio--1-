@@ -34,13 +34,28 @@ export interface TechnicalInfo {
 }
 
 export interface BentoCardData {
-    color?: string;
+    color?: string; // Legacy support
     title?: string;
     description?: string;
     label?: string;
     img?: string; // URL for logo/icon/image
-    type?: 'default' | 'image' | 'font'; // To determine how to render
+    video?: string;
+    type?: 'default' | 'image' | 'video' | 'font' | 'color-palette' | 'pattern' | 'logo' | 'link' | 'mockup';
     fontFamily?: string; // For typography cards
+
+    // Grid Spanning
+    colSpan?: 1 | 2 | 3 | 4;
+    rowSpan?: 1 | 2;
+
+    // Styling
+    backgroundColor?: string;
+    textColor?: string;
+
+    // Palette
+    colors?: { hex: string; name: string }[];
+
+    // Image Fit
+    imgFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 export interface GalleryItem {
@@ -53,6 +68,7 @@ export interface GalleryItem {
     technicalInfo?: TechnicalInfo;
     bentoData?: BentoCardData[];
     mockups?: { url: string; title?: string; description?: string }[];
+    process?: { url: string; title?: string; description?: string }[];
     cameraInfo?: CameraInfo;
     objectPosition?: string;
 }

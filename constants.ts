@@ -134,70 +134,124 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     },
     {
         id: 8,
-        title: "Sistema de Identidad de Marca",
+        title: "Aquarium Agustin Codazzi",
         category: "Design",
-        description: "Un sistema integral de identidad de marca diseñado para una startup tecnológica moderna. Este proyecto abarca el diseño del logotipo, la selección de la paleta de colores, la jerarquía tipográfica y la aplicación en varios puntos de contacto físicos y digitales. El objetivo fue crear un lenguaje visual que comunique innovación, confiabilidad y cercanía.",
-        url: "https://www.dropbox.com/scl/fi/qiqiv707pneox7mov6k2l/Logourl.png?rlkey=6xf5lm2cdy24g03ku0xffbqkg&st=undtitur&raw=1",
+        description: "Un sistema integral de identidad de marca diseñado para el Aquarium Agustin Codazzi. Este proyecto abarca el rediseño del logotipo, la selección de una paleta de colores marinos y vibrantes, la jerarquía tipográfica y la aplicación en diversos soportes. El objetivo fue crear una imagen fresca y moderna que invite a la conservación y el aprendizaje.",
+        url: "https://www.dropbox.com/scl/fi/erwe5ypbrw6npwbf782xa/Portfolio-Cover.png?rlkey=pssu0u5q3n31rpjeiy6ax7uxp&st=3xahkbvo&raw=1",
         media: [],
         technicalInfo: {
-            software: "Adobe Illustrator, Photoshop, Figma",
+            software: "Adobe Illustrator, Photoshop",
             year: "2024",
-            dimensions: "Varias",
-            technique: "Diseño Vectorial y UI/UX"
+            dimensions: "Vectorial",
+            technique: "Branding & Identidad Visual"
         },
         bentoData: [
+            // 1. Main Logo (Large Square, Top Left)
             {
-                color: '#0f172a',
-                title: 'Paleta Primaria',
-                description: 'Slate 900 - La base de la marca, representando estabilidad y profundidad.',
-                label: 'Color'
+                type: 'logo',
+                colSpan: 2,
+                rowSpan: 2,
+                backgroundColor: '#ffffff',
+                img: 'https://www.dropbox.com/scl/fi/mvdt32ctuafz33wdhdsol/Recurso-126biologia_ucv-logotipo-isotipo-traspa.png?rlkey=l5tggnbujnhpto0hkdkqxnzwa&st=t1wc0vlq&raw=1'
             },
+            // 2. T-Shirt Mockup (Large Square, Top Right)
             {
-                color: '#6366f1',
-                title: 'Color de Acento',
-                description: 'Indigo 500 - Usado para llamadas a la acción y resaltar información clave.',
-                label: 'Color'
+                type: 'mockup',
+                colSpan: 2,
+                rowSpan: 2,
+                img: 'https://www.dropbox.com/scl/fi/z6qrrqmp19sfi81crvoj1/Camisa-acuario-agustin-codazzi.png?rlkey=78xfuvgmtu8dfqmm8zf9j269l&st=8qpzdul3&raw=1'
             },
+            // 3. Secondary Logo / Badge (Wide Rectangle, Middle Left)
             {
-                color: '#1e293b',
-                title: 'Tipografía',
-                description: 'Space Grotesk - Sans-serif moderna y geométrica.',
-                label: 'Fuente',
-                type: 'font',
-                fontFamily: 'Space Grotesk'
+                type: 'logo',
+                colSpan: 2,
+                rowSpan: 1,
+                backgroundColor: '#0f172a', // Dark theme for contrast
+                img: 'https://www.dropbox.com/scl/fi/w0t22hrqs0dpekv59e22g/Logotipo.png?rlkey=3rxy8gh4ja0frwokshsjqa6cw&st=gaieduua&raw=1'
             },
+            // 4. Color Palette (Wide Rectangle, Middle Right)
             {
-                color: '#000000',
-                title: 'Marca de Logotipo',
-                description: 'Abstracción geométrica minimalista.',
-                label: 'Activo de Marca',
-                type: 'image',
-                img: 'https://www.dropbox.com/scl/fi/qiqiv707pneox7mov6k2l/Logourl.png?rlkey=6xf5lm2cdy24g03ku0xffbqkg&st=undtitur&raw=1'
+                type: 'color-palette',
+                colSpan: 2,
+                rowSpan: 1,
+                backgroundColor: '#ffffff',
+                colors: [
+                    { hex: '#6990CB', name: 'Serenity' },
+                    { hex: '#F5F9FF', name: 'Ice' },
+                    { hex: '#28285B', name: 'Navy' }
+                ]
             },
+            // 5. Manual de Marca (Small)
             {
-                color: '#334155',
-                title: 'Iconografía',
-                description: 'Peso de trazo consistente y esquinas redondeadas.',
-                label: 'Sistema'
+                type: 'logo',
+                colSpan: 1,
+                rowSpan: 1,
+                backgroundColor: '#000000ff',
+                imgFit: 'contain',
+                img: 'https://www.dropbox.com/scl/fi/9274l6uac2jhx2sp5k0tv/manual.png?rlkey=5wbkjbvh6p3xorfd6wce8zjgf&st=jrqgvm7g&raw=1',
             },
+            // 6. Logo Variation White (Small)
             {
-                color: '#475569',
-                title: 'Sistema de Retícula',
-                description: 'Retícula fluida de 12 columnas para diseños responsivos.',
-                label: 'Diseño'
+                type: 'logo',
+                colSpan: 1,
+                rowSpan: 1,
+                backgroundColor: '#28285B', // Navy bg for white logo
+                imgFit: 'contain',
+                img: 'https://www.dropbox.com/scl/fi/g1hyknmful91c7pnoxsii/logo-en-blanco.png?rlkey=nl6f3vfegl6645n7e9oawenx6&st=emhntt0i&raw=1'
             },
+            // 7. Logo Variation Black (Small)
             {
-                color: '#0f172a',
-                title: 'Ver Mockups',
-                description: 'Mira la marca aplicada en escenarios reales.',
-                label: 'Mockups',
-                type: 'default' // This will be the trigger
+                type: 'logo',
+                colSpan: 1,
+                rowSpan: 1,
+                backgroundColor: '#F5F9FF', // Light bg for black logo
+                imgFit: 'contain',
+                img: 'https://www.dropbox.com/scl/fi/x2s3j6p75vl3u4fnicgnl/logo-negro.png?rlkey=xg0btulviqcl0i3e9vd1bz3vu&st=04yuk5ob&raw=1'
+            },
+            // 8. Brand Pattern (Small Filler)
+            {
+                type: 'pattern',
+                colSpan: 1,
+                rowSpan: 1,
+                backgroundColor: '#6990CB', // Serenity Blue
+                img: 'https://www.dropbox.com/scl/fi/mvdt32ctuafz33wdhdsol/Recurso-126biologia_ucv-logotipo-isotipo-traspa.png?rlkey=l5tggnbujnhpto0hkdkqxnzwa&st=t1wc0vlq&raw=1'
+            },
+            // 9. Instagram Mockup (Large Square, Bottom Left)
+            {
+                type: 'mockup',
+                colSpan: 2,
+                rowSpan: 2,
+                img: 'https://www.dropbox.com/scl/fi/5gltfp2zre6gtmczq5pbm/Instagram-acuario-agustin-codazzi.png?rlkey=221sihfqtn4azmw9vkb3ce0mo&st=c3t47nmi&raw=1'
+            },
+            // 10. Pendon Mockup (Large Square, Bottom Right)
+            {
+                type: 'mockup',
+                colSpan: 2,
+                rowSpan: 2,
+                img: 'https://www.dropbox.com/scl/fi/yb6p2zci4ewp9il4tybk7/Pendon.png?rlkey=ahju6aiypjxzst37qm7y4cyyf&st=9nais0ga&raw=1'
             }
         ],
         mockups: [
-            { url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2055&auto=format&fit=crop", title: "Página de Aterrizaje", description: "Mockup de escritorio de alta fidelidad." },
-            { url: "https://images.unsplash.com/photo-1555421689-491a97ff2040?q=80&w=2070&auto=format&fit=crop", title: "Aplicación Móvil", description: "Diseño de interfaz de app iOS." },
-            { url: "https://images.unsplash.com/photo-1603380353725-f8a4d39cc80e?q=80&w=2070&auto=format&fit=crop", title: "Tarjetas de Presentación", description: "Branding en material impreso." }
+            { url: "https://www.dropbox.com/scl/fi/z6qrrqmp19sfi81crvoj1/Camisa-acuario-agustin-codazzi.png?rlkey=78xfuvgmtu8dfqmm8zf9j269l&st=8qpzdul3&raw=1", title: "Merchandising", description: "Camisetas oficiales." },
+            { url: "https://www.dropbox.com/scl/fi/yb6p2zci4ewp9il4tybk7/Pendon.png?rlkey=ahju6aiypjxzst37qm7y4cyyf&st=9nais0ga&raw=1", title: "Señalética", description: "Identidad en espacios." },
+            { url: "https://www.dropbox.com/scl/fi/5gltfp2zre6gtmczq5pbm/Instagram-acuario-agustin-codazzi.png?rlkey=221sihfqtn4azmw9vkb3ce0mo&st=c3t47nmi&raw=1", title: "Social Media", description: "Feed de Instagram." }
+        ],
+        process: [
+            {
+                url: "https://www.dropbox.com/scl/fi/nqobokxve1dt5gsskiges/Logo-version-1.png?rlkey=596z2ctysyel9nwijo0x6hsw3&st=60gd9crc&raw=1",
+                title: "Concepto A: Pez Completo",
+                description: "Una exploración figurativa buscando representar la vida marina de forma directa, utilizando la silueta completa para generar reconocimiento inmediato."
+            },
+            {
+                url: "https://www.dropbox.com/scl/fi/tdjq66u8ly6teg5iguh2t/Logo-version-2.png?rlkey=oso92usmcmkvmwzq7br0h4pi8&st=ax3gzjj8&raw=1",
+                title: "Concepto B: Arquitectura",
+                description: "Abstracción geométrica inspirada en los arcos y líneas estructurales de la fachada icónica del edificio del Acuario Agustin Codazzi."
+            },
+            {
+                url: "https://www.dropbox.com/scl/fi/8p2rn6pgqeu63ab4rjr0p/Logo-version-3.png?rlkey=vdbivcdn9x2i705af3wywvw0p&st=0hyoyurm&raw=1",
+                title: "Concepto C: Evolución",
+                description: "Una iteración previa a la final, donde se busca sintetizar la forma orgánica del pez con un estilo más moderno y minimalista, acercándose a la solución definitiva."
+            }
         ]
     }
 ];
