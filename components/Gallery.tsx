@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Image as ImageIcon, ZoomIn, ChevronLeft, ChevronRight, Play, Pause, Copy } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Image as ImageIcon } from 'lucide-react';
+import ProjectModal from './ProjectModal';
 import { GalleryItem, MediaItem } from '../types';
 import { CATEGORY_TRANSLATIONS } from '../constants';
 import { extractColorsFromUrl } from '../utils/colorUtils';
@@ -315,143 +316,24 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
             </div>
 
             {/* --- MODAL --- */}
-            <AnimatePresence>
-                {selectedId && modalItem && (
-                    <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center md:px-4 pointer-events-none">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setSelectedId(null)}
-                            className="absolute inset-0 bg-slate-950/95 backdrop-blur-xl cursor-pointer pointer-events-auto"
-                        />
-
-                        {/* Layout: 
-                            Mobile: Stacked (Image 50%, Info 50%)
-                            Tablet (md): Stacked (Image 60%, Info 40%) -> Changed from previous row layout
-                            Laptop (lg): Row (Image 75%, Info 25%) 
-                        */}
-                        <motion.div
-                            layoutId={`card-container-${modalItem.id}`}
-                            className="relative w-full h-[100dvh] md:h-[90vh] lg:max-w-6xl lg:h-[85vh] overflow-hidden bg-slate-900 shadow-2xl flex flex-col lg:flex-row pointer-events-auto border-0 md:border border-white/5 z-50 md:rounded-lg"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button
-                                onClick={() => setSelectedId(null)}
-                                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 p-2 text-white/50 hover:text-white bg-black/50 rounded-full backdrop-blur-md hover:bg-black/70 transition-colors"
-                            >
-                                <X size={24} />
-                            </button>
-
-                            {/* Media Viewport */}
-                            <motion.div
-                                className="w-full lg:w-3/4 h-[50%] md:h-[60%] lg:h-full relative bg-[#050505] flex flex-col group/carousel shrink-0"
-                                drag="x"
-                                dragConstraints={{ left: 0, right: 0 }}
-                                dragElastic={0.2}
-                                onDragEnd={(e, { offset, velocity }) => {
-                                    const swipe = offset.x;
-                                    if (swipe < -50) {
-                                        handleNextMedia(e as any);
-                                    } else if (swipe > 50) {
-                                        handlePrevMedia(e as any);
-                                    }
-                                }}
-                            >
-                                <div className="relative flex-grow h-full flex items-center justify-center p-0 md:p-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[length:20px_20px] overflow-hidden">
-
-                                    {/* Navigation Arrows */}
-                                    {mediaList.length > 1 && (
-                                        <>
-                                            <button
-                                                onClick={handlePrevMedia}
-                                                className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/20 text-white/70 hover:bg-black/50 hover:text-white transition-all backdrop-blur-sm opacity-100 lg:opacity-0 lg:group-hover/carousel:opacity-100"
-                                            >
-                                                <ChevronLeft size={32} />
-                                            </button>
-                                            <button
-                                                onClick={handleNextMedia}
-                                                className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/20 text-white/70 hover:bg-black/50 hover:text-white transition-all backdrop-blur-sm opacity-100 lg:opacity-0 lg:group-hover/carousel:opacity-100"
-                                            >
-                                                <ChevronRight size={32} />
-                                            </button>
-                                        </>
-                                    )}
-
-                                    {activeMedia?.type === 'video' ? (
-                                        <CustomVideoPlayer
-                                            src={activeMedia.url}
-                                            poster={activeMedia.thumbnail}
-                                        />
-                                    ) : (
-                                        <ZoomableImage
-                                            src={activeMedia?.url}
-                                            alt={modalItem.title}
-                                        />
-                                    )}
-                                </div>
-
-                                {/* Thumbnails Strip */}
-                                {mediaList.length > 1 && (
-                                    <div className="h-16 md:h-20 bg-slate-950 border-t border-white/10 flex gap-2 p-2 overflow-x-auto justify-center flex-shrink-0 z-20 relative">
-                                        {mediaList.map((m, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={() => setCurrentMediaIndex(idx)}
-                                                className={`relative aspect-square h-full rounded-md overflow-hidden border-2 transition-all ${currentMediaIndex === idx ? 'border-indigo-500 opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`}
-                                            >
-                                                <img src={m.thumbnail || m.url} className="w-full h-full object-cover" loading="lazy" alt="thumbnail" />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </motion.div>
-
-                            {/* Info Panel */}
-                            <div className="w-full lg:w-1/4 h-[50%] md:h-[40%] lg:h-full bg-slate-950 border-t lg:border-t-0 lg:border-l border-white/5 p-6 md:p-8 overflow-y-auto custom-scrollbar flex-grow">
-                                <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-500/30 pb-1 mb-4 inline-block">{CATEGORY_TRANSLATIONS[modalItem.category] || modalItem.category}</span>
-                                <h2 className="text-2xl md:text-3xl font-light text-white mb-4 md:mb-6 mt-2">{modalItem.title}</h2>
-                                <p className="text-slate-400 text-sm leading-relaxed mb-8 font-mono">{modalItem.description}</p>
-
-                                <div className="border-t border-white/10 pt-6">
-                                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-4 flex items-center gap-2">
-                                        Paleta de Color
-                                        <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">HEX</span>
-                                    </h4>
-
-                                    <div className="flex flex-wrap gap-3">
-                                        {palettes[modalItem.id] ? (
-                                            palettes[modalItem.id].map((color, index) => (
-                                                <div key={index} className="relative group">
-                                                    <button
-                                                        onClick={() => handleCopyColor(color)}
-                                                        className="w-10 h-10 rounded-full border-2 border-white/10 shadow-lg hover:scale-110 transition-all duration-300 flex items-center justify-center group hover:border-white/40"
-                                                        style={{ backgroundColor: color }}
-                                                        title="Clic para copiar"
-                                                    >
-                                                        {copiedColor === color && <Check size={16} className="text-white drop-shadow-md" />}
-                                                    </button>
-
-                                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
-                                                        {copiedColor === color ? '¡Copiado!' : color}
-                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900"></div>
-                                                    </div>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <div className="flex gap-2">
-                                                {[1, 2, 3, 4, 5].map(i => (
-                                                    <div key={i} className="w-10 h-10 rounded-full bg-slate-800 animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
+            {selectedId && modalItem && (
+                <ProjectModal
+                    item={modalItem}
+                    onClose={() => setSelectedId(null)}
+                    hasNext={items.length > 1}
+                    hasPrev={items.length > 1}
+                    onNext={() => {
+                        const currentIndex = items.findIndex(i => i.id === selectedId);
+                        const nextIndex = (currentIndex + 1) % items.length;
+                        setSelectedId(items[nextIndex].id);
+                    }}
+                    onPrev={() => {
+                        const currentIndex = items.findIndex(i => i.id === selectedId);
+                        const prevIndex = (currentIndex - 1 + items.length) % items.length;
+                        setSelectedId(items[prevIndex].id);
+                    }}
+                />
+            )}
         </div>
     );
 };
