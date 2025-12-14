@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SERVICES } from '../constants';
@@ -13,6 +14,7 @@ const getIcon = (iconName: string) => {
 };
 
 const Services = () => {
+    const { t } = useTranslation();
     return (
         <div className="w-full max-w-6xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -40,19 +42,19 @@ const Services = () => {
                             </div>
 
                             <h3 className="text-2xl font-['Permanent_Marker'] text-center mb-4 tracking-wide group-hover:text-indigo-600 transition-colors">
-                                {service.title}
+                                {t(`services.items.${service.id}.title`)}
                             </h3>
 
                             <p className="text-slate-600 text-center font-mono text-sm leading-relaxed mb-8 flex-grow">
-                                {service.description}
+                                {t(`services.items.${service.id}.description`)}
                             </p>
 
                             <div className="mt-auto border-t-2 border-dashed border-slate-200 pt-4 flex justify-between items-center">
                                 <span className="font-bold font-['Space_Grotesk'] text-lg text-slate-800">
-                                    {service.price}
+                                    {t(`services.items.${service.id}.price`)}
                                 </span>
                                 <a href="#contact" className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-sm font-bold uppercase tracking-wider group/link">
-                                    Cotizar
+                                    {t('services.cta')}
                                     <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
                                 </a>
                             </div>

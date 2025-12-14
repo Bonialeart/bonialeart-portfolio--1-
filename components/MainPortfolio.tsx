@@ -1,9 +1,9 @@
 
+import { useTranslation } from 'react-i18next';
 import React, { useState, useRef } from 'react';
 import { motion, Variants, useScroll, useTransform, useSpring } from 'framer-motion';
 import { GeneratedContent } from '../types';
 import { INITIAL_CONTENT, GALLERY_ITEMS } from '../constants';
-import ThreeBackground from './ThreeBackground';
 import ArtModel from './ArtModel';
 import Navigation from './Navigation';
 import Gallery from './Gallery';
@@ -24,11 +24,16 @@ interface MainPortfolioProps {
 }
 
 const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
+    const { t, i18n } = useTranslation();
     const [content, setContent] = useState<GeneratedContent>(INITIAL_CONTENT as any);
     const [selectedGalleryId, setSelectedGalleryId] = useState<number | null>(null);
-    const [activeCategory, setActiveCategory] = useState<string>('Todos');
+    const [activeCategory, setActiveCategory] = useState<string>('all');
     const qualitiesContainerRef = useRef<HTMLDivElement>(null);
     const marqueeRef = useRef<HTMLElement>(null);
+
+    const toggleLanguage = () => {
+        i18n.changeLanguage(i18n.language === 'en' ? 'es' : 'en');
+    };
 
     // Track scroll progress for the TALL qualities container
     const { scrollYProgress: qualityScrollProgress } = useScroll({
@@ -117,19 +122,19 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
     // Category Filtering Logic
     const doesItemBelongToCategory = (item: typeof GALLERY_ITEMS[0], category: string): boolean => {
         switch (category) {
-            case 'Todos':
+            case 'all':
                 return true;
-            case 'Ilustraciones Digitales':
+            case 'illustrations':
                 return item.category === 'Digital Painting';
-            case 'Arte de Entornos':
+            case 'environments':
                 return item.category === '3d' || item.category === 'Sketches' || item.description.toLowerCase().includes('entorno') || item.description.toLowerCase().includes('landscape');
-            case 'Arte Conceptual':
+            case 'conceptual':
                 return item.category === 'Sketches' || item.category === 'Digital Painting';
-            case 'Diseño de Personajes':
+            case 'characters':
                 return (item.category === 'Digital Painting' || item.category === '3d') && !item.description.toLowerCase().includes('landscape') && !item.description.toLowerCase().includes('entorno');
-            case '3D':
+            case 'threed':
                 return item.category === '3d';
-            case 'Diseño':
+            case 'design':
                 return item.category === 'Design';
             default:
                 return false;
@@ -139,13 +144,13 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
     const portfolioItems = basePortfolioItems.filter(item => doesItemBelongToCategory(item, activeCategory));
 
     const categories = [
-        'Todos',
-        'Ilustraciones Digitales',
-        'Arte de Entornos',
-        'Arte Conceptual',
-        'Diseño de Personajes',
-        '3D',
-        'Diseño'
+        'all',
+        'illustrations',
+        'environments',
+        'conceptual',
+        'characters',
+        'threed',
+        'design'
     ];
 
     return (
@@ -156,18 +161,27 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             className="relative w-full min-h-screen text-slate-100 selection:bg-indigo-500 selection:text-white"
         >
             <CustomCursor />
-            <ThreeBackground />
             <Navigation />
             <MediaKitButton />
 
             {/* Back Button - Responsive Positioning */}
             <button
                 onClick={onBack}
-                className="fixed z-50 rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 bg-slate-900/80 backdrop-blur-md
-                bottom-6 left-6 p-3 shadow-lg group"
+                className="fixed z-50 rounded-full text-white hover:bg-indigo-500 transition-colors border-2 border-white/20 bg-indigo-600 backdrop-blur-md
+                bottom-6 left-6 p-3 shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)] group"
                 title="Volver al Inicio"
             >
                 <Home size={20} className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            </button>
+
+            {/* Language Switcher */}
+            <button
+                onClick={toggleLanguage}
+                className="fixed z-50 rounded-full text-white hover:bg-indigo-500 transition-colors border-2 border-white/20 bg-indigo-600 backdrop-blur-md
+                bottom-20 left-6 p-3 shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)] group font-bold font-mono text-xs w-12 h-12 flex items-center justify-center"
+                title="Cambiar Idioma / Change Language"
+            >
+                {i18n.language === 'en' ? 'ES' : 'EN'}
             </button>
 
             {/* Hero Section */}
@@ -190,9 +204,9 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 */}
                         <motion.h1
                             variants={fadeUp}
-                            className="text-[18vw] md:text-[21vw] lg:text-[12rem] xl:text-[15rem] leading-[0.9] md:leading-[0.8] font-bold font-['Space_Grotesk'] tracking-tighter text-indigo-600 select-none mix-blend-screen opacity-90"
+                            className="text-[15vw] md:text-[18vw] lg:text-[11rem] xl:text-[13rem] leading-[0.9] font-['Permanent_Marker'] tracking-wider text-slate-100 select-none drop-shadow-[8px_8px_0px_#4f46e5] -rotate-6 transform-gpu z-20 relative py-4"
                         >
-                            Portafolio
+                            {t('hero.title')}
                         </motion.h1>
 
                         <motion.div
@@ -216,7 +230,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                                     <div className="absolute -bottom-3 -right-3 w-12 h-5 bg-[#e2d5b5]/80 rotate-[45deg] shadow-sm"></div>
 
                                     <span className="font-['Permanent_Marker'] text-2xl md:text-3xl lg:text-5xl text-slate-900 relative z-10 block tracking-wide whitespace-nowrap">
-                                        Bonialeart
+                                        {t('hero.subtitle')}
                                     </span>
 
                                     <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#000_1px,transparent_0)] bg-[length:3px_3px]"></div>
@@ -228,10 +242,10 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     <motion.div variants={fadeUp} className="h-1 w-24 md:w-32 bg-indigo-500 mx-auto mb-6 md:mb-10 shadow-[0_0_20px_rgba(99,102,241,0.6)] rounded-full" />
 
                     <motion.p variants={fadeUp} className="text-base md:text-xl lg:text-2xl font-light tracking-wide text-slate-300 mb-4 md:mb-8 max-w-2xl px-4 text-center">
-                        {content.tagline}
+                        {t('hero.tagline')}
                     </motion.p>
                     <motion.p variants={fadeUp} className="text-xs md:text-sm lg:text-base max-w-lg mx-auto text-slate-400 px-4 text-center leading-relaxed hidden md:block">
-                        {content.bio}
+                        {t('hero.bio')}
                     </motion.p>
                 </div>
 
@@ -241,7 +255,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
                     className="absolute bottom-6 md:bottom-12 z-50 cursor-pointer p-2 hover:bg-white/5 rounded-full transition-colors"
                     onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
-                    aria-label="Ir a Galería"
+                    aria-label={t('hero.cta')}
                 >
                     <ArrowDown className="w-6 h-6 md:w-8 md:h-8 text-indigo-400 hover:text-white transition-colors" />
                 </motion.button>
@@ -273,7 +287,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             <motion.section
                 ref={qualitiesContainerRef}
                 id="qualities"
-                className="h-[350vh] md:h-[400vh] relative z-10"
+                className="h-[200vh] md:h-[250vh] relative z-10"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: false, amount: 0 }}
@@ -298,6 +312,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                         <ArtModel scrollProgress={smoothProgress} />
                     </div>
 
+
                     {/* Floating Content Container */}
                     <div className="absolute inset-0 z-20 pointer-events-none container mx-auto">
 
@@ -309,13 +324,13 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                             >
                                 <div className="flex items-center gap-4 mb-2">
                                     <ScribbleCircle />
-                                    <span className="font-['Permanent_Marker'] text-indigo-400 tracking-widest text-lg md:text-xl">Paso 01</span>
+                                    <span className="font-['Permanent_Marker'] text-indigo-400 tracking-widest text-lg md:text-xl">{t('qualities.step')} 01</span>
                                 </div>
                                 <h3 className="text-4xl md:text-4xl lg:text-6xl font-bold text-white mb-4 font-['Space_Grotesk'] uppercase leading-none tracking-tighter">
-                                    {qualities[0].title}
+                                    {t('qualities.items.0.title')}
                                 </h3>
                                 <p className="text-slate-300 md:text-slate-400 font-mono text-xs leading-relaxed border-l-2 border-indigo-500/30 pl-4 bg-slate-950/50 lg:bg-transparent p-2 lg:p-0 rounded lg:rounded-none backdrop-blur-sm lg:backdrop-blur-none">
-                                    {qualities[0].description}
+                                    {t('qualities.items.0.description')}
                                 </p>
                                 <svg className="absolute top-1/2 left-full w-12 lg:w-24 h-24 hidden lg:block -translate-y-1/2 opacity-40">
                                     <path d="M0,50 L80,50 L100,10" fill="none" stroke="#6366f1" strokeWidth="1" />
@@ -331,14 +346,14 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                                 className="absolute top-[40%] md:top-[40%] lg:top-[45%] right-6 md:right-10 lg:right-32 max-w-[80%] md:max-w-[300px] lg:max-w-xs text-right"
                             >
                                 <div className="flex items-center gap-4 mb-2 justify-end relative">
-                                    <span className="font-['Permanent_Marker'] text-orange-500 tracking-widest text-lg md:text-xl">Paso 02</span>
+                                    <span className="font-['Permanent_Marker'] text-orange-500 tracking-widest text-lg md:text-xl">{t('qualities.step')} 02</span>
                                     <div className="absolute -top-2 -right-2 w-12 h-12 border-2 border-orange-500/50 rounded-full animate-ping" />
                                 </div>
                                 <h3 className="text-4xl md:text-4xl lg:text-6xl font-bold text-white mb-4 font-['Space_Grotesk'] uppercase leading-none tracking-tighter">
-                                    {qualities[1].title}
+                                    {t('qualities.items.1.title')}
                                 </h3>
                                 <p className="text-slate-300 md:text-slate-400 font-mono text-xs leading-relaxed border-r-2 border-orange-500/30 pr-4 bg-slate-950/50 lg:bg-transparent p-2 lg:p-0 rounded lg:rounded-none backdrop-blur-sm lg:backdrop-blur-none inline-block">
-                                    {qualities[1].description}
+                                    {t('qualities.items.1.description')}
                                 </p>
                                 <svg className="absolute top-1/2 right-full w-20 lg:w-32 h-12 hidden lg:block -translate-y-1/2 opacity-40">
                                     <path d="M128,20 L40,20 L10,50" fill="none" stroke="#f97316" strokeWidth="1" />
@@ -354,13 +369,13 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                                 className="absolute bottom-[20%] md:bottom-[20%] left-6 md:left-16 lg:left-40 max-w-[80%] md:max-w-[300px] lg:max-w-xs"
                             >
                                 <div className="flex items-center gap-4 mb-2">
-                                    <span className="font-['Permanent_Marker'] text-pink-500 tracking-widest text-lg md:text-xl">Paso 03</span>
+                                    <span className="font-['Permanent_Marker'] text-pink-500 tracking-widest text-lg md:text-xl">{t('qualities.step')} 03</span>
                                 </div>
                                 <h3 className="text-4xl md:text-4xl lg:text-6xl font-bold text-white mb-4 font-['Space_Grotesk'] uppercase leading-none tracking-tighter">
-                                    {qualities[2].title}
+                                    {t('qualities.items.2.title')}
                                 </h3>
                                 <p className="text-slate-300 md:text-slate-400 font-mono text-xs leading-relaxed border-l-2 border-pink-500/30 pl-4 bg-slate-950/50 lg:bg-transparent p-2 lg:p-0 rounded lg:rounded-none backdrop-blur-sm lg:backdrop-blur-none">
-                                    {qualities[2].description}
+                                    {t('qualities.items.2.description')}
                                 </p>
                                 <svg className="absolute bottom-full left-8 w-1 h-16 hidden lg:block opacity-40">
                                     <line x1="0" y1="64" x2="0" y2="0" stroke="#ec4899" strokeWidth="1" strokeDasharray="4,4" />
@@ -388,7 +403,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     <div className="inline-block relative">
                         <StickerCrown className="absolute -top-10 -right-10 rotate-12 z-20" />
                         <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
-                            HABILIDADES Y SOFTWARE
+                            {t('skills.title')}
                         </h2>
                         <div className="w-full max-w-[200px] md:max-w-[300px] mx-auto">
                             <ScribbleUnderline color="text-pink-500" />
@@ -413,7 +428,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                         <div className="inline-block relative">
                             <StickerWow className="absolute -top-12 -left-20 -rotate-12 z-20" />
                             <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] pr-2 md:pr-6">
-                                OBRA RECIENTE
+                                {t('gallery.title')}
                             </h2>
                             <div className="w-1/2 ml-auto">
                                 <ScribbleUnderline color="text-indigo-500" />
@@ -432,7 +447,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                                     : 'bg-slate-900/50 border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
                                     }`}
                             >
-                                {cat}
+                                {t(`gallery.categories.${cat}`)}
                             </button>
                         ))}
                     </div>
@@ -460,14 +475,14 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 <div className="max-w-5xl mx-auto text-center mb-16 md:mb-24 px-4">
                     <div className="inline-block relative">
                         <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
-                            SERVICIOS
+                            {t('services.title')}
                         </h2>
                         <div className="w-full max-w-[200px] md:max-w-[300px] mx-auto">
                             <ScribbleUnderline color="text-indigo-500" />
                         </div>
                     </div>
                     <p className="text-slate-400 mt-6 max-w-2xl mx-auto font-light text-lg">
-                        ¿Tienes una idea en mente? Puedo ayudarte a hacerla realidad.
+                        {t('services.subtitle')}
                     </p>
                 </div>
 
@@ -530,7 +545,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     </div>
 
                     <p className="text-slate-500 uppercase tracking-widest text-xs md:text-sm">
-                        © {new Date().getFullYear()} Bonialeart. Todos los derechos reservados.
+                        © {new Date().getFullYear()} Bonialeart. {t('footer.rights')}
                     </p>
                 </div>
             </footer>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Quote, Star } from 'lucide-react';
@@ -62,6 +63,7 @@ const TESTIMONIALS = [
 ];
 
 const Testimonials = () => {
+    const { t } = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -85,7 +87,7 @@ const Testimonials = () => {
                     className="inline-block relative"
                 >
                     <h2 className="text-4xl md:text-6xl font-['Permanent_Marker'] text-slate-100 mb-4 transform -rotate-2">
-                        TESTIMONIOS
+                        {t('testimonials.title')}
                     </h2>
                     {/* Scribble Underline */}
                     <svg viewBox="0 0 200 20" className="w-full h-4 text-indigo-500 opacity-80 mx-auto">
@@ -93,7 +95,7 @@ const Testimonials = () => {
                     </svg>
                 </motion.div>
                 <p className="text-slate-400 mt-6 max-w-2xl mx-auto font-['Handlee'] text-xl">
-                    Notas de clientes felices y colaboradores.
+                    {t('testimonials.subtitle')}
                 </p>
             </div>
 
@@ -125,7 +127,7 @@ const Testimonials = () => {
                                 </div>
 
                                 <p className="text-slate-800 font-['Handlee'] text-lg leading-relaxed mb-8 flex-grow">
-                                    "{item.text}"
+                                    "{t(`testimonials.items.${item.id}.text`)}"
                                 </p>
 
                                 <div className="flex items-center gap-4 border-t border-slate-200 pt-4 mt-auto">
@@ -135,7 +137,7 @@ const Testimonials = () => {
                                     <div>
                                         <h4 className="text-slate-900 font-['Permanent_Marker'] text-lg leading-none mb-1">{item.name}</h4>
                                         <p className="text-indigo-600 text-xs font-bold uppercase tracking-wider font-['Space_Grotesk']">
-                                            {item.role} <span className="text-slate-400">@</span> {item.company}
+                                            {t(`testimonials.items.${item.id}.role`)} <span className="text-slate-400">@</span> {item.company}
                                         </p>
                                     </div>
                                 </div>

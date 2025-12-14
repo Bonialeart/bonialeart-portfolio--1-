@@ -1,9 +1,11 @@
 
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navigation = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -14,6 +16,24 @@ const Navigation = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const gallerySection = document.getElementById('gallery');
+
+      // Check if we are inside the gallery section
+      let inGallery = false;
+      if (gallerySection) {
+        const rect = gallerySection.getBoundingClientRect();
+        // If the top of the gallery is near/above the top of viewport, and bottom is still visible
+        if (rect.top <= 100 && rect.bottom > 0) {
+          inGallery = true;
+        }
+      }
+
+      if (inGallery) {
+        setIsVisible(false);
+        setScrolled(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
 
       // Determine if scrolled down
       if (currentScrollY > 50) {
@@ -46,12 +66,12 @@ const Navigation = () => {
   };
 
   const navLinks = [
-    { id: 'home', label: 'Inicio' },
-    { id: 'about', label: 'Sobre Mí' },
-    { id: 'skills', label: 'Habilidades' },
-    { id: 'gallery', label: 'Galería' },
-    { id: 'services', label: 'Servicios' },
-    { id: 'contact', label: 'Contacto' },
+    { id: 'home', label: t('navigation.home') },
+    { id: 'about', label: t('navigation.about') },
+    { id: 'skills', label: t('navigation.skills') },
+    { id: 'gallery', label: t('navigation.gallery') },
+    { id: 'services', label: t('navigation.services') },
+    { id: 'contact', label: t('navigation.contact') },
   ];
 
   return (

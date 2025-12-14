@@ -109,8 +109,8 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
             {/* Back Button - Responsive Positioning */}
             <button
                 onClick={onBack}
-                className={`fixed z-50 rounded-full text-white hover:bg-indigo-600 transition-colors border border-slate-700 bg-slate-900/80 backdrop-blur-md group
-                bottom-6 left-6 p-3 shadow-lg
+                className={`fixed z-50 rounded-full text-white hover:bg-indigo-500 transition-colors border-2 border-white/20 bg-indigo-600 backdrop-blur-md group
+                bottom-6 left-6 p-3 shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)]
                 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 title="Volver al Inicio"
             >

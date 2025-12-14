@@ -1,4 +1,5 @@
 
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PROFILE_IMAGE, POLAROID_TEXT, CV_URL } from '../constants';
@@ -11,6 +12,7 @@ interface AboutProps {
 import { StickerSmile, StickerFlame, ScribbleArrow } from './Doodles';
 
 const About: React.FC<AboutProps> = ({ text }) => {
+    const { t } = useTranslation();
     return (
         <div className="container mx-auto px-4 relative overflow-visible">
 
@@ -31,7 +33,7 @@ const About: React.FC<AboutProps> = ({ text }) => {
                         className="absolute -top-12 -left-2 md:-top-16 md:-left-4 z-20"
                     >
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-['Permanent_Marker'] text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] tracking-widest">
-                            SOBRE MÍ
+                            {t('about.title')}
                             <div className="h-1 w-full bg-white mt-1 rounded-full" />
                         </h2>
                     </motion.div>
@@ -80,8 +82,8 @@ const About: React.FC<AboutProps> = ({ text }) => {
 
                         <div className="absolute -left-4 md:-left-6 top-1/3 w-16 h-16 md:w-24 md:h-24 bg-black rounded-full text-white flex items-center justify-center border-2 border-white transform -rotate-12 shadow-xl z-20">
                             <div className="text-center leading-none">
-                                <span className="block text-[8px] md:text-[10px] tracking-widest uppercase">Digital</span>
-                                <span className="block text-sm md:text-xl font-bold font-['Permanent_Marker'] text-pink-500">ARTISTA</span>
+                                <span className="block text-[8px] md:text-[10px] tracking-widest uppercase">{t('about.digital')}</span>
+                                <span className="block text-sm md:text-xl font-bold font-['Permanent_Marker'] text-pink-500">{t('about.role')}</span>
                             </div>
                         </div>
                     </motion.div>
@@ -96,18 +98,16 @@ const About: React.FC<AboutProps> = ({ text }) => {
                         viewport={{ once: true }}
                     >
                         <h1 className="text-6xl md:text-6xl lg:text-9xl font-black tracking-tighter text-white mb-4 md:mb-6 leading-[0.9] md:leading-[0.8]">
-                            ¡HOLA!
+                            {t('about.greeting')}
                         </h1>
 
                         <div className="bg-slate-900/50 border-l-4 border-pink-600 pl-4 md:pl-6 py-2 mb-6 md:mb-8 backdrop-blur-sm">
-                            <p className="text-lg md:text-xl text-white font-light">
-                                Mi nombre es <strong className="text-pink-500">Bonialeart</strong>, Soy un Diseñador / Ilustrador /Fotografo
-                            </p>
+                            <p className="text-lg md:text-xl text-white font-light" dangerouslySetInnerHTML={{ __html: t('about.intro') }} />
                         </div>
 
                         <div className="space-y-6 text-slate-300 text-base md:text-lg leading-relaxed max-w-xl">
                             <p className="first-letter:text-4xl md:first-letter:text-5xl first-letter:font-['Permanent_Marker'] text-white first-letter:float-left first-letter:mr-3 first-letter:mt-[-5px] md:first-letter:mt-[-10px]">
-                                {text}
+                                {t('about.description')}
                             </p>
 
                             {/* CV Button */}
@@ -125,7 +125,7 @@ const About: React.FC<AboutProps> = ({ text }) => {
                                     rel="noopener noreferrer"
                                     download
                                 >
-                                    Descargar CV
+                                    {t('about.cv')}
                                     <Download size={18} />
                                 </a>
                             </motion.div>
@@ -135,7 +135,7 @@ const About: React.FC<AboutProps> = ({ text }) => {
                                     <Globe size={20} />
                                 </div>
                                 <p className="font-['Permanent_Marker'] text-lg md:text-xl text-white transform rotate-1">
-                                    "Cada pieza es un descubrimiento; cada proyecto, una conexión."
+                                    {t('about.quote')}
                                 </p>
                                 <div className="absolute bottom-4 right-[-40px] hidden lg:block">
                                     <ScribbleArrow />

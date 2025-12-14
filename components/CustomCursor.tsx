@@ -50,7 +50,7 @@ const CustomCursor = () => {
     <>
       {/* Main Pen Tip */}
       <motion.div
-        className="fixed top-0 left-0 z-[9999] pointer-events-none"
+        className="fixed top-0 left-0 z-[10000] pointer-events-none"
         animate={{
           x: mousePosition.x - 2, // Align tip
           y: mousePosition.y - 2,

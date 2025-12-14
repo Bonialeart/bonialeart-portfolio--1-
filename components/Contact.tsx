@@ -1,4 +1,5 @@
 
+import { useTranslation } from 'react-i18next';
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Send, AlertCircle, CheckCircle2 } from 'lucide-react';
@@ -6,6 +7,7 @@ import emailjs from '@emailjs/browser';
 import { StickerSmile } from './Doodles';
 
 const Contact = () => {
+    const { t } = useTranslation();
     const formRef = useRef<HTMLFormElement>(null);
     const [formState, setFormState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState('');
@@ -40,7 +42,7 @@ const Contact = () => {
             } catch (error: any) {
                 console.error('FAILED...', error);
                 setFormState('error');
-                setErrorMessage('Hubo un error al enviar el mensaje. Por favor intenta de nuevo.');
+                setErrorMessage(t('contact.errorMessage'));
                 setTimeout(() => setFormState('idle'), 5000);
             }
         }
@@ -54,44 +56,44 @@ const Contact = () => {
             </div>
 
             <h3 className="text-3xl md:text-5xl font-['Permanent_Marker'] mb-4 text-center text-white">
-                Hablemos
+                {t('contact.title')}
             </h3>
             <p className="text-slate-400 text-center mb-8 font-mono text-xs md:text-sm">
-                ¿Tienes un proyecto en mente? Escríbeme.
+                {t('contact.subtitle')}
             </p>
 
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div>
-                    <label htmlFor="user_name" className="block text-sm font-medium text-slate-400 mb-1">Nombre</label>
+                    <label htmlFor="user_name" className="block text-sm font-medium text-slate-400 mb-1">{t('contact.name')}</label>
                     <input
                         type="text"
                         name="user_name"
                         id="user_name"
                         required
                         className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder-slate-600"
-                        placeholder="Tu nombre"
+                        placeholder={t('contact.namePlaceholder')}
                     />
                 </div>
                 <div>
-                    <label htmlFor="user_email" className="block text-sm font-medium text-slate-400 mb-1">Email</label>
+                    <label htmlFor="user_email" className="block text-sm font-medium text-slate-400 mb-1">{t('contact.email')}</label>
                     <input
                         type="email"
                         name="user_email"
                         id="user_email"
                         required
                         className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder-slate-600"
-                        placeholder="tu@email.com"
+                        placeholder={t('contact.emailPlaceholder')}
                     />
                 </div>
                 <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-1">Mensaje</label>
+                    <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-1">{t('contact.message')}</label>
                     <textarea
                         name="message"
                         id="message"
                         required
                         rows={4}
                         className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors resize-none placeholder-slate-600"
-                        placeholder="Cuéntame sobre tu idea..."
+                        placeholder={t('contact.messagePlaceholder')}
                     />
                 </div>
 
@@ -107,25 +109,25 @@ const Contact = () => {
                 >
                     {formState === 'idle' && (
                         <>
-                            <span>Enviar Mensaje</span>
+                            <span>{t('contact.submit')}</span>
                             <Send size={18} />
                         </>
                     )}
                     {formState === 'sending' && (
                         <>
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            <span>Enviando...</span>
+                            <span>{t('contact.sending')}</span>
                         </>
                     )}
                     {formState === 'sent' && (
                         <>
-                            <span>¡Mensaje Enviado!</span>
+                            <span>{t('contact.sent')}</span>
                             <CheckCircle2 size={18} />
                         </>
                     )}
                     {formState === 'error' && (
                         <>
-                            <span>Error al enviar</span>
+                            <span>{t('contact.error')}</span>
                             <AlertCircle size={18} />
                         </>
                     )}

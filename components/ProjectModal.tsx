@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import React, { useRef, useLayoutEffect, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { X, ChevronLeft, ChevronRight, Camera, Aperture, Timer, Maximize2, Check, PlayCircle } from 'lucide-react';
@@ -48,6 +50,7 @@ interface ProjectModalProps {
 }
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPrev, hasNext, hasPrev }) => {
+    const { t } = useTranslation();
     const modalRef = useRef<HTMLDivElement>(null);
     const mockupsRef = useRef<HTMLDivElement>(null);
     const [activeImage, setActiveImage] = useState<string | null>(item.url);
@@ -216,7 +219,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                             <Scribble className="w-32 h-6 text-indigo-500 mb-8 opacity-80" />
 
                             <p className="text-slate-400 font-light text-lg leading-relaxed animate-pulse">
-                                Desliza para explorar
+                                {t('modal.scroll_hint')}
                             </p>
                         </div>
                     </div>
@@ -232,7 +235,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                 <div className="md:col-span-4">
                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                        <span className="text-indigo-500">01.</span> SOBRE LA TOMA
+                                        <span className="text-indigo-500">01.</span> {t('modal.about_shot')}
                                     </h3>
                                     <div className="w-full h-[1px] bg-white/10"></div>
                                 </div>
@@ -247,31 +250,31 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                             <Tape className="w-32 -top-4 left-1/2 -translate-x-1/2 -rotate-1 opacity-90" />
                                             <h3 className="text-xl font-['Permanent_Marker'] text-slate-800 mb-6 flex items-center gap-2 border-b-2 border-slate-200 pb-2">
                                                 <Camera className="text-slate-800" strokeWidth={2.5} size={20} />
-                                                LOG DE CÁMARA
+                                                {t('modal.camera_log')}
                                             </h3>
                                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-6 gap-x-4">
                                                 <div className="space-y-1">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Modelo</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('modal.model')}</span>
                                                     <p className="text-slate-800 font-['Space_Grotesk'] font-bold">{item.cameraInfo.model}</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lente</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('modal.lens')}</span>
                                                     <p className="text-slate-800 font-['Space_Grotesk'] font-bold">{item.cameraInfo.lens}</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Apertura</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('modal.aperture')}</span>
                                                     <p className="text-slate-800 font-['Space_Grotesk'] font-bold flex items-center gap-2">
                                                         <Aperture size={14} className="text-indigo-500" /> {item.cameraInfo.aperture}
                                                     </p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Obturador</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('modal.shutter')}</span>
                                                     <p className="text-slate-800 font-['Space_Grotesk'] font-bold flex items-center gap-2">
                                                         <Timer size={14} className="text-indigo-500" /> {item.cameraInfo.shutterSpeed}
                                                     </p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ISO</span>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('modal.iso')}</span>
                                                     <p className="text-slate-800 font-['Space_Grotesk'] font-bold flex items-center gap-2">
                                                         <Maximize2 size={14} className="text-indigo-500" /> {item.cameraInfo.iso}
                                                     </p>
@@ -279,7 +282,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                             </div>
                                             <div className="absolute bottom-4 right-6 opacity-10 rotate-12 pointer-events-none">
                                                 <div className="border-2 border-slate-900 rounded-full w-16 h-16 flex items-center justify-center">
-                                                    <span className="font-['Permanent_Marker'] text-xs text-slate-900">APROBADO</span>
+                                                    <span className="font-['Permanent_Marker'] text-xs text-slate-900">{t('modal.approved')}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -292,7 +295,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
                                     <div className="md:col-span-4">
                                         <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-indigo-500">02.</span> ÁLBUM DE FOTOS
+                                            <span className="text-indigo-500">02.</span> {t('modal.photo_album')}
                                         </h3>
                                         <div className="w-full h-[1px] bg-white/10"></div>
                                     </div>
@@ -322,7 +325,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                                     )}
                                                     <ScratchOverlay />
                                                 </div>
-                                                <div className="mt-4 font-['Handlee'] text-slate-800 text-xl text-center">Captura #{idx + 1}</div>
+                                                <div className="mt-4 font-['Handlee'] text-slate-800 text-xl text-center">{t('modal.capture')} #{idx + 1}</div>
                                             </div>
                                         </div>
                                     ))}
@@ -339,7 +342,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start mb-12">
                                     <div className="md:col-span-4">
                                         <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-indigo-500">01.</span> SISTEMA DE DISEÑO
+                                            <span className="text-indigo-500">01.</span> {t('modal.design_system')}
                                         </h3>
                                         <div className="w-full h-[1px] bg-white/10"></div>
                                     </div>
@@ -358,7 +361,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                 <div className="md:col-span-4">
                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                        <span className="text-indigo-500">02.</span> LA HISTORIA
+                                        <span className="text-indigo-500">02.</span> {t('modal.the_story')}
                                     </h3>
                                     <div className="w-full h-[1px] bg-white/10"></div>
                                 </div>
@@ -374,7 +377,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                     <div className="md:col-span-4">
                                         <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-indigo-500">03.</span> ESPECIFICACIONES
+                                            <span className="text-indigo-500">03.</span> {t('modal.specs')}
                                         </h3>
                                         <div className="w-full h-[1px] bg-white/10"></div>
                                     </div>
@@ -383,7 +386,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                             {Object.entries(item.technicalInfo).map(([key, value]) => (
                                                 <div key={key} className="bg-white/5 p-6 rounded-lg border border-white/5 hover:border-indigo-500/30 transition-colors">
                                                     <h4 className="text-indigo-400 uppercase tracking-widest text-xs mb-2 font-bold">
-                                                        {key === 'software' ? 'Software' : key === 'year' ? 'Año' : key === 'dimensions' ? 'Dimensiones' : key === 'technique' ? 'Técnica' : key}
+                                                        {key === 'software' ? t('modal.software') : key === 'year' ? t('modal.year') : key === 'dimensions' ? t('modal.dimensions') : key === 'technique' ? t('modal.technique') : key}
                                                     </h4>
                                                     <p className="text-slate-200 font-['Space_Grotesk'] text-lg">{value}</p>
                                                 </div>
@@ -399,13 +402,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
                                         <div className="md:col-span-4">
                                             <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                <span className="text-indigo-500">04.</span> EXPLORACIÓN
+                                                <span className="text-indigo-500">04.</span> {t('modal.exploration')}
                                             </h3>
                                             <div className="w-full h-[1px] bg-white/10"></div>
                                         </div>
                                         <div className="md:col-span-8">
                                             <p className="text-xl text-slate-300 font-light leading-relaxed mb-12">
-                                                El camino hacia la identidad final involucró la exploración de diversas metáforas visuales.
+                                                {t('modal.exploration_text')}
                                             </p>
                                             <div className="space-y-20">
                                                 {item.process.map((proc, idx) => (
@@ -422,7 +425,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                                         </div>
                                                         <div className="w-full lg:w-1/2 text-center lg:text-left">
                                                             <div className="inline-block px-3 py-1 mb-4 border rounded-full text-[10px] font-bold tracking-widest uppercase border-indigo-500/30 text-indigo-400 bg-indigo-500/10">
-                                                                Prototipo {String(idx + 1).padStart(2, '0')}
+                                                                {t('modal.prototype')} {String(idx + 1).padStart(2, '0')}
                                                             </div>
                                                             <h4 className="text-2xl md:text-3xl font-['Permanent_Marker'] text-white mb-4">{proc.title}</h4>
                                                             <p className="text-slate-300 font-['Space_Grotesk'] text-lg leading-relaxed opacity-90">{proc.description}</p>
@@ -441,7 +444,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                         <div className="md:col-span-4">
                                             <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                <span className="text-indigo-500">05.</span> MOCKUPS
+                                                <span className="text-indigo-500">05.</span> {t('modal.mockups')}
                                             </h3>
                                             <div className="w-full h-[1px] bg-white/10"></div>
                                         </div>
@@ -471,7 +474,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                 <div className="md:col-span-4">
                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                        <span className="text-indigo-500">01.</span> LA HISTORIA
+                                        <span className="text-indigo-500">01.</span> {t('modal.the_story')}
                                     </h3>
                                     <div className="w-full h-[1px] bg-white/10"></div>
                                 </div>
@@ -487,7 +490,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                     <div className="md:col-span-4">
                                         <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-indigo-500">02.</span> ESPECIFICACIONES
+                                            <span className="text-indigo-500">02.</span> {t('modal.specs')}
                                         </h3>
                                         <div className="w-full h-[1px] bg-white/10"></div>
                                     </div>
@@ -508,7 +511,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start content-section">
                                 <div className="md:col-span-4">
                                     <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                        <span className="text-indigo-500">{item.technicalInfo ? '03.' : '02.'}</span> PALETA
+                                        <span className="text-indigo-500">{item.technicalInfo ? '03.' : '02.'}</span> {t('modal.palette')}
                                     </h3>
                                     <div className="w-full h-[1px] bg-white/10"></div>
                                 </div>
@@ -530,7 +533,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                                 </div>
                                             ))
                                         ) : (
-                                            <div className="text-slate-500 font-mono">Analizando colores...</div>
+                                            <div className="text-slate-500 font-mono">{t('modal.analyzing')}</div>
                                         )}
                                     </div>
                                 </div>
@@ -542,7 +545,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
                                         <div className="md:col-span-4">
                                             <h3 className="text-3xl font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-3">
-                                                <span className="text-indigo-500">{item.technicalInfo ? '04.' : '03.'}</span> ACTIVOS
+                                                <span className="text-indigo-500">{item.technicalInfo ? '04.' : '03.'}</span> {t('modal.assets')}
                                             </h3>
                                             <div className="w-full h-[1px] bg-white/10"></div>
                                         </div>
@@ -588,7 +591,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
                                                         <ScratchOverlay />
                                                     </div>
                                                     <div className="absolute -bottom-10 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                        <span className="font-['Permanent_Marker'] text-slate-500">Ver en detalle</span>
+                                                        <span className="font-['Permanent_Marker'] text-slate-500">{t('modal.view_detail')}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -616,8 +619,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
     };
 
 
-    return (
-        <div className="fixed inset-0 z-[200] pointer-events-auto">
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] pointer-events-auto">
             {/* Shutter Overlay */}
             <div id="modal-shutter" className="absolute inset-0 bg-black z-[190] pointer-events-none"></div>
 
@@ -654,7 +657,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ item, onClose, onNext, onPr
 
                 {renderContent()}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
