@@ -7,6 +7,7 @@ import MainPortfolio from './components/MainPortfolio';
 import ArtisticGallery from './components/ArtisticGallery';
 
 import CustomCursor from './components/CustomCursor';
+import SEO from './components/SEO';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <>
+      <SEO />
       <CustomCursor />
       <AnimatePresence mode="wait">
         {isLoading && (

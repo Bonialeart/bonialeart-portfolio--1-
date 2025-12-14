@@ -156,7 +156,7 @@ const About: React.FC<AboutProps> = ({ text }) => {
                                 bonialeart@gmail.com
                             </a>
                             <span className="text-slate-600 hidden sm:inline">*</span>
-                            <span className="hidden sm:inline">+351 936 562 723</span>
+                            <span>+58 4264167871</span>
                             <span className="text-slate-600 hidden sm:inline">*</span>
                             <a href="#" className="flex items-center gap-2 hover:text-pink-500 transition-colors">
                                 https://www.artstation.com/boniale

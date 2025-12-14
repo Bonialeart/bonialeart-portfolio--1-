@@ -28,7 +28,7 @@ export const es = {
         role: "ARTISTA"
     },
     gallery: {
-        title: "OBRA RECIENTE",
+        title: "GALERÍA",
         categories: {
             all: "Todos",
             illustrations: "Ilustraciones Digitales",
@@ -85,6 +85,11 @@ export const es = {
             1: { title: "Técnica", description: "Precisión en cada trazo y pixel" },
             2: { title: "Innovación", description: "Mezclando estilos 2D y 3D" }
         }
+    },
+    seo: {
+        title: "Bonialeart | Portafolio Digital",
+        description: "Portfolio de Alejandro Bonilla (Bonialeart). Arte digital, concept art, ilustración y fotografía. Creando mundos visuales únicos que inspiran y cautivan.",
+        keywords: "Bonialeart, Alejandro Bonilla, Arte Digital, Concept Art, Ilustración, Fotografía, Portfolio, ArtStation, Blender, Photoshop"
     },
     footer: {
         rights: "Todos los derechos reservados."

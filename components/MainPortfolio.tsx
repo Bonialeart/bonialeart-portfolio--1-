@@ -389,30 +389,6 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 </div>
             </motion.section>
 
-            {/* Skills Section */}
-            <motion.section
-                id="skills"
-                className="py-20 md:py-24 px-4 relative z-20 border-t border-slate-900/50"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
-                variants={sectionVariants}
-            >
-                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 to-transparent -z-10"></div>
-                <div className="max-w-5xl mx-auto text-center mb-16 md:mb-24">
-                    <div className="inline-block relative">
-                        <StickerCrown className="absolute -top-10 -right-10 rotate-12 z-20" />
-                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
-                            {t('skills.title')}
-                        </h2>
-                        <div className="w-full max-w-[200px] md:max-w-[300px] mx-auto">
-                            <ScribbleUnderline color="text-pink-500" />
-                        </div>
-                    </div>
-                </div>
-                <Skills />
-            </motion.section>
-
             {/* Gallery Section */}
             <motion.section
                 id="gallery"
@@ -459,6 +435,30 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     />
 
                 </div>
+            </motion.section>
+
+            {/* Skills Section */}
+            <motion.section
+                id="skills"
+                className="py-20 md:py-24 px-4 relative z-20 border-t border-slate-900/50"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.3 }}
+                variants={sectionVariants}
+            >
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 to-transparent -z-10"></div>
+                <div className="max-w-5xl mx-auto text-center mb-16 md:mb-24">
+                    <div className="inline-block relative">
+                        <StickerCrown className="absolute -top-10 -right-10 rotate-12 z-20" />
+                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
+                            {t('skills.title')}
+                        </h2>
+                        <div className="w-full max-w-[200px] md:max-w-[300px] mx-auto">
+                            <ScribbleUnderline color="text-pink-500" />
+                        </div>
+                    </div>
+                </div>
+                <Skills />
             </motion.section>
 
             {/* Services Section */}

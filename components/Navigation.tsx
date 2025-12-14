@@ -68,8 +68,8 @@ const Navigation = () => {
   const navLinks = [
     { id: 'home', label: t('navigation.home') },
     { id: 'about', label: t('navigation.about') },
-    { id: 'skills', label: t('navigation.skills') },
     { id: 'gallery', label: t('navigation.gallery') },
+    { id: 'skills', label: t('navigation.skills') },
     { id: 'services', label: t('navigation.services') },
     { id: 'contact', label: t('navigation.contact') },
   ];
