@@ -6,8 +6,51 @@ import { Send, AlertCircle, CheckCircle2 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { StickerSmile } from './Doodles';
 
-const Tape = ({ className }: { className?: string }) => (
-    <div className={`absolute h-8 w-32 bg-[#e2d5b5]/90 backdrop-blur-sm shadow-sm z-20 ${className}`}></div>
+const PaperClip = ({ className }: { className?: string }) => (
+    <div className={`absolute z-30 pointer-events-none drop-shadow-xl ${className}`}>
+        <svg viewBox="0 0 60 100" className="w-full h-full overflow-visible">
+            <defs>
+                <linearGradient id="metal-gradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#e4e4e7" />
+                    <stop offset="40%" stopColor="#a1a1aa" />
+                    <stop offset="50%" stopColor="#ffffff" />
+                    <stop offset="60%" stopColor="#a1a1aa" />
+                    <stop offset="100%" stopColor="#71717a" />
+                </linearGradient>
+                <filter id="clip-shadow">
+                    <feDropShadow dx="2" dy="3" stdDeviation="2" floodOpacity="0.2" />
+                </filter>
+            </defs>
+            <path
+                d="M20 30 V80 C20 92 32 95 38 90 C42 86 42 78 42 75 V20 C42 8 28 5 22 10 C18 13 16 20 16 25 V75 C16 82 23 85 28 85 C33 85 36 80 36 75 V30"
+                fill="none"
+                stroke="black"
+                strokeWidth="6"
+                strokeOpacity="0.3"
+                transform="translate(3, 4)"
+                filter="blur(1px)"
+            />
+            <path
+                d="M20 30 V80 C20 92 32 95 38 90 C42 86 42 78 42 75 V20 C42 8 28 5 22 10 C18 13 16 20 16 25 V75 C16 82 23 85 28 85 C33 85 36 80 36 75 V30"
+                fill="none"
+                stroke="url(#metal-gradient)"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            {/* Shine highlight */}
+            <path
+                d="M20 30 V80 C20 92 32 95 38 90 C42 86 42 78 42 75 V20 C42 8 28 5 22 10 C18 13 16 20 16 25 V75 C16 82 23 85 28 85 C33 85 36 80 36 75 V30"
+                fill="none"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeOpacity="0.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="mix-blend-overlay"
+            />
+        </svg>
+    </div>
 );
 
 const Contact = () => {
@@ -56,9 +99,8 @@ const Contact = () => {
             {/* Paper Container */}
             <div className="bg-[#fcfbf9] text-slate-800 rounded-sm p-8 md:p-12 shadow-[8px_8px_0px_rgba(0,0,0,0.2)] transform -rotate-1 relative z-10">
 
-                {/* Tape Elements */}
-                <Tape className="-top-4 left-1/2 -translate-x-1/2 -rotate-2" />
-                <Tape className="hidden md:block -bottom-4 right-12 rotate-1" />
+                {/* PaperClip holding the sheets */}
+                <PaperClip className="-top-12 left-8 md:left-12 -rotate-6 w-16 h-32" />
 
                 {/* Decorative Sticker */}
                 <div className="absolute -top-8 -right-8 z-30 hidden lg:block pointer-events-none">

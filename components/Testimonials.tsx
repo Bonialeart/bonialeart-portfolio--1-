@@ -4,8 +4,14 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Quote, Star } from 'lucide-react';
 
 // --- SVG Assets for Handmade Feel (Duplicated/Shared Style) ---
-const Tape = ({ className, color = "bg-[#e2d5b5]/90" }: { className?: string, color?: string }) => (
-    <div className={`absolute h-8 ${color} backdrop-blur-sm shadow-sm z-20 pointer-events-none ${className}`}></div>
+const PushPin = ({ className }: { className?: string }) => (
+    <div className={`absolute z-20 pointer-events-none ${className}`} style={{ filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))' }}>
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <line x1="50" y1="50" x2="50" y2="95" stroke="#94a3b8" strokeWidth="6" strokeLinecap="round" />
+            <path d="M68 25 C68 12 32 12 32 25 C32 32 38 38 38 45 L38 52 L30 52 L30 58 L70 58 L70 52 L62 52 L62 45 C62 38 68 32 68 25 Z" fill="#ef4444" stroke="#7f1d1d" strokeWidth="2" />
+            <ellipse cx="45" cy="22" rx="6" ry="3" fill="white" opacity="0.4" />
+        </svg>
+    </div>
 );
 
 const ScratchOverlay = () => (
@@ -112,8 +118,8 @@ const Testimonials = () => {
                             <PaperTexture />
                             <ScratchOverlay />
 
-                            {/* Tape Element */}
-                            <Tape className="w-32 -top-4 left-1/2 -translate-x-1/2 -rotate-1 opacity-90" />
+                            {/* PushPin */}
+                            <PushPin className="w-8 h-8 -top-3 left-1/2 -translate-x-1/2 -rotate-12" />
 
                             {/* Content */}
                             <div className="relative z-10 flex flex-col h-full">

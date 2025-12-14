@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Image as ImageIcon } from 'lucide-react';
+import { Image as ImageIcon, Pause, Play, ZoomIn } from 'lucide-react';
 import ProjectModal from './ProjectModal';
 import { GalleryItem, MediaItem } from '../types';
 import { CATEGORY_TRANSLATIONS } from '../constants';
@@ -12,6 +12,22 @@ interface GalleryProps {
     selectedId: number | null;
     setSelectedId: (id: number | null) => void;
 }
+
+// --- PushPin Component ---
+const PushPin = ({ className }: { className?: string }) => (
+    <div className={`absolute z-50 pointer-events-none ${className}`} style={{ filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))' }}>
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <line x1="50" y1="50" x2="50" y2="95" stroke="#94a3b8" strokeWidth="6" strokeLinecap="round" />
+            <path d="M68 25 C68 12 32 12 32 25 C32 32 38 38 38 45 L38 52 L30 52 L30 58 L70 58 L70 52 L62 52 L62 45 C62 38 68 32 68 25 Z" fill="#ef4444" stroke="#7f1d1d" strokeWidth="2" />
+            <ellipse cx="45" cy="22" rx="6" ry="3" fill="white" opacity="0.4" />
+        </svg>
+    </div>
+);
+
+const PaperTexture = () => (
+    <div className="absolute inset-0 pointer-events-none opacity-40 z-10 mix-blend-multiply rounded-[2px]" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/cream-paper.png")' }}>
+    </div>
+);
 
 // --- Image Component with Loader ---
 const ImageWithLoader = React.memo(({
@@ -283,31 +299,40 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                             key={item.id}
                             layoutId={`card-container-${item.id}`}
                             onClick={() => setSelectedId(item.id)}
-                            className={`${getGridClass(index)} relative group rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 cursor-pointer hover:border-indigo-500/30 transition-all duration-500`}
-                            whileHover={{ y: -5 }}
+                            className={`${getGridClass(index)} relative group rounded-[2px] bg-[#f8f5e6] cursor-pointer shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:z-20 hover:shadow-2xl`}
+                            style={{
+                                overflow: 'visible',
+                                transform: `rotate(${index % 2 === 0 ? '1deg' : '-0.5deg'})`,
+                            }}
                         >
-                            <ImageWithLoader
-                                src={item.url}
-                                alt={item.title}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                priority={false}
-                            />
+                            <PaperTexture />
+                            {/* PushPin with better shadow/position */}
+                            <PushPin className={`w-8 h-8 -top-3 left-1/2 -translate-x-1/2 transform ${index % 3 === 0 ? 'rotate-12' : '-rotate-6'}`} />
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+                            <div className="w-full h-full p-2 relative overflow-hidden rounded-sm">
+                                <ImageWithLoader
+                                    src={item.url}
+                                    alt={item.title}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter sepia-[0.1] group-hover:sepia-0"
+                                    priority={false}
+                                />
 
-                            <div className="absolute bottom-0 left-0 p-6 z-20 w-full">
-                                <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                                    <span className="block text-6xl md:text-7xl font-light text-white font-['Space_Grotesk'] leading-none mb-1 opacity-90">
-                                        {item.id < 10 ? `0${item.id}` : item.id}
-                                        <span className="text-lg align-top text-indigo-400 ml-1 opacity-60">.</span>
-                                    </span>
-                                    <div className="h-[1px] w-12 bg-indigo-500 mb-3 mt-1 opacity-50 group-hover:w-24 transition-all duration-500"></div>
-                                    <span className="block text-sm md:text-base font-medium text-slate-200 uppercase tracking-widest">
-                                        {item.title}
-                                    </span>
-                                    <span className="text-xs text-indigo-400 font-mono mt-1 block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
-                                        {CATEGORY_TRANSLATIONS[item.category] || item.category}
-                                    </span>
+                                <div className="absolute inset-2 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+
+                                <div className="absolute bottom-2 left-2 p-4 z-20 w-[calc(100%-1rem)]">
+                                    <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                                        <span className="block text-4xl md:text-5xl font-light text-white font-['Space_Grotesk'] leading-none mb-1 opacity-90">
+                                            {item.id < 10 ? `0${item.id}` : item.id}
+                                            <span className="text-lg align-top text-indigo-400 ml-1 opacity-60">.</span>
+                                        </span>
+                                        <div className="h-[1px] w-8 bg-indigo-500 mb-2 mt-1 opacity-50 group-hover:w-16 transition-all duration-500"></div>
+                                        <span className="block text-sm font-medium text-slate-200 uppercase tracking-widest truncate">
+                                            {item.title}
+                                        </span>
+                                        <span className="text-xs text-indigo-400 font-mono mt-1 block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
+                                            {CATEGORY_TRANSLATIONS[item.category] || item.category}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
