@@ -287,57 +287,77 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
         <div className="w-full relative min-h-[800px] flex flex-col items-center">
 
             {/* --- MOSAIC GRID VIEW --- */}
-            <div className="w-full max-w-[1400px] px-4 pb-24">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="grid grid-cols-1 md:grid-cols-3 auto-rows-[280px] md:auto-rows-[320px] gap-4"
-                >
-                    {safeItems.map((item, index) => (
-                        <motion.div
-                            key={item.id}
-                            layoutId={`card-container-${item.id}`}
-                            onClick={() => setSelectedId(item.id)}
-                            className={`${getGridClass(index)} relative group rounded-[2px] bg-[#f8f5e6] cursor-pointer shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:z-20 hover:shadow-2xl`}
-                            style={{
-                                overflow: 'visible',
-                                transform: `rotate(${index % 2 === 0 ? '1deg' : '-0.5deg'})`,
-                            }}
-                        >
-                            <PaperTexture />
-                            {/* PushPin with better shadow/position */}
-                            <PushPin className={`w-8 h-8 -top-3 left-1/2 -translate-x-1/2 transform ${index % 3 === 0 ? 'rotate-12' : '-rotate-6'}`} />
+            <div className="w-full max-w-[1400px] px-4 pb-24 relative z-10">
+                {/* Corkboard Background Container */}
+                <div className="relative p-6 md:p-10 rounded-xl border-[16px] border-[#3e2723] bg-[#bc9e82] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                    {/* Cork Texture */}
+                    <div
+                        className="absolute inset-0 z-0 opacity-90"
+                        style={{
+                            backgroundImage: 'url(/assets/cork-board.png)',
+                            backgroundSize: '400px',
+                            backgroundRepeat: 'repeat',
+                            backgroundBlendMode: 'multiply'
+                        }}
+                    ></div>
+                    {/* Inner Vignette/Shadow */}
+                    <div className="absolute inset-0 z-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.6)]"></div>
 
-                            <div className="w-full h-full p-2 relative overflow-hidden rounded-sm">
-                                <ImageWithLoader
-                                    src={item.url}
-                                    alt={item.title}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter sepia-[0.1] group-hover:sepia-0"
-                                    priority={false}
-                                />
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="grid grid-cols-1 md:grid-cols-3 auto-rows-[280px] md:auto-rows-[320px] gap-4"
+                    >
+                        {safeItems.map((item, index) => (
+                            <motion.div
+                                key={item.id}
+                                layoutId={`card-container-${item.id}`}
+                                onClick={() => setSelectedId(item.id)}
+                                className={`${getGridClass(index)} relative group rounded-[2px] bg-[#f8f5e6] cursor-pointer shadow-xl transform-gpu origin-top`}
+                                whileHover={{
+                                    rotate: [0, 2, -2, 1, -1, 0],
+                                    transition: { duration: 0.6, ease: "easeInOut" }
+                                }}
+                                style={{
+                                    overflow: 'visible',
+                                    transform: `rotate(${index % 2 === 0 ? '1deg' : '-0.5deg'})`, // Initial static rotation
+                                }}
+                            >
+                                <PaperTexture />
+                                {/* PushPin with better shadow/position */}
+                                <PushPin className={`w-8 h-8 -top-3 left-1/2 -translate-x-1/2 transform ${index % 3 === 0 ? 'rotate-12' : '-rotate-6'}`} />
 
-                                <div className="absolute inset-2 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+                                <div className="w-full h-full p-2 relative overflow-hidden rounded-sm">
+                                    <ImageWithLoader
+                                        src={item.url}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover"
+                                        priority={false}
+                                    />
 
-                                <div className="absolute bottom-2 left-2 p-4 z-20 w-[calc(100%-1rem)]">
-                                    <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                                        <span className="block text-4xl md:text-5xl font-light text-white font-['Space_Grotesk'] leading-none mb-1 opacity-90">
-                                            {item.id < 10 ? `0${item.id}` : item.id}
-                                            <span className="text-lg align-top text-indigo-400 ml-1 opacity-60">.</span>
-                                        </span>
-                                        <div className="h-[1px] w-8 bg-indigo-500 mb-2 mt-1 opacity-50 group-hover:w-16 transition-all duration-500"></div>
-                                        <span className="block text-sm font-medium text-slate-200 uppercase tracking-widest truncate">
-                                            {item.title}
-                                        </span>
-                                        <span className="text-xs text-indigo-400 font-mono mt-1 block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
-                                            {CATEGORY_TRANSLATIONS[item.category] || item.category}
-                                        </span>
+                                    <div className="absolute inset-2 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+
+                                    <div className="absolute bottom-2 left-2 p-4 z-20 w-[calc(100%-1rem)]">
+                                        <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                                            <span className="block text-4xl md:text-5xl font-light text-white font-['Space_Grotesk'] leading-none mb-1 opacity-90">
+                                                {item.id < 10 ? `0${item.id}` : item.id}
+                                                <span className="text-lg align-top text-indigo-400 ml-1 opacity-60">.</span>
+                                            </span>
+                                            <div className="h-[1px] w-8 bg-indigo-500 mb-2 mt-1 opacity-50 group-hover:w-16 transition-all duration-500"></div>
+                                            <span className="block text-sm font-medium text-slate-200 uppercase tracking-widest truncate">
+                                                {item.title}
+                                            </span>
+                                            <span className="text-xs text-indigo-400 font-mono mt-1 block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
+                                                {CATEGORY_TRANSLATIONS[item.category] || item.category}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
             </div>
 
             {/* --- MODAL --- */}

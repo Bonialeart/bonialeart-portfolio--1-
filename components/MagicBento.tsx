@@ -67,7 +67,7 @@ const BentoCard: React.FC<BentoCardProps> = ({
                 group relative overflow-hidden rounded-[2rem] 
                 transition-all duration-500 ease-out
                 hover:scale-[1.02] hover:shadow-2xl hover:z-10
-                flex flex-col
+                flex flex-col shadow-md
                 ${getGridClasses()}
                 ${onClick || url ? 'cursor-pointer' : ''}
             `}
