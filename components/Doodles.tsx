@@ -1,26 +1,53 @@
 
 import React from 'react';
 
-// --- EXISTING DOODLES (Moved from About.tsx & MainPortfolio.tsx) ---
+// --- MASKING TAPE: warm, fibrous strip used to "stick" paper/polaroid elements down ---
+
+export const Tape = ({ className = "", rotate = "-rotate-2" }: { className?: string, rotate?: string }) => (
+    <div className={`absolute bg-gradient-to-b from-[#f4e9cf]/95 via-[#ecdcb3]/90 to-[#e2d0a3]/95 ${rotate} shadow-[0_3px_6px_rgba(0,0,0,0.2)] border-x border-white/50 z-20 pointer-events-none ${className}`}>
+        <div
+            className="absolute inset-0 opacity-40 mix-blend-multiply"
+            style={{ backgroundImage: 'repeating-linear-gradient(115deg, transparent, transparent 3px, rgba(120,90,40,0.15) 3px, rgba(120,90,40,0.15) 4px)' }}
+        />
+        <div className="absolute inset-x-0 top-0 h-1/3 bg-white/30" />
+    </div>
+);
+
+// --- STICKERS: filled shapes + thick white "die-cut" border to read as real stickers ---
 
 export const StickerSmile = ({ className = "" }: { className?: string }) => (
-    <svg viewBox="0 0 100 100" className={`w-16 h-16 md:w-24 md:h-24 text-pink-600 drop-shadow-lg transform -rotate-12 ${className}`}>
-        <path d="M25,35 L35,45 M35,35 L25,45" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-        <path d="M65,35 L75,45 M75,35 L65,45" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-        <path d="M25,65 Q50,85 75,65" stroke="currentColor" strokeWidth="5" fill="none" strokeLinecap="round" />
+    <svg viewBox="0 0 100 100" className={`w-16 h-16 md:w-24 md:h-24 drop-shadow-lg transform -rotate-12 ${className}`}>
+        <circle cx="50" cy="52" r="40" fill="#fde047" stroke="#ffffff" strokeWidth="7" />
+        <circle cx="50" cy="52" r="40" fill="none" stroke="#78350f" strokeWidth="2" opacity="0.5" />
+        <circle cx="24" cy="58" r="7" fill="#fb7185" opacity="0.55" />
+        <circle cx="76" cy="58" r="7" fill="#fb7185" opacity="0.55" />
+        <path d="M32,40 L42,50 M42,40 L32,50" stroke="#451a03" strokeWidth="5" strokeLinecap="round" />
+        <path d="M58,40 L68,50 M68,40 L58,50" stroke="#451a03" strokeWidth="5" strokeLinecap="round" />
+        <path d="M30,66 Q50,86 70,66" stroke="#451a03" strokeWidth="5.5" fill="none" strokeLinecap="round" />
     </svg>
 );
 
 export const StickerFlame = ({ className = "" }: { className?: string }) => (
-    <svg viewBox="0 0 100 100" className={`w-24 h-24 md:w-32 md:h-32 text-pink-600 drop-shadow-lg ${className}`}>
+    <svg viewBox="0 0 100 100" className={`w-24 h-24 md:w-32 md:h-32 drop-shadow-lg ${className}`}>
         <path
-            d="M50,5 C50,5 20,40 20,65 C20,85 35,95 50,95 C65,95 80,85 80,65 C80,40 50,5 50,5 Z M50,25 C50,25 65,55 65,70 C65,80 58,85 50,85 C42,85 35,80 35,70 C35,55 50,25 50,25 Z"
-            stroke="currentColor"
-            strokeWidth="3"
-            fill="none"
+            d="M50,4 C50,4 14,42 14,66 C14,86 30,97 50,97 C70,97 86,86 86,66 C86,42 50,4 50,4 Z"
+            fill="#f97316"
+            stroke="#ffffff"
+            strokeWidth="7"
             strokeLinejoin="round"
         />
-        <path d="M50,45 L50,75" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+        <path
+            d="M50,4 C50,4 14,42 14,66 C14,86 30,97 50,97 C70,97 86,86 86,66 C86,42 50,4 50,4 Z"
+            fill="none"
+            stroke="#7c2d12"
+            strokeWidth="2"
+            strokeLinejoin="round"
+            opacity="0.5"
+        />
+        <path
+            d="M50,32 C50,32 32,56 32,71 C32,83 40,89 50,89 C60,89 68,83 68,71 C68,56 50,32 50,32 Z"
+            fill="#fde047"
+        />
     </svg>
 );
 
@@ -50,27 +77,35 @@ export const ScribbleCircle = ({ className = "" }: { className?: string }) => (
 // --- NEW DOODLES ---
 
 export const StickerStar = ({ className = "" }: { className?: string }) => (
-    <svg viewBox="0 0 100 100" className={`w-12 h-12 md:w-16 md:h-16 text-yellow-400 drop-shadow-md ${className}`}>
+    <svg viewBox="0 0 100 100" className={`w-12 h-12 md:w-16 md:h-16 drop-shadow-md ${className}`}>
         <path d="M50,5 L63,35 L95,38 L70,60 L78,90 L50,75 L22,90 L30,60 L5,38 L37,35 Z"
-            fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
-        <path d="M50,25 L50,25" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+            fill="#facc15" stroke="#ffffff" strokeWidth="6" strokeLinejoin="round" />
+        <path d="M50,5 L63,35 L95,38 L70,60 L78,90 L50,75 L22,90 L30,60 L5,38 L37,35 Z"
+            fill="none" stroke="#854d0e" strokeWidth="2" strokeLinejoin="round" opacity="0.5" />
+        <circle cx="38" cy="32" r="5" fill="#ffffff" opacity="0.6" />
     </svg>
 );
 
 export const StickerCrown = ({ className = "" }: { className?: string }) => (
-    <svg viewBox="0 0 100 60" className={`w-16 h-10 md:w-20 md:h-14 text-yellow-500 drop-shadow-sm ${className}`}>
-        <path d="M10,50 L10,20 L30,40 L50,10 L70,40 L90,20 L90,50 Z"
-            fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
-        <circle cx="10" cy="15" r="3" fill="currentColor" />
-        <circle cx="50" cy="5" r="3" fill="currentColor" />
-        <circle cx="90" cy="15" r="3" fill="currentColor" />
+    <svg viewBox="0 0 100 70" className={`w-16 h-10 md:w-20 md:h-14 drop-shadow-md ${className}`}>
+        <path d="M10,62 L10,26 L30,46 L50,10 L70,46 L90,26 L90,62 Z"
+            fill="#facc15" stroke="#ffffff" strokeWidth="6" strokeLinejoin="round" />
+        <path d="M10,62 L10,26 L30,46 L50,10 L70,46 L90,26 L90,62 Z"
+            fill="none" stroke="#854d0e" strokeWidth="2" strokeLinejoin="round" opacity="0.5" />
+        <rect x="10" y="58" width="80" height="8" rx="1" fill="#eab308" stroke="#854d0e" strokeWidth="1" opacity="0.9" />
+        <circle cx="30" cy="42" r="5" fill="#ec4899" />
+        <circle cx="50" cy="28" r="5" fill="#6366f1" />
+        <circle cx="70" cy="42" r="5" fill="#10b981" />
     </svg>
 );
 
 export const StickerWow = ({ className = "" }: { className?: string }) => (
-    <svg viewBox="0 0 120 60" className={`w-24 h-12 md:w-32 md:h-16 text-pink-500 drop-shadow-md ${className}`}>
-        <text x="10" y="45" fontFamily="Permanent Marker" fontSize="40" fill="currentColor" stroke="white" strokeWidth="1">WOW!</text>
-        <path d="M5,50 Q60,60 115,50" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="4,2" />
+    <svg viewBox="0 0 140 80" className={`w-28 h-16 md:w-36 md:h-20 drop-shadow-md ${className}`}>
+        <path d="M12,40 Q6,10 38,12 Q70,-4 102,12 Q134,10 128,40 Q134,70 102,68 Q70,84 38,68 Q6,70 12,40 Z"
+            fill="#ffffff" />
+        <path d="M12,40 Q6,10 38,12 Q70,-4 102,12 Q134,10 128,40 Q134,70 102,68 Q70,84 38,68 Q6,70 12,40 Z"
+            fill="none" stroke="#1e293b" strokeWidth="1.5" opacity="0.15" />
+        <text x="18" y="53" fontFamily="'Permanent Marker', cursive" fontSize="34" fill="#ec4899" stroke="#831843" strokeWidth="1">WOW!</text>
     </svg>
 );
 

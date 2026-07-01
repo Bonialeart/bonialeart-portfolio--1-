@@ -52,8 +52,9 @@ const PolaroidCard = ({ item, onClick, index }: { item: GalleryItem; onClick: ()
 
       <motion.div
         onClick={onClick}
-        initial={{ rotate: Math.random() * 4 - 2 }}
-        animate={{ rotate: index % 2 === 0 ? 2 : -2 }}
+        initial={{ rotate: index % 2 === 0 ? 2 : -2 }}
+        animate={{ rotate: index % 2 === 0 ? [2, 5, 2, -1, 2] : [-2, -5, -2, 1, -2] }}
+        transition={{ duration: 5 + (index % 4), repeat: Infinity, ease: 'easeInOut', delay: (index % 5) * 0.4 }}
         whileHover={{
           rotate: 0,
           scale: 1.05,
@@ -107,7 +108,7 @@ const PolaroidCard = ({ item, onClick, index }: { item: GalleryItem; onClick: ()
             loading="lazy"
           />
           {/* Noise overlay */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[url('/assets/textures/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
         </div>
 
         {/* Caption */}

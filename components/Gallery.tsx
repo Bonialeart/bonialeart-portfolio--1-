@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Image as ImageIcon, Pause, Play, ZoomIn } from 'lucide-react';
 import ProjectModal from './ProjectModal';
@@ -25,7 +26,7 @@ const PushPin = ({ className }: { className?: string }) => (
 );
 
 const PaperTexture = () => (
-    <div className="absolute inset-0 pointer-events-none opacity-40 z-10 mix-blend-multiply rounded-[2px]" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/cream-paper.png")' }}>
+    <div className="absolute inset-0 pointer-events-none opacity-40 z-10 mix-blend-multiply rounded-[2px]" style={{ backgroundImage: 'url("/assets/textures/paper.svg")' }}>
     </div>
 );
 
@@ -211,6 +212,7 @@ const ZoomableImage = ({ src, alt }: { src?: string, alt: string }) => {
 
 
 const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId }) => {
+    const { t } = useTranslation();
     // State selectedId is now lifted to props
     const [palettes, setPalettes] = useState<Record<number, string[]>>({});
     const [copiedColor, setCopiedColor] = useState<string | null>(null);
@@ -269,7 +271,9 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
     };
 
     const getGridClass = (index: number) => {
-        const patternIndex = index % 6;
+        // Feature the first item in the current view as a larger "flagship" tile
+        if (index === 0) return "md:col-span-2 md:row-span-2";
+        const patternIndex = (index - 1) % 6;
         switch (patternIndex) {
             case 0: return "md:col-span-1 md:row-span-2";
             case 1: return "md:col-span-2 md:row-span-1";
@@ -328,12 +332,18 @@ const Gallery: React.FC<GalleryProps> = ({ items = [], selectedId, setSelectedId
                                 {/* PushPin with better shadow/position */}
                                 <PushPin className={`w-8 h-8 -top-3 left-1/2 -translate-x-1/2 transform ${index % 3 === 0 ? 'rotate-12' : '-rotate-6'}`} />
 
+                                {index === 0 && (
+                                    <div className="absolute top-3 right-3 z-30 bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-md rotate-3">
+                                        {t('gallery.featured')}
+                                    </div>
+                                )}
+
                                 <div className="w-full h-full p-2 relative overflow-hidden rounded-sm">
                                     <ImageWithLoader
                                         src={item.url}
                                         alt={item.title}
                                         className="w-full h-full object-cover"
-                                        priority={false}
+                                        priority={index === 0}
                                     />
 
                                     <div className="absolute inset-2 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>

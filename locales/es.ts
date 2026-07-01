@@ -2,9 +2,11 @@ export const es = {
     hero: {
         title: "Portafolio",
         subtitle: "Bonialeart",
-        tagline: "Arte Digital, Diseño, 3D, Fotografia.",
+        tagline: "Arte Digital, Diseño, 3D, Fotografía.",
         bio: "Creando mundos visuales únicos que inspiran y cautivan. Arte digital, concept art y fotografía para cine, videojuegos y proyectos creativos",
-        cta: "Ir a Galería"
+        cta: "Ir a Galería",
+        ctaPrimary: "Ver Portafolio",
+        ctaSecondary: "Contratar"
     },
     navigation: {
         home: "Inicio",
@@ -12,7 +14,8 @@ export const es = {
         skills: "Habilidades",
         gallery: "Galería",
         services: "Servicios",
-        contact: "Contacto"
+        contact: "Contacto",
+        extendedGallery: "Galería Artística Extendida"
     },
     skills: {
         title: "HABILIDADES Y SOFTWARE"
@@ -20,7 +23,7 @@ export const es = {
     about: {
         title: "SOBRE MÍ",
         greeting: "¡HOLA!",
-        intro: "Mi nombre es <strong class='text-pink-500'>Alejandro Bonilla</strong>, un dedicado artista digital freelance, ilustrador y amante de la fotografia con más de 4 años de experiencia profesional.",
+        intro: "Mi nombre es <strong class='text-pink-500'>Alejandro Bonilla</strong>, un dedicado artista digital freelance, ilustrador y amante de la fotografía con más de 4 años de experiencia profesional.",
         description: "Mi pasión radica en crear narrativas visuales atractivas y mundos únicos. Me especializo en transformar ideas en visuales cautivadores. Ya sea que necesites ilustraciones impactantes, arte conceptual detallado o pinturas digitales dinámicas, aporto una mezcla de habilidad técnica y visión creativa a cada proyecto.",
         cv: "Descargar CV",
         quote: '"Cada pieza es un descubrimiento; cada proyecto, una conexión."',
@@ -29,6 +32,7 @@ export const es = {
     },
     gallery: {
         title: "GALERÍA",
+        featured: "Destacado",
         categories: {
             all: "Todos",
             illustrations: "Ilustraciones Digitales",

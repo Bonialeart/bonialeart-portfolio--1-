@@ -26,7 +26,7 @@ const ScratchOverlay = () => (
 );
 
 const PaperTexture = () => (
-    <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
+    <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0 mix-blend-multiply bg-[url('/assets/textures/paper.svg')]"></div>
 );
 
 const TESTIMONIALS = [
@@ -34,36 +34,40 @@ const TESTIMONIALS = [
         id: 1,
         name: "Sofia Rodriguez",
         role: "Directora de Arte",
-        company: "Studio Ghibli",
+        company: "Kaon Studio",
         text: "La capacidad de Alejandro para capturar la emoción en sus pinturas digitales es inigualable. Su trabajo en 'Crimson Requiem' dio vida a nuestra visión.",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop",
+        initials: "SR",
+        color: "bg-indigo-600",
         rotation: "rotate-1"
     },
     {
         id: 2,
         name: "Marcus Chen",
         role: "Desarrollador Principal",
-        company: "TechFlow",
+        company: "TechFlow Games",
         text: "Los activos 3D proporcionados para nuestro entorno de juego fueron optimizados perfectamente sin sacrificar la fidelidad visual. Un verdadero profesional.",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop",
+        initials: "MC",
+        color: "bg-orange-500",
         rotation: "-rotate-2"
     },
     {
         id: 3,
         name: "Elena Vasquez",
         role: "Jefa de Marketing",
-        company: "Solaris",
+        company: "Solaris Brands",
         text: "Contratamos a Bonialeart para una revisión completa de identidad de marca. El resultado fue un sistema elegante y moderno que comunica perfectamente nuestros valores.",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop",
+        initials: "EV",
+        color: "bg-pink-500",
         rotation: "rotate-2"
     },
     {
         id: 4,
         name: "David Miller",
         role: "Desarrollador Indie",
-        company: "Indie",
+        company: "Estudio Independiente",
         text: "Los diseños de personajes para mi RPG fueron perfectos. Alejandro tiene un estilo único que realmente destaca. La comunicación fue fluida.",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop",
+        initials: "DM",
+        color: "bg-slate-700",
         rotation: "-rotate-1"
     }
 ];
@@ -83,7 +87,7 @@ const Testimonials = () => {
         <section className="py-24 bg-slate-950 relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-20"></div>
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] -z-10"></div>
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('/assets/textures/stardust.svg')] -z-10"></div>
 
             <div className="max-w-7xl mx-auto px-6 mb-16 text-center relative z-10">
                 <motion.div
@@ -137,8 +141,8 @@ const Testimonials = () => {
                                 </p>
 
                                 <div className="flex items-center gap-4 border-t border-slate-200 pt-4 mt-auto">
-                                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md grayscale group-hover:grayscale-0 transition-all">
-                                        <img src={item.avatar} alt={item.name} className="w-full h-full object-cover" />
+                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 border-white shadow-md ${item.color} text-white font-['Permanent_Marker'] text-sm shrink-0`}>
+                                        {item.initials}
                                     </div>
                                     <div>
                                         <h4 className="text-slate-900 font-['Permanent_Marker'] text-lg leading-none mb-1">{item.name}</h4>

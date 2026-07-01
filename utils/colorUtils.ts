@@ -9,22 +9,9 @@ export const extractColorsFromUrl = async (imageUrl: string, sampleCount: number
             return;
         }
 
-        // Fix for Dropbox links to allow Canvas access (CORS)
-        let safeUrl = imageUrl;
-        if (safeUrl.includes('www.dropbox.com')) {
-            safeUrl = safeUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
-        }
-        
-        // Add cache buster to avoid browser caching opaque responses
-        if (safeUrl.includes('?')) {
-            safeUrl += `&cacheBust=${Date.now()}`;
-        } else {
-            safeUrl += `?cacheBust=${Date.now()}`;
-        }
-
         const img = new Image();
         img.crossOrigin = "Anonymous";
-        img.src = safeUrl;
+        img.src = imageUrl;
 
         img.onload = () => {
             const canvas = document.createElement('canvas');

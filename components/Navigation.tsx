@@ -1,13 +1,22 @@
 
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Images } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Tape } from './Doodles';
 
-const Navigation = () => {
-  const { t } = useTranslation();
+interface NavigationProps {
+  onOpenGallery: () => void;
+}
+
+const Navigation = ({ onOpenGallery }: NavigationProps) => {
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'en' ? 'es' : 'en');
+  };
 
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -83,7 +92,7 @@ const Navigation = () => {
           onClick={() => scrollToSection('home')}
         >
           <img
-            src="https://www.dropbox.com/scl/fi/9q9hko6g1xf1h7llrog4l/logo.png?rlkey=nzog3afkbp36668f9nv6hbihv&st=t74qbrli&raw=1"
+            src="/assets/branding/nav-logo.webp"
             alt="Bonialeart Logo"
             className="h-14 md:h-20 w-auto object-contain hover:scale-105 transition-transform duration-300"
           />
@@ -101,10 +110,10 @@ const Navigation = () => {
               initial={{ rotate: 0 }}
             >
               {/* Paper Background */}
-              <div className={`absolute inset-0 ${link.id === 'contact' ? 'bg-[#ffbd2e]' : 'bg-[#f1f5f9]'} shadow-md transform ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} group-hover:rotate-0 transition-transform duration-300 rounded-sm`}></div>
+              <div className={`absolute inset-0 ${link.id === 'contact' ? 'bg-[#ffbd2e]' : 'bg-[#f8f4e8]'} shadow-md transform ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} group-hover:rotate-0 transition-transform duration-300 rounded-sm`}></div>
 
               {/* Tape Effect */}
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-white/40 backdrop-blur-[1px] rotate-[-2deg] shadow-sm z-10 border-l border-r border-white/20"></div>
+              <Tape className="-top-2 left-1/2 -translate-x-1/2 w-8 h-3 z-10" />
 
               {/* Text */}
               <span className={`relative z-10 font-['Permanent_Marker'] ${link.id === 'contact' ? 'text-slate-900 group-hover:text-white' : 'text-slate-900 group-hover:text-indigo-600'} transition-colors text-sm md:text-base`}>
@@ -112,16 +121,50 @@ const Navigation = () => {
               </span>
             </motion.a>
           ))}
+
+          {/* Utility Buttons: Extended Gallery + Language */}
+          <div className="flex items-center gap-2 pl-2">
+            <button
+              onClick={onOpenGallery}
+              title={t('navigation.extendedGallery')}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-indigo-600 hover:border-indigo-600 transition-colors"
+            >
+              <Images size={16} />
+            </button>
+            <button
+              onClick={toggleLanguage}
+              title="Cambiar Idioma / Change Language"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-indigo-600 hover:border-indigo-600 transition-colors font-bold font-mono text-xs"
+            >
+              {i18n.language === 'en' ? 'ES' : 'EN'}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile/Tablet Hamburger - Visible on md and below */}
-        <button
-          className="lg:hidden z-50 p-2 text-white focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        {/* Mobile/Tablet Controls - Visible on md and below */}
+        <div className="lg:hidden flex items-center gap-2 z-50">
+          <button
+            onClick={onOpenGallery}
+            title={t('navigation.extendedGallery')}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white"
+          >
+            <Images size={18} />
+          </button>
+          <button
+            onClick={toggleLanguage}
+            title="Cambiar Idioma / Change Language"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white font-bold font-mono text-xs"
+          >
+            {i18n.language === 'en' ? 'ES' : 'EN'}
+          </button>
+          <button
+            className="p-2 text-white focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </nav>
 
 

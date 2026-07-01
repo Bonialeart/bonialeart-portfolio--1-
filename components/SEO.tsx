@@ -18,10 +18,9 @@ const SEO: React.FC<SEOProps> = ({ title, description, keywords, image }) => {
     const siteKeywords = keywords || t('seo.keywords');
     const currentLang = i18n.language || 'es';
 
-    // Default image if not provided (use the one from existing index.html or proper branded one)
-    const defaultImage = "https://cdnb.artstation.com/p/assets/images/images/068/156/463/large/alejandro-bonilla-wukong3-color-correct.jpg?1697115257";
-    const siteImage = image || defaultImage;
     const siteUrl = "https://bonialeart.vercel.app/";
+    const defaultImage = `${siteUrl}assets/gallery/alejandro-bonilla-wukong3-color-correct.webp`;
+    const siteImage = image || defaultImage;
 
     return (
         <Helmet>

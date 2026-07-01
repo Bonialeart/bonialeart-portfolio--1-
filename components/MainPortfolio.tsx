@@ -10,30 +10,25 @@ import Gallery from './Gallery';
 import Skills from './Skills';
 import Contact from './Contact';
 import About from './About';
-import CustomCursor from './CustomCursor';
 import Testimonials from './Testimonials';
 import PolaroidMarquee from './PolaroidMarquee';
 import Services from './Services';
 import MediaKitButton from './MediaKitButton';
-import { ArrowDown, Instagram, Globe, ArrowLeft, Home } from 'lucide-react';
+import { ArrowDown, Instagram, Globe, ArrowRight, Mail } from 'lucide-react';
 
 import { ScribbleUnderline, ScribbleCircle, StickerStar, StickerCrown, StickerWow, ScribbleSpiral, StickerSmile } from './Doodles';
 
 interface MainPortfolioProps {
-    onBack: () => void;
+    onOpenGallery: () => void;
 }
 
-const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
-    const { t, i18n } = useTranslation();
+const MainPortfolio: React.FC<MainPortfolioProps> = ({ onOpenGallery }) => {
+    const { t } = useTranslation();
     const [content, setContent] = useState<GeneratedContent>(INITIAL_CONTENT as any);
     const [selectedGalleryId, setSelectedGalleryId] = useState<number | null>(null);
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const qualitiesContainerRef = useRef<HTMLDivElement>(null);
     const marqueeRef = useRef<HTMLElement>(null);
-
-    const toggleLanguage = () => {
-        i18n.changeLanguage(i18n.language === 'en' ? 'es' : 'en');
-    };
 
     // Track scroll progress for the TALL qualities container
     const { scrollYProgress: qualityScrollProgress } = useScroll({
@@ -160,29 +155,8 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
             exit={{ opacity: 0 }}
             className="relative w-full min-h-screen text-slate-100 selection:bg-indigo-500 selection:text-white"
         >
-            <CustomCursor />
-            <Navigation />
+            <Navigation onOpenGallery={onOpenGallery} />
             <MediaKitButton />
-
-            {/* Back Button - Responsive Positioning */}
-            <button
-                onClick={onBack}
-                className="fixed z-50 rounded-full text-white hover:bg-indigo-500 transition-colors border-2 border-white/20 bg-indigo-600 backdrop-blur-md
-                bottom-6 left-6 p-3 shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)] group"
-                title="Volver al Inicio"
-            >
-                <Home size={20} className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            </button>
-
-            {/* Language Switcher */}
-            <button
-                onClick={toggleLanguage}
-                className="fixed z-50 rounded-full text-white hover:bg-indigo-500 transition-colors border-2 border-white/20 bg-indigo-600 backdrop-blur-md
-                bottom-20 left-6 p-3 shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)] group font-bold font-mono text-xs w-12 h-12 flex items-center justify-center"
-                title="Cambiar Idioma / Change Language"
-            >
-                {i18n.language === 'en' ? 'ES' : 'EN'}
-            </button>
 
             {/* Hero Section */}
             <motion.section
@@ -212,7 +186,7 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                         <motion.div
                             variants={fadeUp}
                             // Adjusted position for Tablet (MD) to account for larger size
-                            className="absolute bottom-[-5%] left-[60%] md:bottom-[10%] md:left-[70%] lg:left-[70%] z-20 cursor-none origin-center"
+                            className="absolute bottom-[-5%] left-[60%] md:bottom-[10%] md:left-[70%] lg:left-[70%] z-20 origin-center"
                         >
                             {/* Scale increased on MD to 125 (1.25) for larger tape */}
                             <div className="scale-[0.58] md:scale-100 lg:scale-105 -rotate-12 origin-center transition-transform duration-300 relative">
@@ -247,6 +221,23 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                     <motion.p variants={fadeUp} className="text-xs md:text-sm lg:text-base max-w-lg mx-auto text-slate-400 px-4 text-center leading-relaxed hidden md:block">
                         {t('hero.bio')}
                     </motion.p>
+
+                    <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-4 mt-8 md:mt-10">
+                        <button
+                            onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-indigo-600 text-white rounded-lg font-bold font-['Space_Grotesk'] uppercase tracking-widest text-xs md:text-sm hover:bg-indigo-500 transition-all duration-300 shadow-[4px_4px_0px_rgba(0,0,0,0.4)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
+                        >
+                            {t('hero.ctaPrimary')}
+                            <ArrowRight size={16} />
+                        </button>
+                        <button
+                            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-transparent text-white rounded-lg font-bold font-['Space_Grotesk'] uppercase tracking-widest text-xs md:text-sm border-2 border-white/30 hover:border-white hover:bg-white/10 transition-all duration-300"
+                        >
+                            {t('hero.ctaSecondary')}
+                            <Mail size={16} />
+                        </button>
+                    </motion.div>
                 </div>
 
                 <motion.button
@@ -447,9 +438,10 @@ const MainPortfolio: React.FC<MainPortfolioProps> = ({ onBack }) => {
                 variants={sectionVariants}
             >
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 to-transparent -z-10"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[length:30px_30px] opacity-[0.03] pointer-events-none -z-10"></div>
                 <div className="max-w-5xl mx-auto text-center mb-16 md:mb-24">
                     <div className="inline-block relative">
-                        <StickerCrown className="absolute -top-10 -right-10 rotate-12 z-20" />
+                        <StickerCrown className="absolute -top-12 -right-16 md:-right-20 rotate-12 z-20" />
                         <h2 className="text-4xl md:text-6xl lg:text-7xl font-['Permanent_Marker'] text-slate-100 z-10 relative">
                             {t('skills.title')}
                         </h2>

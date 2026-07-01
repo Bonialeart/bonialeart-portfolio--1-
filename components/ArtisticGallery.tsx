@@ -134,7 +134,7 @@ const ArtisticGallery: React.FC<ArtisticGalleryProps> = ({ onBack }) => {
 
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-20 fixed"></div>
-            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] -z-10 fixed"></div>
+            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('/assets/textures/stardust.svg')] -z-10 fixed"></div>
 
             {/* Title Background (Desktop Only) */}
             <h2 className={`hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-800/50 font-['Permanent_Marker'] text-[15vw] opacity-10 select-none pointer-events-none whitespace-nowrap z-0 transition-opacity duration-500 ${selectedItem ? 'opacity-0' : 'opacity-10'}`}>

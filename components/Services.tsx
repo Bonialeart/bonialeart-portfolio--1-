@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { SERVICES } from '../constants';
 import { Palette, Box, Camera, ArrowRight } from 'lucide-react';
+import { Tape } from './Doodles';
 
 const getIcon = (iconName: string) => {
     switch (iconName) {
@@ -29,15 +30,16 @@ const Services = () => {
                         className="relative group"
                     >
                         {/* Tape Effect */}
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-white/20 backdrop-blur-sm rotate-[-2deg] shadow-sm z-20 border-l-2 border-r-2 border-white/10"></div>
+                        <Tape className="-top-4 left-1/2 -translate-x-1/2 w-32 h-8" />
 
                         {/* Card Content */}
-                        <div className="bg-[#f8fafc] text-slate-900 p-8 pt-12 rounded-sm shadow-[10px_10px_20px_rgba(0,0,0,0.5)] h-full flex flex-col relative overflow-hidden">
+                        <div className="bg-[#faf6ec] text-slate-900 p-8 pt-12 rounded-sm shadow-[10px_10px_20px_rgba(0,0,0,0.5)] h-full flex flex-col relative overflow-hidden border border-black/5">
 
                             {/* Paper Texture Overlay */}
-                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+                            <div className="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-multiply bg-[url('/assets/textures/paper.svg')]"></div>
+                            <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('/assets/textures/noise.svg')]"></div>
 
-                            <div className="mb-6 text-indigo-600 p-4 bg-indigo-50 rounded-full w-fit mx-auto border-2 border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                            <div className="mb-6 text-indigo-600 p-4 bg-indigo-50 rounded-full w-fit mx-auto border-2 border-dashed border-indigo-200 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-colors duration-300">
                                 {getIcon(service.icon)}
                             </div>
 

@@ -4,7 +4,9 @@ export const en = {
         subtitle: "Bonialeart",
         tagline: "Digital Art, Design, 3D, Photography.",
         bio: "Creating unique visual worlds that inspire and captivate. Digital art, concept art, and photography for film, video games, and creative projects.",
-        cta: "Go to Gallery"
+        cta: "Go to Gallery",
+        ctaPrimary: "View Portfolio",
+        ctaSecondary: "Hire Me"
     },
     navigation: {
         home: "Home",
@@ -12,7 +14,8 @@ export const en = {
         skills: "Skills",
         gallery: "Gallery",
         services: "Services",
-        contact: "Contact"
+        contact: "Contact",
+        extendedGallery: "Extended Art Gallery"
     },
     skills: {
         title: "SKILLS"
@@ -29,6 +32,7 @@ export const en = {
     },
     gallery: {
         title: "GALLERY",
+        featured: "Featured",
         categories: {
             all: "All",
             illustrations: "Digital Illustrations",

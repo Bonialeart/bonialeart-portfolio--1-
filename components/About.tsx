@@ -9,7 +9,7 @@ interface AboutProps {
     text: string;
 }
 
-import { StickerSmile, StickerFlame, ScribbleArrow } from './Doodles';
+import { StickerSmile, StickerFlame, ScribbleArrow, Tape } from './Doodles';
 
 const About: React.FC<AboutProps> = ({ text }) => {
     const { t } = useTranslation();
@@ -64,15 +64,15 @@ const About: React.FC<AboutProps> = ({ text }) => {
                         viewport={{ once: true }}
                         className="bg-white p-3 pb-12 md:p-4 md:pb-16 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform rotate-[-6deg] hover:rotate-[-2deg] transition-transform duration-500 ease-out w-[80%] md:w-[70%] lg:w-[90%] max-w-md mx-auto relative"
                     >
-                        <div className="absolute -top-4 md:-top-6 left-1/2 -translate-x-1/2 w-24 md:w-32 h-8 md:h-10 bg-white/30 backdrop-blur-sm rotate-2 border border-white/20 shadow-sm z-10"></div>
+                        <Tape className="-top-4 md:-top-6 left-1/2 -translate-x-1/2 w-24 md:w-32 h-8 md:h-10" rotate="rotate-2" />
 
                         <div className="aspect-[4/5] overflow-hidden bg-slate-200 grayscale contrast-125 brightness-90 hover:grayscale-0 transition-all duration-700">
                             <img
                                 src={PROFILE_IMAGE}
-                                alt="Profile"
+                                alt="Alejandro Bonilla, artista digital freelance"
                                 className="w-full h-full object-cover"
                             />
-                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                            <div className="absolute inset-0 bg-[url('/assets/textures/noise.svg')] opacity-20 mix-blend-overlay"></div>
                         </div>
 
                         <div className="absolute bottom-3 md:bottom-4 left-4 md:left-6 font-['Permanent_Marker'] text-slate-900 text-lg md:text-xl transform -rotate-1 flex justify-between w-[85%]">

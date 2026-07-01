@@ -99,6 +99,9 @@ const Contact = () => {
             {/* Paper Container */}
             <div className="bg-[#fcfbf9] text-slate-800 rounded-sm p-8 md:p-12 shadow-[8px_8px_0px_rgba(0,0,0,0.2)] transform -rotate-1 relative z-10">
 
+                {/* Paper Texture */}
+                <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-multiply bg-[url('/assets/textures/paper.svg')] rounded-sm"></div>
+
                 {/* PaperClip holding the sheets */}
                 <PaperClip className="-top-12 left-8 md:left-12 -rotate-6 w-16 h-32" />
 

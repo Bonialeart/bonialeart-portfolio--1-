@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SiAdobephotoshop, SiAdobeillustrator, SiAdobeaftereffects, SiBlender } from 'react-icons/si';
+import { Tape } from './Doodles';
 
 // Custom SVG component for Clip Studio Paint
 const ClipStudioPaintIcon = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
@@ -57,45 +58,55 @@ const SOFTWARE = [
   }
 ];
 
+const rotations = ['-rotate-3', 'rotate-2', '-rotate-2', 'rotate-3', '-rotate-1', 'rotate-1'];
+
 const Skills = () => {
   return (
-    <div className="w-full max-w-5xl mx-auto px-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className="w-full max-w-5xl mx-auto px-4 relative">
+      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12 md:gap-x-10">
         {SOFTWARE.map((soft, index) => (
           <motion.div
             key={soft.name}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
+            initial={{ opacity: 0, y: 30, rotate: 0 }}
+            whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ delay: index * 0.08, duration: 0.5 }}
             viewport={{ once: true, margin: "-50px", amount: 0.3 }}
-            className="flex items-center gap-6"
+            whileHover={{ rotate: 0, y: -8, scale: 1.04 }}
+            className={`relative w-[150px] sm:w-[170px] transform ${rotations[index % rotations.length]} hover:!rotate-0 transition-transform duration-300 group`}
           >
-            {/* Logo Icon */}
-            <div className="relative w-16 h-16 flex-shrink-0 bg-slate-900 rounded-xl flex items-center justify-center border border-slate-800 group hover:border-indigo-500/50 transition-colors shadow-lg overflow-visible">
-              {/* Tape Effect */}
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-white/20 backdrop-blur-sm rotate-[-2deg] shadow-sm z-10 border border-white/10"></div>
-              <soft.Icon
-                className="w-8 h-8 relative z-0"
-                style={{ color: soft.color }}
-              />
-            </div>
+            {/* Tape holding the badge */}
+            <Tape className="w-14 h-6 -top-3 left-1/2 -translate-x-1/2" rotate={index % 2 === 0 ? '-rotate-3' : 'rotate-3'} />
 
-            {/* Bar Info */}
-            <div className="flex-grow">
-              <div className="flex justify-between mb-2">
-                <span className="font-bold text-lg tracking-wide text-slate-200">{soft.name}</span>
-                <span className="text-slate-500 font-mono text-sm">{soft.level}%</span>
+            {/* Paper Badge */}
+            <div className="bg-[#faf6ec] rounded-sm shadow-[6px_6px_0px_rgba(0,0,0,0.35)] p-5 pt-8 border border-black/5 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply bg-[url('/assets/textures/paper.svg')]"></div>
+
+              {/* Icon Stamp */}
+              <div
+                className="relative w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-4 border-2 border-dashed transition-colors group-hover:border-solid"
+                style={{ borderColor: soft.color, backgroundColor: `${soft.color}1f` }}
+              >
+                <soft.Icon className="w-7 h-7 relative z-0" style={{ color: soft.color }} />
               </div>
-              <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${soft.level}%` }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  viewport={{ once: true }}
-                  className="h-full rounded-full shadow-[0_0_10px_rgba(0,0,0,0.3)]"
-                  style={{ backgroundColor: soft.color }}
-                />
+
+              <p className="text-center font-['Permanent_Marker'] text-slate-900 text-base mb-3 leading-tight">
+                {soft.name}
+              </p>
+
+              {/* Hand-drawn level meter */}
+              <div className="flex justify-center gap-1.5 mb-1">
+                {[0, 1, 2, 3, 4].map((dot) => (
+                  <span
+                    key={dot}
+                    className="w-3 h-3 rounded-full border-2"
+                    style={{
+                      borderColor: soft.color,
+                      backgroundColor: dot < Math.round(soft.level / 20) ? soft.color : 'transparent',
+                    }}
+                  />
+                ))}
               </div>
+              <p className="text-center font-mono text-[10px] text-slate-500 tracking-widest">{soft.level}%</p>
             </div>
           </motion.div>
         ))}
